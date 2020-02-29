@@ -1,7 +1,5 @@
-import {Injectable} from '@angular/core';
 import {DateTime} from "ionic-angular";
 
-@Injectable()
 export class TaskModel {
   id: number;
   title: string;

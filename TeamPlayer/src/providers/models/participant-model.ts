@@ -1,6 +1,3 @@
-import {Injectable} from '@angular/core';
-
-@Injectable()
 export class ParticipantModel {
   id: number;
   userId: number;
