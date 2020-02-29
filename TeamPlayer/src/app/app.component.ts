@@ -40,7 +40,7 @@ export class AppComponent implements OnInit {
     {
       title: 'Mój profil',
       url: '/folder/Mój profil',
-      icon: 'ellipsis-vertical-circle-outline'
+      icon: 'person-circle-outline'
     },
   ];
   // public labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];

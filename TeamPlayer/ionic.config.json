@@ -1,5 +1,7 @@
 {
   "name": "TeamPlayer",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }
