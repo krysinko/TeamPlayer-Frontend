@@ -15,4 +15,11 @@ export class FolderPage implements OnInit {
     this.folder = this.activatedRoute.snapshot.paramMap.get('id');
   }
 
+    goToLoginPage() {
+
+    }
+
+    goToRegisterPage() {
+
+    }
 }

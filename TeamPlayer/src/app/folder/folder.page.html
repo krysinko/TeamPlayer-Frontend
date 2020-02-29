@@ -13,9 +13,18 @@
       <ion-title size="large">{{ folder }}</ion-title>
     </ion-toolbar>
   </ion-header>
+<ion-row class="ion-justify-content-center">
+  <ion-col size="12" class="ion-justify-content-center ion-text-center">
+    <h2>Team Player</h2>
+    <!-- TODO weryfikacja stanu autentykacji -->
+    <h5>Aplikacja do zarządzania Twoją organizacją</h5>
+  </ion-col>
 
-  <div id="container">
-    <strong class="capitalize">{{ folder }}</strong>
-    <p>Explore <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
+  <ion-col size="4" class="ion-justify-content-end ion-text-end">
+    <ion-button (click)="goToLoginPage()" shape="round" color="green">Logowanie</ion-button>
+  </ion-col>
+  <ion-col size="4" class="ion-justify-content-start ion-text-start">
+    <ion-button (click)="goToRegisterPage()" shape="round" color="green">Rejestracja</ion-button>
+  </ion-col>
+</ion-row>
 </ion-content>

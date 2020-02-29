@@ -24,3 +24,104 @@
 @import "~@ionic/angular/css/text-alignment.css";
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
+
+
+.md body, .ios body {
+  --ion-background-color: #fdffff;
+  --ion-background-color-rgb: 253,255,255;
+
+  --ion-text-color: #265c00;
+  --ion-text-color-rgb: 38,92,0;
+
+  --ion-color-step-50: #f2f7f2;
+  --ion-color-step-100: #e8efe6;
+  --ion-color-step-150: #dde7d9;
+  --ion-color-step-200: #d2decc;
+  --ion-color-step-250: #c7d6bf;
+  --ion-color-step-300: #bdceb3;
+  --ion-color-step-350: #b2c6a6;
+  --ion-color-step-400: #a7be99;
+  --ion-color-step-450: #9cb68c;
+  --ion-color-step-500: #92ae80;
+  --ion-color-step-550: #87a573;
+  --ion-color-step-600: #7c9d66;
+  --ion-color-step-650: #719559;
+  --ion-color-step-700: #678d4d;
+  --ion-color-step-750: #5c8540;
+  --ion-color-step-800: #517d33;
+  --ion-color-step-850: #467426;
+  --ion-color-step-900: #3c6c19;
+  --ion-color-step-950: #31640d;
+}
+
+:root {
+  --ion-color-deep-green: #265c00;
+  --ion-color-deep-green-rgb: 38,92,0;
+  --ion-color-deep-green-contrast: #fdffff;
+  --ion-color-deep-green-contrast-rgb: 253,255,255;
+  --ion-color-deep-green-shade: #215100;
+  --ion-color-deep-green-tint: #3c6c1a;
+}
+
+.ion-color-deep-green {
+  --ion-color-base: var(--ion-color-deep-green);
+  --ion-color-base-rgb: var(--ion-color-deep-green-rgb);
+  --ion-color-contrast: var(--ion-color-deep-green-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-deep-green-contrast-rgb);
+  --ion-color-shade: var(--ion-color-deep-green-shade);
+  --ion-color-tint: var(--ion-color-deep-green-tint);
+}
+
+:root {
+  --ion-color-green: #68a225;
+  --ion-color-green-rgb: 104,162,37;
+  --ion-color-green-contrast: #fdffff;
+  --ion-color-green-contrast-rgb: 253,255,255;
+  --ion-color-green-shade: #5c8f21;
+  --ion-color-green-tint: #77ab3b;
+}
+
+.ion-color-green {
+  --ion-color-base: var(--ion-color-green);
+  --ion-color-base-rgb: var(--ion-color-green-rgb);
+  --ion-color-contrast: var(--ion-color-green-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-green-contrast-rgb);
+  --ion-color-shade: var(--ion-color-green-shade);
+  --ion-color-tint: var(--ion-color-green-tint);
+}
+
+:root {
+  --ion-color-pastel-green: #b3de81;
+  --ion-color-pastel-green-rgb: 179,222,129;
+  --ion-color-pastel-green-contrast: #265c00;
+  --ion-color-pastel-green-contrast-rgb: 104,162,37;
+  --ion-color-pastel-green-shade: #9ec372;
+  --ion-color-pastel-green-tint: #bbe18e;
+}
+
+.ion-color-pastel-green {
+  --ion-color-base: var(--ion-color-pastel-green);
+  --ion-color-base-rgb: var(--ion-color-pastel-green-rgb);
+  --ion-color-contrast: var(--ion-color-pastel-green-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-pastel-green-contrast-rgb);
+  --ion-color-shade: var(--ion-color-pastel-green-shade);
+  --ion-color-tint: var(--ion-color-pastel-green-tint);
+}
+
+:root {
+  --ion-color-contrast-green: #fdffff;
+  --ion-color-contrast-green-rgb: 253,255,255;
+  --ion-color-contrast-green-contrast: #265c00;
+  --ion-color-contrast-green-contrast-rgb: 104,162,37;
+  --ion-color-contrast-green-shade: #dfe0e0;
+  --ion-color-contrast-green-tint: #fdffff;
+}
+
+.ion-color-contrast-green {
+  --ion-color-base: var(--ion-color-contrast-green);
+  --ion-color-base-rgb: var(--ion-color-contrast-green-rgb);
+  --ion-color-contrast: var(--ion-color-contrast-green-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-contrast-green-contrast-rgb);
+  --ion-color-shade: var(--ion-color-contrast-green-shade);
+  --ion-color-tint: var(--ion-color-contrast-green-tint);
+}
