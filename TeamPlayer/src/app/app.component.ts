@@ -14,32 +14,32 @@ export class AppComponent implements OnInit {
   public appPages = [
     {
       title: 'Strona główna',
-      url: '/folder/Strona główna',
+      url: '/folder/main',
       icon: 'cube-outline'
     },
     {
       title: 'Zadania',
-      url: '/folder/Zadania',
+      url: '/folder/tasks',
       icon: 'list-outline'
     },
     {
       title: 'Wydarzenia',
-      url: '/folder/Wydarzenia',
+      url: '/folder/events',
       icon: 'calendar-outline'
     },
     {
       title: 'Notatki',
-      url: '/folder/Notatki',
+      url: '/folder/note',
       icon: 'reader-outline'
     },
     {
       title: 'Zespoły',
-      url: '/folder/Zespoły',
+      url: '/folder/teams',
       icon: 'people-outline'
     },
     {
       title: 'Mój profil',
-      url: '/folder/Mój profil',
+      url: '/folder/my-profile',
       icon: 'person-circle-outline'
     },
   ];

@@ -1,0 +1,65 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title>Logowanie</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+    <ion-header collapse="condense">
+        <ion-toolbar>
+            <ion-title size="large">Cześć!</ion-title>
+        </ion-toolbar>
+    </ion-header>
+    <ion-row class="ion-justify-content-center">
+        <ion-col size="8" class="ion-justify-content-center ion-text-center">
+            <form action="doRegister()">
+                <ion-item>
+                    <ion-label position="stacked">Nazwa użytkownika:</ion-label>
+                    <ion-input
+                            name="name"
+                            type="text"
+                            inputmode="text"
+                    ></ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-label position="stacked">E-mail:</ion-label>
+                    <ion-input
+                            name="email"
+                            type="email"
+                            fill="outline"
+                            inputmode="email"
+                            required="true"
+                    ></ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-label position="stacked">Hasło:</ion-label>
+                    <ion-input
+                            name="password"
+                            type="password"
+                            inputmode="text"
+                            required="true"
+                    ></ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-label position="stacked">Powtórz hasło:</ion-label>
+                    <ion-input
+                            name="passwordConfirmed"
+                            type="password"
+                            inputmode="text"
+                            required="true"
+                    ></ion-input>
+                </ion-item>
+                <ion-button
+                        type="submit"
+                        color="green"
+                        [shape]="round"
+                >
+                    Zaloguj
+                </ion-button>
+            </form>
+        </ion-col>
+    </ion-row>
+</ion-content>
