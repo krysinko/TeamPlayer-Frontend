@@ -16,7 +16,8 @@
     <ion-row class="ion-justify-content-center">
         <ion-col size="8" class="ion-justify-content-center ion-text-center">
             <form action="doRegister()">
-                <ion-item>
+                <div class="ion-text-end ion-margin-top"><small><ion-text color="light-danger">*</ion-text> - pola wymagane</small></div>
+                <ion-item class="ion-no-padding">
                     <ion-label position="stacked">Nazwa użytkownika:</ion-label>
                     <ion-input
                             name="name"
@@ -24,8 +25,8 @@
                             inputmode="text"
                     ></ion-input>
                 </ion-item>
-                <ion-item>
-                    <ion-label position="stacked">E-mail:</ion-label>
+                <ion-item class="ion-no-padding">
+                    <ion-label position="stacked">E-mail<ion-text color="light-danger">*</ion-text>:</ion-label>
                     <ion-input
                             name="email"
                             type="email"
@@ -34,8 +35,8 @@
                             required="true"
                     ></ion-input>
                 </ion-item>
-                <ion-item>
-                    <ion-label position="stacked">Hasło:</ion-label>
+                <ion-item class="ion-no-padding">
+                    <ion-label position="stacked">Hasło<ion-text color="light-danger">*</ion-text>:</ion-label>
                     <ion-input
                             name="password"
                             type="password"
@@ -43,8 +44,8 @@
                             required="true"
                     ></ion-input>
                 </ion-item>
-                <ion-item>
-                    <ion-label position="stacked">Powtórz hasło:</ion-label>
+                <ion-item class="ion-no-padding">
+                    <ion-label position="stacked">Powtórz hasło<ion-text color="light-danger">*</ion-text>:</ion-label>
                     <ion-input
                             name="passwordConfirmed"
                             type="password"
@@ -55,9 +56,10 @@
                 <ion-button
                         type="submit"
                         color="green"
-                        [shape]="round"
+                        shape="round"
+                        class="ion-margin-top"
                 >
-                    Zaloguj
+                    Zarejestruj
                 </ion-button>
             </form>
         </ion-col>
