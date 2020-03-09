@@ -6,7 +6,7 @@ import {RegisterComponent} from './components/register/register.component';
 const routes: Routes = [
     {
         path: '',
-        redirectTo: 'folder/main',
+        redirectTo: 'main',
         pathMatch: 'full'
     },
     {
@@ -18,31 +18,31 @@ const routes: Routes = [
         loadChildren: () => import('./components/register/register.component').then(m => m.RegisterComponent)
     },
     // {
-    //   path: 'folder/:id',
-    //   loadChildren: () => import('./modules/folder/folder.module').then(m => m.FolderPageModule)
+    //   path: ':id',
+    //   loadChildren: () => import('./modules/folder.module').then(m => m.FolderPageModule)
     // },
     {
-        path: 'folder/main',
+        path: 'main',
         loadChildren: () => import('./pages/main/main.module').then(m => m.MainPageModule)
     },
     {
-        path: 'folder/tasks',
+        path: 'tasks',
         loadChildren: () => import('./pages/tasks/tasks.module').then(m => m.TasksPageModule)
     },
     {
-        path: 'folder/events',
+        path: 'events',
         loadChildren: () => import('./pages/events/events.module').then(m => m.EventsPageModule)
     },
     {
-        path: 'folder/note',
+        path: 'note',
         loadChildren: () => import('./pages/note/note.module').then(m => m.NotePageModule)
     },
     {
-        path: 'folder/teams',
+        path: 'teams',
         loadChildren: () => import('./pages/teams/teams.module').then(m => m.TeamsPageModule)
     },
     {
-        path: 'folder/my-profile',
+        path: 'my-profile',
         loadChildren: () => import('./pages/my-profile/my-profile.module').then(m => m.MyProfilePageModule),
     }
 ];

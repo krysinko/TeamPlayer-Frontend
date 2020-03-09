@@ -10,36 +10,36 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
   styleUrls: ['app.component.scss']
 })
 export class AppComponent implements OnInit {
-  public selectedIndex = 0;
-  public appPages = [
+  selectedIndex = 0;
+  appPages = [
     {
       title: 'Strona główna',
-      url: '/folder/main',
+      url: '/main',
       icon: 'cube-outline'
     },
     {
       title: 'Zadania',
-      url: '/folder/tasks',
+      url: '/tasks',
       icon: 'list-outline'
     },
     {
       title: 'Wydarzenia',
-      url: '/folder/events',
+      url: '/events',
       icon: 'calendar-outline'
     },
     {
       title: 'Notatki',
-      url: '/folder/note',
+      url: '/note',
       icon: 'reader-outline'
     },
     {
       title: 'Zespoły',
-      url: '/folder/teams',
+      url: '/teams',
       icon: 'people-outline'
     },
     {
       title: 'Mój profil',
-      url: '/folder/my-profile',
+      url: '/my-profile',
       icon: 'person-circle-outline'
     },
   ];
@@ -61,7 +61,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    const path = window.location.pathname.split('folder/')[1];
+    const path = window.location.pathname.split('')[1];
     if (path !== undefined) {
       this.selectedIndex = this.appPages.findIndex(page => page.title.toLowerCase() === path.toLowerCase());
     }

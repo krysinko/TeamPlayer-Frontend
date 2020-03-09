@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {User} from '../models/user';
 import {BehaviorSubject, Observable} from 'rxjs';
+import {Router} from '@angular/router';
 
 @Injectable({
     providedIn: 'root'
@@ -17,13 +18,19 @@ export class UserService {
     userLoggedIn$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     private _user$: Observable<User>;
 
-    constructor() {
+    constructor(private router: Router) {
     }
 
     // TODO odpowiednie typy i obsługa logowania
-    logIn(): boolean {
-        this.userLoggedIn$.next(true);
-        return true;
+    logIn(): void {
+        this.apiLogIn(null).then(
+            () => {
+                this.userLoggedIn$.next(true);
+                this.writeUserData(null);
+                this.router.navigate(['/']);
+            }, err => {
+            }
+        );
     }
 
     logOut(): boolean {
@@ -32,27 +39,41 @@ export class UserService {
     }
 
     register(userData) {
-        this.api_register(userData).then(() => {
+        this.apiRegister(userData).then(
+            () => {
+                alert('User registered!');
                 this.writeUserData(userData);
                 this.logIn();
+                this.router.navigate(['/']);
             },
             err => {
-            });
+            }
+        );
     }
 
     private writeUserData(data) {
         const usr = new User();
-        if (data.description) {
-            usr.email = data.email;
+        if (data) {
+            if (data.description) {
+                usr.description = data.description;
+            }
+            usr.name = data.name;
+            usr.description = '';
         }
-        usr.name = data.name;
-        usr.description = '';
         this.userData = usr;
     }
 
-    private api_register(userdata): Promise<boolean> {
+    private apiRegister(userdata): Promise<boolean> {
         return new Promise((resolve, reject) => {
-            setTimeout(function() {
+            setTimeout(function () {
+                resolve(true);
+            }, 600);
+        });
+    }
+
+    private apiLogIn(userdata): Promise<boolean> {
+        return new Promise((resolve, reject) => {
+            setTimeout(function () {
                 resolve(true);
             }, 600);
         });

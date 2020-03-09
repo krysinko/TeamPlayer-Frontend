@@ -3,14 +3,14 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>{{ folder }}</ion-title>
+    <ion-title>{{ subpage }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">{{ folder }}</ion-title>
+      <ion-title size="large">{{ subpage }}</ion-title>
     </ion-toolbar>
   </ion-header>
   <ion-row class="ion-justify-content-center">
@@ -19,13 +19,13 @@
       <!-- TODO weryfikacja stanu autentykacji -->
       <h5>Aplikacja do zarządzania Twoją organizacją</h5>
     </ion-col>
-
-    <ion-col size="4" class="ion-justify-content-end ion-text-end">
-      <ion-button (click)="goToLoginPage()" shape="round" color="green">Logowanie</ion-button>
-    </ion-col>
-    <ion-col size="4" class="ion-justify-content-start ion-text-start">
-      <ion-button (click)="goToRegisterPage()" shape="round" color="green">Rejestracja</ion-button>
-    </ion-col>
+    <ng-container *ngIf="!userLoggedIn">
+      <ion-col size="4" class="ion-justify-content-end ion-text-end">
+        <ion-button (click)="goToLoginPage()" shape="round" color="green">Logowanie</ion-button>
+      </ion-col>
+      <ion-col size="4" class="ion-justify-content-start ion-text-start">
+        <ion-button (click)="goToRegisterPage()" shape="round" color="green">Rejestracja</ion-button>
+      </ion-col>
+    </ng-container>
   </ion-row>
 </ion-content>
-<router-outlet></router-outlet>

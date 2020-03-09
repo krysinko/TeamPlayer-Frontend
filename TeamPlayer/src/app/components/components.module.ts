@@ -3,7 +3,8 @@ import { CommonModule } from '@angular/common';
 import {LoginComponent} from './login/login.component';
 import {RegisterComponent} from './register/register.component';
 import {ComponentsRoutingModule} from './components-routing.module';
-import {IonicModule} from "@ionic/angular";
+import {IonicModule} from '@ionic/angular';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 
 
@@ -13,7 +14,9 @@ import {IonicModule} from "@ionic/angular";
     imports: [
         CommonModule,
         ComponentsRoutingModule,
-        IonicModule
+        IonicModule,
+        FormsModule,
+        ReactiveFormsModule
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

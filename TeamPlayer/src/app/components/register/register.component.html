@@ -15,7 +15,7 @@
     </ion-header>
     <ion-row class="ion-justify-content-center">
         <ion-col size="8" class="ion-justify-content-center ion-text-center">
-            <form action="doRegister()">
+            <form (ngSubmit)="doRegister()" [formGroup]="registerForm">
                 <div class="ion-text-end ion-margin-top"><small><ion-text color="light-danger">*</ion-text> - pola wymagane</small></div>
                 <ion-item class="ion-no-padding">
                     <ion-label position="stacked">Nazwa użytkownika:</ion-label>
@@ -23,6 +23,7 @@
                             name="name"
                             type="text"
                             inputmode="text"
+                            formControlName="name"
                     ></ion-input>
                 </ion-item>
                 <ion-item class="ion-no-padding">
@@ -33,6 +34,7 @@
                             fill="outline"
                             inputmode="email"
                             required="true"
+                            formControlName="email"
                     ></ion-input>
                 </ion-item>
                 <ion-item class="ion-no-padding">
@@ -42,6 +44,7 @@
                             type="password"
                             inputmode="text"
                             required="true"
+                            formControlName="password"
                     ></ion-input>
                 </ion-item>
                 <ion-item class="ion-no-padding">
@@ -51,6 +54,7 @@
                             type="password"
                             inputmode="text"
                             required="true"
+                            formControlName="passwordConfirmed"
                     ></ion-input>
                 </ion-item>
                 <ion-button

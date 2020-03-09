@@ -9,26 +9,24 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 })
 export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
-  constructor(private userService: UserService, private formBuilder: FormBuilder) {
+  constructor(private userService: UserService, private formBuilder: FormBuilder) {}
+
+  ngOnInit() {
+    this.buildRegisterForm();
+  }
+
+  doRegister() {
+    this.userService.register({});
+    this.userService.logIn();
+  }
+
+  buildRegisterForm(): void {
     this.registerForm = this.formBuilder.group({
       name: [''],
-      email: ['', Validators.required, Validators.email],
+      email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
       passwordConfirmed: ['', Validators.required],
     });
   }
 
-  ngOnInit() {}
-
-  doRegister() {
-    // this.userService.register({});
-    this.userService.logIn();
-  }
-
 }
-// core.js:6014 ERROR Error: Uncaught (in promise): NullInjectorError: StaticInjectorError(AppModule)[RegisterComponent -> FormBuilder]:
-//   StaticInjectorError(Platform: core)[RegisterComponent -> FormBuilder]:
-//     NullInjectorError: No provider for FormBuilder!
-// NullInjectorError: StaticInjectorError(AppModule)[RegisterComponent -> FormBuilder]:
-//   StaticInjectorError(Platform: core)[RegisterComponent -> FormBuilder]:
-//     NullInjectorError: No provider for FormBuilder!
