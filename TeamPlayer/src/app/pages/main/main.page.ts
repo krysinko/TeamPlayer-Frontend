@@ -3,6 +3,9 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {BehaviorSubject, Subject} from 'rxjs';
 import {UserService} from '../../services/user.service';
 import {takeUntil} from 'rxjs/operators';
+import {Location} from "@angular/common";
+import {AppPages} from "../../models/app-pages";
+import * as _ from 'lodash';
 
 @Component({
     selector: 'app-main',
@@ -11,16 +14,16 @@ import {takeUntil} from 'rxjs/operators';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MainPage implements OnInit, OnDestroy {
-    subpage: string;
+    subpage: string = '';
     userLoggedIn: boolean = false;
     componentDestroyed$: Subject<boolean> = new Subject();
 
-    constructor(private activatedRoute: ActivatedRoute, private userService: UserService, private router: Router) {
+    constructor(private location: Location, private userService: UserService, private router: Router, private appPages: AppPages) {
         this.setUserLoginStateSubscription();
     }
 
     ngOnInit() {
-        this.subpage = this.activatedRoute.snapshot.paramMap.get('id');
+        this.subpage = this.appPages.getPageDetails(this.location.path()).title;
     }
 
 

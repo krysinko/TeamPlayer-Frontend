@@ -8,6 +8,7 @@ import {MyProfilePageRoutingModule} from './my-profile-routing.module';
 
 import {MyProfilePage} from './my-profile.page';
 import {ComponentsModule} from '../../components/components.module';
+import {AppPages} from "../../models/app-pages";
 
 @NgModule({
     imports: [
@@ -18,6 +19,7 @@ import {ComponentsModule} from '../../components/components.module';
         MyProfilePageRoutingModule
     ],
     declarations: [MyProfilePage],
+    providers: [AppPages],
     exports: []
 })
 export class MyProfilePageModule {

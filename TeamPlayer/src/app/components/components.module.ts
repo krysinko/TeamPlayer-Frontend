@@ -5,12 +5,13 @@ import {RegisterComponent} from './register/register.component';
 import {ComponentsRoutingModule} from './components-routing.module';
 import {IonicModule} from '@ionic/angular';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {HeaderSimpleComponent} from './header-simple/header-simple.component';
 
 
 
 @NgModule({
-  declarations: [LoginComponent, RegisterComponent],
-  exports: [LoginComponent, RegisterComponent],
+  declarations: [LoginComponent, RegisterComponent, HeaderSimpleComponent],
+  exports: [LoginComponent, RegisterComponent, HeaderSimpleComponent],
     imports: [
         CommonModule,
         ComponentsRoutingModule,

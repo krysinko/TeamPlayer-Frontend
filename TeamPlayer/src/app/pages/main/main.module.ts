@@ -8,6 +8,7 @@ import {MainPageRoutingModule} from './main-routing.module';
 
 import {MainPage} from './main.page';
 import {ComponentsModule} from '../../components/components.module';
+import {AppPages} from "../../models/app-pages";
 
 @NgModule({
     imports: [
@@ -17,7 +18,8 @@ import {ComponentsModule} from '../../components/components.module';
         ComponentsModule,
         MainPageRoutingModule
     ],
-    declarations: [MainPage]
+    declarations: [MainPage],
+    providers: [AppPages]
 })
 export class MainPageModule {
 }

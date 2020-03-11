@@ -17,10 +17,6 @@ const routes: Routes = [
         path: 'register',
         loadChildren: () => import('./components/register/register.component').then(m => m.RegisterComponent)
     },
-    // {
-    //   path: ':id',
-    //   loadChildren: () => import('./modules/folder.module').then(m => m.FolderPageModule)
-    // },
     {
         path: 'main',
         loadChildren: () => import('./pages/main/main.module').then(m => m.MainPageModule)
