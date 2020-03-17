@@ -1,11 +1,11 @@
-import {Component, OnInit} from '@angular/core';
-import {UserService} from '../../services/user.service';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { UserService } from '../../services/user.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
     selector: 'app-login',
     templateUrl: './login.component.html',
-    styleUrls: ['./login.component.scss'],
+    styleUrls: [ './login.component.scss' ],
 })
 export class LoginComponent implements OnInit {
     loginForm: FormGroup;
@@ -23,8 +23,8 @@ export class LoginComponent implements OnInit {
 
     private buildLoginForm(): void {
         this.loginForm = this.formBuilder.group({
-            email: ['', [Validators.email, Validators.required]],
-            password: ['', Validators.required]
+            email: [ '', [ Validators.email, Validators.required ] ],
+            password: [ '', Validators.required ]
         });
     }
 

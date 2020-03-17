@@ -1,16 +1,15 @@
-import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {BehaviorSubject, Subject} from 'rxjs';
-import {UserService} from '../../services/user.service';
-import {takeUntil} from 'rxjs/operators';
-import {Location} from "@angular/common";
-import {AppPages} from "../../models/app-pages";
-import * as _ from 'lodash';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { Subject } from 'rxjs';
+import { UserService } from '../../services/user.service';
+import { takeUntil } from 'rxjs/operators';
+import { Location } from '@angular/common';
+import { AppPages } from '../../models/app-pages';
 
 @Component({
     selector: 'app-main',
     templateUrl: './main.page.html',
-    styleUrls: ['./main.page.scss'],
+    styleUrls: [ './main.page.scss' ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MainPage implements OnInit, OnDestroy {
@@ -28,11 +27,11 @@ export class MainPage implements OnInit, OnDestroy {
 
 
     goToLoginPage() {
-        this.router.navigate(['login']);
+        this.router.navigate([ 'login' ]);
     }
 
     goToRegisterPage() {
-        this.router.navigate(['register']);
+        this.router.navigate([ 'register' ]);
     }
 
     ngOnDestroy(): void {

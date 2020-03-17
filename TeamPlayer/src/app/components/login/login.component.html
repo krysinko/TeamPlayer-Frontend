@@ -2,37 +2,43 @@
 
 
 <ion-content [fullscreen]="true">
-    <ion-header class="ion-no-border" collapse="condense">
-        <ion-toolbar>
-            <ion-title size="large">Cześć!</ion-title>
-        </ion-toolbar>
-    </ion-header>
-    <ion-row class="ion-justify-content-center">
-        <ion-col size="8" class="ion-justify-content-center ion-text-center ion-margin-top ion-padding-top">
-            <form (ngSubmit)="doLogIn()" [formGroup]="loginForm">
-                <ion-item class="ion-no-padding">
-                    <ion-label position="stacked">E-mail<ion-text color="light-danger">*</ion-text>:</ion-label>
-                    <ion-input
-                        name="email"
-                        type="email"
-                        fill="outline"
-                        inputmode="email"
-                        required="true"
-                        formControlName="email"
-                    ></ion-input>
-                </ion-item>
-                <ion-item class="ion-no-padding">
-                    <ion-label position="stacked">Hasło<ion-text color="light-danger">*</ion-text>:</ion-label>
-                    <ion-input
-                        name="password"
-                        type="password"
-                        inputmode="text"
-                        required="true"
-                        formControlName="password"
-                    ></ion-input>
-                </ion-item>
-                <ion-button type="submit" color="green" shape="round" class="ion-margin-top" >Zaloguj</ion-button>
-            </form>
-        </ion-col>
-    </ion-row>
+	<ion-header class="ion-no-border" collapse="condense">
+		<ion-toolbar>
+			<ion-title size="large">Cześć!</ion-title>
+		</ion-toolbar>
+	</ion-header>
+	<ion-row class="ion-justify-content-center">
+		<ion-col size="8" class="ion-justify-content-center ion-text-center ion-margin-top ion-padding-top">
+			<form (ngSubmit)="doLogIn()" [formGroup]="loginForm">
+				<ion-item class="ion-no-padding">
+					<ion-label position="stacked">E-mail
+						<ion-text color="light-danger">*</ion-text>
+						:
+					</ion-label>
+					<ion-input
+						name="email"
+						type="email"
+						fill="outline"
+						inputmode="email"
+						required="true"
+						formControlName="email"
+					></ion-input>
+				</ion-item>
+				<ion-item class="ion-no-padding">
+					<ion-label position="stacked">Hasło
+						<ion-text color="light-danger">*</ion-text>
+						:
+					</ion-label>
+					<ion-input
+						name="password"
+						type="password"
+						inputmode="text"
+						required="true"
+						formControlName="password"
+					></ion-input>
+				</ion-item>
+				<ion-button type="submit" color="green" shape="round" class="ion-margin-top">Zaloguj</ion-button>
+			</form>
+		</ion-col>
+	</ion-row>
 </ion-content>

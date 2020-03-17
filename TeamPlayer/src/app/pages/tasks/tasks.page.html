@@ -1,5 +1,30 @@
 <app-header-simple [title]="title"></app-header-simple>
 
 <ion-content>
+	<ion-row>
+		<ion-col>
+			<ion-list>
+				<ion-item *ngFor="let task of tasks" lines="full">
+					<ion-checkbox slot="start"></ion-checkbox>
+					<ion-label>
+						{{ task.title }}
+					</ion-label>
 
+					<ion-text class="ion-padding-end">
+						<small>{{ task.deadline | date: 'dd.MM.yyyy, hh:mm' }}</small>
+					</ion-text>
+
+					<ion-button shape="round" class="task-button ion-no-padding ion-no-margin">
+						<ion-icon name="calendar-outline"></ion-icon>
+					</ion-button>
+					<ion-button shape="round" class="task-button ion-no-padding ion-no-margin">
+						<ion-icon name="person-add-outline"></ion-icon>
+					</ion-button>
+					<ion-button shape="round" class="task-button ion-no-padding ion-no-margin">
+						<ion-icon name="arrow-forward-outline" mode="ios"></ion-icon>
+					</ion-button>
+				</ion-item>
+			</ion-list>
+		</ion-col>
+	</ion-row>
 </ion-content>

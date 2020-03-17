@@ -1,7 +1,7 @@
-import {Injectable} from '@angular/core';
-import {User} from '../models/user';
-import {BehaviorSubject, Observable} from 'rxjs';
-import {Router} from '@angular/router';
+import { Injectable } from '@angular/core';
+import { User } from '../models/user';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Injectable({
     providedIn: 'root'
@@ -27,7 +27,7 @@ export class UserService {
             () => {
                 this.userLoggedIn$.next(true);
                 this.writeUserData(null);
-                this.router.navigate(['/']);
+                this.router.navigate([ '/' ]);
             }, err => {
             }
         );
@@ -44,7 +44,7 @@ export class UserService {
                 alert('User registered!');
                 this.writeUserData(userData);
                 this.logIn();
-                this.router.navigate(['/']);
+                this.router.navigate([ '/' ]);
             },
             err => {
             }

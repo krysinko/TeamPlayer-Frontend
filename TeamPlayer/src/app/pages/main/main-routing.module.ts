@@ -1,10 +1,8 @@
-import {NgModule} from '@angular/core';
-import {Routes, RouterModule} from '@angular/router';
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
 
-import {MainPage} from './main.page';
-import {LoginComponent} from '../../components/login/login.component';
-import {RegisterComponent} from '../../components/register/register.component';
-import {ComponentsModule} from '../../components/components.module';
+import { MainPage } from './main.page';
+import { ComponentsModule } from '../../components/components.module';
 
 const routes: Routes = [
     {
@@ -14,8 +12,8 @@ const routes: Routes = [
 ];
 
 @NgModule({
-    imports: [ComponentsModule, RouterModule.forChild(routes)],
-    exports: [RouterModule],
+    imports: [ ComponentsModule, RouterModule.forChild(routes) ],
+    exports: [ RouterModule ],
 })
 export class MainPageRoutingModule {
 }

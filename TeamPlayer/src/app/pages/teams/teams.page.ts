@@ -1,21 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
-import {AppPages} from "../../models/app-pages";
-import {Location} from "@angular/common";
+import { AppPages } from '../../models/app-pages';
+import { Location } from '@angular/common';
 
 @Component({
-  selector: 'app-teams',
-  templateUrl: './teams.page.html',
-  styleUrls: ['./teams.page.scss'],
+    selector: 'app-teams',
+    templateUrl: './teams.page.html',
+    styleUrls: [ './teams.page.scss' ],
 })
 export class TeamsPage implements OnInit {
-  title: string;
+    title: string;
 
-  constructor(private appPages: AppPages, private location: Location) {
-  }
+    constructor(private appPages: AppPages, private location: Location) {
+    }
 
-  ngOnInit() {
-    this.title = this.appPages.getPageDetails(this.location.path()).title;
-  }
+    ngOnInit() {
+        this.title = this.appPages.getPageDetails(this.location.path()).title;
+    }
 
 }

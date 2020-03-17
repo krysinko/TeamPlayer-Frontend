@@ -1,12 +1,21 @@
-export class Task {
-    id: number;
-    title: string;
-    content: string;
-    deadline: Date;
-    status: StatusModel;
+class PreviousTaskState {
+    updated: Date;
+    oldDetails: TaskDetails;
 }
 
-export enum StatusModel {
+export class TaskDetails {
+    title?: string;
+    content?: string;
+    deadline?: Date;
+    status?: TaskStatus;
+}
+
+export class Task extends TaskDetails {
+    id?: number;
+    previousStates?: Array<PreviousTaskState>;
+}
+
+export enum TaskStatus {
     TODO = 'todo',
     PREPARATION = 'preparation ongoing',
     EXECUTION = 'execution ongoing',

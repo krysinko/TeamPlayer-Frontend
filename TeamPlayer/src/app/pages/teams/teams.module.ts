@@ -7,8 +7,8 @@ import { IonicModule } from '@ionic/angular';
 import { TeamsPageRoutingModule } from './teams-routing.module';
 
 import { TeamsPage } from './teams.page';
-import {ComponentsModule} from "../../components/components.module";
-import {AppPages} from "../../models/app-pages";
+import { ComponentsModule } from '../../components/components.module';
+import { AppPages } from '../../models/app-pages';
 
 @NgModule({
     imports: [
@@ -18,8 +18,9 @@ import {AppPages} from "../../models/app-pages";
         TeamsPageRoutingModule,
         ComponentsModule
     ],
-    declarations: [TeamsPage],
-    providers: [AppPages]
+    declarations: [ TeamsPage ],
+    providers: [ AppPages ]
 
 })
-export class TeamsPageModule {}
+export class TeamsPageModule {
+}

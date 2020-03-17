@@ -1,12 +1,11 @@
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
-import {AppPages} from "../../models/app-pages";
-import {Location} from "@angular/common";
+import { Component, OnInit } from '@angular/core';
+import { AppPages } from '../../models/app-pages';
+import { Location } from '@angular/common';
 
 @Component({
     selector: 'app-my-profile',
     templateUrl: './my-profile.page.html',
-    styleUrls: ['./my-profile.page.scss'],
+    styleUrls: [ './my-profile.page.scss' ],
 })
 export class MyProfilePage implements OnInit {
     title: string;
