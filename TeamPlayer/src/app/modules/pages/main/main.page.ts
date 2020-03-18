@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
-import { UserService } from '../../services/user.service';
+import { UserService } from '../../../services/user.service';
 import { takeUntil } from 'rxjs/operators';
 import { Location } from '@angular/common';
-import { AppPages } from '../../models/app-pages';
+import { AppPages } from '../../../models/app-pages';
 
 @Component({
     selector: 'app-main',

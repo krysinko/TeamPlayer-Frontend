@@ -17,27 +17,27 @@ const routes: Routes = [
     },
     {
         path: 'main',
-        loadChildren: () => import('./pages/main/main.module').then(m => m.MainPageModule)
+        loadChildren: () => import('./modules/pages/main/main.module').then(m => m.MainPageModule)
     },
     {
         path: 'tasks',
-        loadChildren: () => import('./pages/tasks/tasks.module').then(m => m.TasksPageModule)
+        loadChildren: () => import('./modules/pages/tasks/tasks.module').then(m => m.TasksPageModule)
     },
     {
         path: 'events',
-        loadChildren: () => import('./pages/events/events.module').then(m => m.EventsPageModule)
+        loadChildren: () => import('./modules/pages/events/events.module').then(m => m.EventsPageModule)
     },
     {
         path: 'note',
-        loadChildren: () => import('./pages/note/note.module').then(m => m.NotePageModule)
+        loadChildren: () => import('./modules/pages/note/note.module').then(m => m.NotePageModule)
     },
     {
         path: 'teams',
-        loadChildren: () => import('./pages/teams/teams.module').then(m => m.TeamsPageModule)
+        loadChildren: () => import('./modules/pages/teams/teams.module').then(m => m.TeamsPageModule)
     },
     {
         path: 'my-profile',
-        loadChildren: () => import('./pages/my-profile/my-profile.module').then(m => m.MyProfilePageModule),
+        loadChildren: () => import('./modules/pages/my-profile/my-profile.module').then(m => m.MyProfilePageModule),
     }
 ];
 

@@ -7,8 +7,8 @@ import { IonicModule } from '@ionic/angular';
 import { MyProfilePageRoutingModule } from './my-profile-routing.module';
 
 import { MyProfilePage } from './my-profile.page';
-import { ComponentsModule } from '../../components/components.module';
-import { AppPages } from '../../models/app-pages';
+import { ComponentsModule } from '../../../components/components.module';
+import { AppPages } from '../../../models/app-pages';
 
 @NgModule({
     imports: [

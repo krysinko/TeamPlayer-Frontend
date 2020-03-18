@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AppPages } from '../../models/app-pages';
+import { AppPages } from '../../../models/app-pages';
 import { Location } from '@angular/common';
 
 @Component({

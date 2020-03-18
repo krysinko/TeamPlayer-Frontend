@@ -4,22 +4,22 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { NotePageRoutingModule } from './note-routing.module';
+import { EventsPageRoutingModule } from './events-routing.module';
 
-import { NotePage } from './note.page';
-import { ComponentsModule } from '../../components/components.module';
-import { AppPages } from '../../models/app-pages';
+import { EventsPage } from './events.page';
+import { ComponentsModule } from '../../../components/components.module';
+import { AppPages } from '../../../models/app-pages';
 
 @NgModule({
     imports: [
         CommonModule,
         FormsModule,
         IonicModule,
-        NotePageRoutingModule,
+        EventsPageRoutingModule,
         ComponentsModule
     ],
-    declarations: [ NotePage ],
+    declarations: [ EventsPage ],
     providers: [ AppPages ]
 })
-export class NotePageModule {
+export class EventsPageModule {
 }

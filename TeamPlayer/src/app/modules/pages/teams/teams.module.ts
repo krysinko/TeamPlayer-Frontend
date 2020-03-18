@@ -4,22 +4,23 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { EventsPageRoutingModule } from './events-routing.module';
+import { TeamsPageRoutingModule } from './teams-routing.module';
 
-import { EventsPage } from './events.page';
-import { ComponentsModule } from '../../components/components.module';
-import { AppPages } from '../../models/app-pages';
+import { TeamsPage } from './teams.page';
+import { ComponentsModule } from '../../../components/components.module';
+import { AppPages } from '../../../models/app-pages';
 
 @NgModule({
     imports: [
         CommonModule,
         FormsModule,
         IonicModule,
-        EventsPageRoutingModule,
+        TeamsPageRoutingModule,
         ComponentsModule
     ],
-    declarations: [ EventsPage ],
+    declarations: [ TeamsPage ],
     providers: [ AppPages ]
+
 })
-export class EventsPageModule {
+export class TeamsPageModule {
 }

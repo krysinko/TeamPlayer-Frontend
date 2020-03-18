@@ -6,11 +6,13 @@ import { ComponentsRoutingModule } from './components-routing.module';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HeaderSimpleComponent } from './header-simple/header-simple.component';
+import { PopoverDatePickerComponent } from './popover-date-picker/popover-date-picker.component';
 
 
 @NgModule({
-    declarations: [ LoginComponent, RegisterComponent, HeaderSimpleComponent ],
-    exports: [ LoginComponent, RegisterComponent, HeaderSimpleComponent ],
+    declarations: [ LoginComponent, RegisterComponent, HeaderSimpleComponent, PopoverDatePickerComponent ],
+    exports: [ LoginComponent, RegisterComponent, HeaderSimpleComponent, PopoverDatePickerComponent ],
+    entryComponents: [PopoverDatePickerComponent],
     imports: [
         CommonModule,
         ComponentsRoutingModule,

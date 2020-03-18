@@ -187,6 +187,18 @@
   --ion-color-shade: var(--ion-color-light-warning-shade);
   --ion-color-tint: var(--ion-color-light-warning-tint);
 }
+
 ion-button {
   text-transform: none;
+}
+
+.popover-date-picker {
+  //width: 60%;
+  //height: 120px;
+  //top: 20%;
+  --height: 120px;
+  --width: 60%;
+  .popover-content {
+    top: 10% !important;
+  }
 }

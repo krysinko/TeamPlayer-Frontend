@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { AppPages } from '../../models/app-pages';
+import { AppPages } from '../../../models/app-pages';
 import { Location } from '@angular/common';
 
 @Component({
-    selector: 'app-my-profile',
-    templateUrl: './my-profile.page.html',
-    styleUrls: [ './my-profile.page.scss' ],
+    selector: 'app-events',
+    templateUrl: './events.page.html',
+    styleUrls: [ './events.page.scss' ],
 })
-export class MyProfilePage implements OnInit {
+export class EventsPage implements OnInit {
     title: string;
 
     constructor(private appPages: AppPages, private location: Location) {
@@ -16,5 +16,4 @@ export class MyProfilePage implements OnInit {
     ngOnInit() {
         this.title = this.appPages.getPageDetails(this.location.path()).title;
     }
-
 }
