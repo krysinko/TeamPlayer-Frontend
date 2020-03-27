@@ -1,28 +1,56 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { PopoverController } from '@ionic/angular';
-import { daynames } from '../../models/task';
+import { daynames, Task } from '../../models/task';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { TaskService } from '../../services/task.service';
 
 @Component({
-  selector: 'app-popover-date-picker',
-  templateUrl: './popover-date-picker.component.html',
-  styleUrls: ['./popover-date-picker.component.scss'],
+    selector: 'app-popover-date-picker',
+    templateUrl: './popover-date-picker.component.html',
+    styleUrls: [ './popover-date-picker.component.scss' ],
 })
 export class PopoverDatePickerComponent implements OnInit {
 
-  @Input() date: Date = new Date();
-  displayDate: string;
-  displayTime: string;
-  constructor(private popoverController: PopoverController) { }
+    @Input() task: Task;
+    now: Date = new Date();
+    _daynames: string[] = daynames;
+    dateForm: FormGroup;
+    errorMessage: string;
+    datePickerOptions: object = {
+        showBackdrop: true,
+        backdropDismiss: true,
+        animated: true,
+    };
 
-  ngOnInit() {}
+    constructor(private popoverController: PopoverController, private formBuilder: FormBuilder, private taskService: TaskService) {}
 
-  getDate(): string {
-    const dateOptions: object = { year: 'numeric', month: '2-digit', day: '2-digit' };
-    return daynames[this.date.getDay()] + ', ' + this.date.toLocaleString('pl-PL', dateOptions);
-  }
+    ngOnInit() {
+        console.log(this.task);
+        this.buildDateForm();
+    }
 
-  getTime(): string {
-    return String(this.date.getHours()) + ':' + String(this.date.getMinutes() > 9 ? this.date.getMinutes() : '0' + this.date.getMinutes());
-  }
+    saveNewDateTime(): void {
+        const timeDate: Date = new Date(this.dateForm.value.time);
+        this.task.deadline = new Date(this.dateForm.value.date);
+        this.task.deadline.setHours(timeDate.getHours(), timeDate.getMinutes());
+        this.taskService.update(this.task);
+        this.popoverController.dismiss();
+    }
 
+    dismiss(): void {
+        this.popoverController.dismiss();
+    }
+
+    private buildDateForm(): void {
+        let date: Date;
+        if (this.task) {
+            date = this.task.deadline;
+        } else {
+            date = new Date();
+        }
+        this.dateForm = this.formBuilder.group({
+            date: date.toISOString(),
+            time: date.toISOString(),
+        });
+    }
 }

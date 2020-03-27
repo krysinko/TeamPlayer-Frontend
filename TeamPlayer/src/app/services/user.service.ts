@@ -15,7 +15,8 @@ export class UserService {
         this._user$ = data;
     }
 
-    userLoggedIn$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    // todo default false
+    userLoggedIn$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
     private _user$: Observable<User>;
 
     constructor(private router: Router) {
@@ -38,7 +39,7 @@ export class UserService {
         return true;
     }
 
-    register(userData) {
+    register(userData): void {
         this.apiRegister(userData).then(
             () => {
                 alert('User registered!');
@@ -51,7 +52,57 @@ export class UserService {
         );
     }
 
-    private writeUserData(data) {
+    // todo do as observable
+    getTeamMembers(): User[] {
+        if (this.userLoggedIn$.getValue()) {
+            return [
+                {
+                    id: 0,
+                    name: 'Ania',
+                    email: 'ania@cc.cc',
+                    description: 'UI Designer'
+                },
+                {
+                    id: 1,
+                    name: 'Piotrek',
+                    email: 'piotrek@cc.cc',
+                    description: 'Key accountant'
+                },
+                {
+                    id: 2,
+                    name: 'Ewa',
+                    email: 'ewa@cc.cc',
+                    description: 'Level designer'
+                },
+                {
+                    id: 3,
+                    name: 'Tomek',
+                    email: 'tomek@cc.cc',
+                    description: 'QA'
+                },
+                {
+                    id: 4,
+                    name: 'Pszemek',
+                    email: 'pszemek@cc.cc',
+                    description: 'Developer'
+                },
+                {
+                    id: 5,
+                    name: 'Natalia',
+                    email: 'natalia@cc.cc',
+                    description: 'Developer'
+                },
+                {
+                    id: 6,
+                    name: 'Jurek',
+                    email: 'jurek@cc.cc',
+                    description: 'CEO'
+                },
+            ];
+        }
+    }
+
+    private writeUserData(data): void {
         const usr = new User();
         if (data) {
             if (data.description) {

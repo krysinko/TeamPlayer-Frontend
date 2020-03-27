@@ -12,6 +12,7 @@ export class TaskDetails {
 
 export class Task extends TaskDetails {
     id?: number;
+    assignedUsers?: number[];
     previousStates?: Array<PreviousTaskState>;
 }
 
@@ -22,3 +23,5 @@ export enum TaskStatus {
     BLOCKED = 'blocked',
     DONE = 'done'
 }
+
+export const daynames: string[] = ['Niedziela', 'Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek', 'Sobota'];
