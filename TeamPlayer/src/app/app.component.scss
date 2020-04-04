@@ -54,7 +54,7 @@ ion-menu.md ion-item {
 }
 
 ion-menu.md ion-item.selected {
-    --background: rgba(var(--ion-color-primary-rgb), 0.14);
+    --background: var(--ion-color-pastel-green);
 }
 
 ion-menu.md ion-item.selected ion-icon {

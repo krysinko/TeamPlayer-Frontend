@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
-import { Task, TaskStatus } from '../models/task';
+import { SortOption, Task, TaskProgressInStartToEndOrder, TaskStatus } from '../models/task';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
@@ -15,18 +15,34 @@ export class TaskService {
         return t1.deadline.getTime() - t2.deadline.getTime();
     }
 
+    static compareTaskStatus(t1: Task, t2: Task, order: 'asc' | 'desc') {
+        return (TaskProgressInStartToEndOrder.indexOf(t1.status) - TaskProgressInStartToEndOrder.indexOf(t2.status)) * (order === 'asc' ? 1 : -1);
+    }
+
     private _tasks$: BehaviorSubject<Task[]> = new BehaviorSubject<Task[]>(null);
 
     constructor() {
         this.getFakeTasks();
     }
 
-    update(task: Task) {
+    update(task: Task): void {
         const tasks: Task[] = this._tasks$.getValue();
         const taskToUpdate: Task = tasks.find((t: Task) => t.id === task.id);
         const updatingIndex: number = tasks.indexOf(taskToUpdate);
         tasks[updatingIndex] = taskToUpdate;
         this._tasks$.next(tasks);
+    }
+
+    sortTasks(options: SortOption): void {
+        let tasksSorted: Task[] = this._tasks$.getValue();
+        if (options.property === 'status') {
+            tasksSorted = tasksSorted.sort((t1: Task, t2: Task) => TaskService.compareTaskStatus(t1, t2, options.order));
+        } else {
+            tasksSorted = _.orderBy(tasksSorted, [ options.property, options.order ]);
+        }
+        console.log(tasksSorted);
+
+        this._tasks$.next(tasksSorted);
     }
 
     private getFakeTasks(): Task[] {

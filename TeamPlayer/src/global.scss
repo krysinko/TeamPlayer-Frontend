@@ -28,6 +28,7 @@
 @import "assets/styles/colors.scss";
 @import "assets/styles/texts.scss";
 @import "assets/styles/popovers.scss";
+@import "assets/styles/alerts.scss";
 
 ion-button {
   text-transform: none;
@@ -36,4 +37,8 @@ ion-button {
 
 .display-none {
   display: none !important;
+}
+
+ion-backdrop {
+  --backdrop-opacity: var(--ion-backdrop-opacity,0.5) !important;
 }

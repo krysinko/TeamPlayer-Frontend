@@ -1,0 +1,25 @@
+.select-alert,
+.sort-options-alert {
+    --width: 80%;
+    --min-width: 80%;
+    --max-width: 95%;
+    top: 10%;
+
+    .alert-radio-group {
+        --height: auto;
+        --max-height: 80vh;
+        max-height: 80vh !important;
+    }
+}
+
+.select-alert, .sort-options-alert  {
+    .alert-button-group {
+        justify-content: space-around !important;
+    }
+}
+//
+//.sort-options-alert {
+//    --width: 80%;
+//    --min-width: 80%;
+//}
+

@@ -13,15 +13,15 @@
 						</ion-text>
 					</ion-label>
 
-					<ion-button shape="round" class="task-button ion-no-padding ion-no-margin"
+					<ion-button shape="round" class="task-button ion-no-padding ion-no-margin" color="pastel-green"
 					            (click)="showDatePickerForTask(task)">
 						<ion-icon name="calendar-outline"></ion-icon>
 					</ion-button>
-					<ion-button shape="round" class="task-button ion-no-padding ion-no-margin"
+					<ion-button shape="round" class="task-button ion-no-padding ion-no-margin" color="pastel-green"
 					            (click)="assignUserToTask(task)">
 						<ion-icon name="person-add-outline"></ion-icon>
 					</ion-button>
-					<ion-button shape="round" class="task-button ion-no-padding ion-no-margin"
+					<ion-button shape="round" class="task-button ion-no-padding ion-no-margin" color="pastel-green"
 					            (click)="goToTaskDetails(index)">
 						<ion-icon name="chevron-forward-outline" mode="ios"></ion-icon>
 					</ion-button>
@@ -29,7 +29,7 @@
 			</ion-list>
 		</ion-col>
 	</ion-row>
-	<ion-fab vertical="bottom" horizontal="center" slot="fixed">
+	<ion-fab vertical="bottom" horizontal="center" slot="fixed" (click)="showSortOptions()">
 		<ion-fab-button color="danger" class="side-cta"><ion-icon name="swap-vertical-outline"></ion-icon></ion-fab-button>
 	</ion-fab>
 	<ion-fab vertical="bottom" horizontal="center" slot="fixed">
@@ -44,32 +44,6 @@
 		<ion-fab-list side="top" class="options-fab-list ion-text-start ion-justify-content-start">
 			<ion-fab-button color="light-danger"><ion-icon name="checkmark-done-outline"></ion-icon></ion-fab-button>
 			<ion-fab-button color="light-danger"><ion-icon name="trash-bin-outline"></ion-icon></ion-fab-button>
-<!--			<ion-fab-list side="top" class="ion-text-start ion-justify-content-start">-->
-<!--				<ion-button shape="round" color="pastel-green">-->
-<!--					Nazwa - alfabetycznie, A-Z-->
-<!--				</ion-button>-->
-<!--				<ion-button shape="round" color="pastel-green">-->
-<!--					Nazwa - alfabetycznie, Z-A-->
-<!--				</ion-button>-->
-<!--				<ion-button shape="round" color="pastel-green">-->
-<!--					Data zakończenia - od najbliższej-->
-<!--				</ion-button>-->
-<!--				<ion-button shape="round" color="pastel-green">-->
-<!--					Data zakończenia - od najdalszej-->
-<!--				</ion-button>-->
-<!--				<ion-button shape="round" color="pastel-green">-->
-<!--					Postęp - najmniejszy-->
-<!--				</ion-button>-->
-<!--				<ion-button shape="round" color="pastel-green">-->
-<!--					Postęp - największy-->
-<!--				</ion-button>-->
-<!--				<ion-button shape="round" color="pastel-green">-->
-<!--					Data utworzenia - od najnowszych-->
-<!--				</ion-button>-->
-<!--				<ion-button shape="round" color="pastel-green">-->
-<!--					Data utworzenia - od najstarszych-->
-<!--				</ion-button>-->
-<!--			</ion-fab-list>-->
 		</ion-fab-list>
 	</ion-fab>
 </ion-content>

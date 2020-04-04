@@ -1,13 +1,19 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { AppPages } from '../../../models/app-pages';
 import { Location } from '@angular/common';
-import { Task } from 'src/app/models/task';
+import { SortOption, Task, TaskSortOptions } from 'src/app/models/task';
 import { TaskService } from '../../../services/task.service';
-import { PopoverController } from '@ionic/angular';
+import { AlertController, PopoverController } from '@ionic/angular';
 import { PopoverDatePickerComponent } from '../../../components/popover-date-picker/popover-date-picker.component';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 import { TaskAssignComponent } from '../../../components/task-assign/task-assign.component';
+import { AlertInput, OverlayEventDetail } from '@ionic/core';
+
+export class SortAlertInput extends SortOption implements AlertInput {
+    type: 'radio';
+    value: string;
+}
 
 @Component({
     selector: 'app-tasks',
@@ -24,6 +30,7 @@ export class TasksPage implements OnInit, OnDestroy {
     private componentDestroyed$: Subject<boolean> = new Subject<boolean>();
 
     constructor(
+        private alertController: AlertController,
         private appPages: AppPages,
         private location: Location,
         private taskService: TaskService,
@@ -63,6 +70,41 @@ export class TasksPage implements OnInit, OnDestroy {
         });
 
         return datePopover.present();
+    }
+
+    async showSortOptions(): Promise<void> {
+        let selectedOption: SortOption;
+        const inputsArr: SortAlertInput[] = TaskSortOptions.map((opt: SortOption) => {
+           return {
+               ...opt,
+               type: 'radio',
+               name: opt.property,
+               value: opt.property + '-' + opt.order,
+               handler: () => { selectedOption = opt; },
+        };
+        });
+        const sortOptionsAlert = await this.alertController.create({
+            header: 'Sortuj według:',
+            inputs: inputsArr,
+            buttons: [
+                {
+                    text: 'Anuluj',
+                    role: 'cancel',
+                    handler: () => this.alertController.dismiss(),
+                },
+                {
+                    text: 'Sortuj',
+                    handler: () => this.alertController.dismiss(),
+                }
+            ],
+            animated: true,
+            backdropDismiss: true,
+            cssClass: 'sort-options-alert'
+        });
+
+        sortOptionsAlert.onDidDismiss().then(() => this.taskService.sortTasks(selectedOption));
+
+        return sortOptionsAlert.present();
     }
 
     goToTaskDetails(index: number) {

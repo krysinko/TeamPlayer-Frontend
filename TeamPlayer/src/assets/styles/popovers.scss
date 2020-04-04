@@ -1,19 +1,16 @@
+.task-assign-popover,
 .popover-date-picker {
-    --height: 250px;
     --width: 80%;
     .popover-content {
         top: 10% !important;
     }
+}
+
+.popover-date-picker {
+    --height: 250px;
+
 }
 
 .task-assign-popover {
     --height: auto;
-    --width: 80%;
-    .popover-content {
-        top: 10% !important;
-    }
-}
-
-.select-alert .alert-button-group {
-    justify-content: space-around !important;
 }
