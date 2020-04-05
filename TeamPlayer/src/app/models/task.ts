@@ -8,7 +8,7 @@ export class TaskDetails {
     content?: string;
     deadline?: Date;
     status?: TaskStatus;
-    createdAt: string;
+    createdAt?: Date;
 }
 
 export class Task extends TaskDetails {

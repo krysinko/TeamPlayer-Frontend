@@ -5,10 +5,12 @@ import { SortOption, Task, TaskSortOptions } from 'src/app/models/task';
 import { TaskService } from '../../../services/task.service';
 import { AlertController, PopoverController } from '@ionic/angular';
 import { PopoverDatePickerComponent } from '../../../components/popover-date-picker/popover-date-picker.component';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 import { TaskAssignComponent } from '../../../components/task-assign/task-assign.component';
-import { AlertInput, OverlayEventDetail } from '@ionic/core';
+import { AlertInput } from '@ionic/core';
+import { isEqual } from 'lodash';
+import { ActivatedRoute, Router } from '@angular/router';
 
 export class SortAlertInput extends SortOption implements AlertInput {
     type: 'radio';
@@ -24,8 +26,10 @@ export class SortAlertInput extends SortOption implements AlertInput {
 export class TasksPage implements OnInit, OnDestroy {
     title: string;
     tasks$: Observable<Task[]>;
-    showListOptions$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-    showSortOptions$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    sortOption: SortOption;
+
+    // showListOptions$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    // showSortOptions$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     // showListOptions$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     private componentDestroyed$: Subject<boolean> = new Subject<boolean>();
 
@@ -33,10 +37,11 @@ export class TasksPage implements OnInit, OnDestroy {
         private alertController: AlertController,
         private appPages: AppPages,
         private location: Location,
+        private router: Router,
+        private route: ActivatedRoute,
         private taskService: TaskService,
         private popoverController: PopoverController) {
         this.tasks$ = this.taskService.tasks$;
-        // this.subscribeOnTasks();
     }
 
     ngOnInit() {
@@ -73,15 +78,17 @@ export class TasksPage implements OnInit, OnDestroy {
     }
 
     async showSortOptions(): Promise<void> {
-        let selectedOption: SortOption;
         const inputsArr: SortAlertInput[] = TaskSortOptions.map((opt: SortOption) => {
-           return {
-               ...opt,
-               type: 'radio',
-               name: opt.property,
-               value: opt.property + '-' + opt.order,
-               handler: () => { selectedOption = opt; },
-        };
+            return {
+                ...opt,
+                type: 'radio',
+                name: opt.property,
+                value: opt.property + '-' + opt.order,
+                checked: isEqual(opt, this.sortOption),
+                handler: () => {
+                    this.sortOption = opt;
+                },
+            };
         });
         const sortOptionsAlert = await this.alertController.create({
             header: 'Sortuj według:',
@@ -102,22 +109,18 @@ export class TasksPage implements OnInit, OnDestroy {
             cssClass: 'sort-options-alert'
         });
 
-        sortOptionsAlert.onDidDismiss().then(() => this.taskService.sortTasks(selectedOption));
+        sortOptionsAlert.onDidDismiss().then(() => {
+            if (this.sortOption) {
+                this.taskService.sortTasks(this.sortOption);
+            }
+        });
 
         return sortOptionsAlert.present();
     }
 
-    goToTaskDetails(index: number) {
-
+    goToTaskDetails(id: number) {
+        this.router.navigate([ 'task-details/' + id ], { relativeTo: this.route });
     }
-
-    // toggleListOptions(): void {
-    //     this.showListOptions$.next(!this.showListOptions$.getValue());
-    // }
-    //
-    // toggleSortOptions(): void {
-    //     this.showSortOptions$.next(!this.showSortOptions$.getValue());
-    // }
 
     private getTask(index: number): Observable<Task> {
         return this.tasks$.pipe(map((arr: Task[]) => arr.find((t: Task) => t.id === index)));

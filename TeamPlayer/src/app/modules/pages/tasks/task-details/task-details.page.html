@@ -1,0 +1,12 @@
+<ng-container *ngIf="(task$ | async) as task">
+	<ion-header class="ion-padding-start">
+		<app-header-simple [title]="'Zadanie: ' + task.title" [arrowBack]="true"></app-header-simple>
+	</ion-header>
+	<ion-content>
+		<ion-row>
+			<ion-col>
+				{{ task.content }}
+			</ion-col>
+		</ion-row>
+	</ion-content>
+</ng-container>
