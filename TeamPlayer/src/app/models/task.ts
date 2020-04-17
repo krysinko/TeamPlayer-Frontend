@@ -1,20 +1,19 @@
-class PreviousTaskState {
-    updated: Date;
-    oldDetails: TaskDetails;
-}
+import { User } from './user';
+import { Project } from './project';
 
 export class TaskDetails {
-    title?: string;
+    title: string;
     content?: string;
-    deadline?: Date;
+    deadline?: Date | string;
     status?: TaskStatus;
-    createdAt?: Date;
+    createdAt: Date | string;
+    creator?: User | any;
+    project?: Project | any;
 }
 
 export class Task extends TaskDetails {
-    id?: number;
-    assignedUsers?: number[];
-    previousStates?: Array<PreviousTaskState>;
+    id: number;
+    assignees?: User[];
 }
 
 export enum TaskStatus {
@@ -26,8 +25,6 @@ export enum TaskStatus {
 }
 
 export const TaskProgressInStartToEndOrder = [TaskStatus.PREPARATION, TaskStatus.TODO, TaskStatus.BLOCKED, TaskStatus.EXECUTION, TaskStatus.DONE ];
-
-export const daynames: string[] = [ 'Niedziela', 'Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek', 'Sobota' ];
 
 export class SortOption {
     label: string;

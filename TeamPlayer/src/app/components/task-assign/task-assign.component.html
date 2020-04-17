@@ -4,42 +4,23 @@
 			<ion-label><h3>Przypisz zadanie do:</h3></ion-label>
 		</ion-item>
 		<ion-list>
-			<ion-item>
-				<ion-label class="display-none">Wybierz użytkownika</ion-label>
-				<ion-select placeholder="Wybierz użytkownika" okText="Zatwierdź" cancelText="Anuluj"
-				            interface="alert"
-				            (ionChange)="assignUser(0, $event)">
-					<ion-select-option
-						*ngFor="let member of teamList$ | async"
-						[value]="member.id" [disabled]="isUserAssigned(member.id)">
-						{{ member.name }}, {{ member.description }}
-					</ion-select-option>
-				</ion-select>
-			</ion-item>
-			<ion-item>
-				<ion-label class="display-none">Wybierz użytkownika</ion-label>
-				<ion-select placeholder="Wybierz użytkownika" okText="Zatwierdź" cancelText="Anuluj"
-				            interface="alert"
-				            (ionChange)="assignUser(1, $event)">
-					<ion-select-option
-						*ngFor="let member of teamList$ | async"
-						[value]="member.id" [disabled]="isUserAssigned(member.id)">
-						{{ member.name }}, {{ member.description }}
-					</ion-select-option>
-				</ion-select>
-			</ion-item>
-			<ion-item>
-				<ion-label class="display-none">Wybierz użytkownika</ion-label>
-				<ion-select placeholder="Wybierz użytkownika" okText="Zatwierdź" cancelText="Anuluj"
-				            interface="alert"
-				            (ionChange)="assignUser(2, $event)">
-					<ion-select-option
-						*ngFor="let member of teamList$ | async"
-						[value]="member.id" [disabled]="isUserAssigned(member.id)">
-						{{ member.name }}, {{ member.description }}
-					</ion-select-option>
-				</ion-select>
-			</ion-item>
+			<ng-container *ngIf="assignedUsers && assignedUsers.size && editAssignedUsersState; else emptySelectList">
+				<ion-item *ngFor="let assignedUsr of assignedUsers.values(); let usrMapIndex = index">
+					<ion-label class="display-none">Wybierz użytkownika</ion-label>
+					<ion-select placeholder="Wybierz użytkownika" okText="Zatwierdź" cancelText="Anuluj"
+					            interface="alert" [value]="assignedUsr.id"
+					            (ionChange)="assignUser(usrMapIndex, $event)" appIonSelectNoCaret>
+						<ion-select-option
+							*ngFor="let member of teamList$ | async"
+							[value]="member.id" [disabled]="isUserAssigned(member.id)">
+							{{ member.username }}, {{ member.description }}
+						</ion-select-option>
+					</ion-select>
+					<ion-button slot="end" fill="clear" shape="round" (click)="removeUserFromTask(usrMapIndex, assignedUsr.id)">
+						<ion-icon name="close-outline"></ion-icon>
+					</ion-button>
+				</ion-item>
+			</ng-container>
 		</ion-list>
 	</ion-col>
 	<ion-col size="6" class="ion-padding ion-text-center">
@@ -53,3 +34,43 @@
 		</ion-button>
 	</ion-col>
 </ion-row>
+
+<ng-template #emptySelectList>
+
+	<ion-item>
+		<ion-label class="display-none">Wybierz użytkownika</ion-label>
+		<ion-select placeholder="Wybierz użytkownika" okText="Zatwierdź" cancelText="Anuluj"
+		            interface="alert"
+		            (ionChange)="assignUser(0, $event)">
+			<ion-select-option
+				*ngFor="let member of teamList$ | async"
+				[value]="member.id" [disabled]="isUserAssigned(member.id)">
+				{{ member.username }}, {{ member.description }}
+			</ion-select-option>
+		</ion-select>
+	</ion-item>
+	<ion-item>
+		<ion-label class="display-none">Wybierz użytkownika</ion-label>
+		<ion-select placeholder="Wybierz użytkownika" okText="Zatwierdź" cancelText="Anuluj"
+		            interface="alert"
+		            (ionChange)="assignUser(1, $event)">
+			<ion-select-option
+				*ngFor="let member of teamList$ | async"
+				[value]="member.id" [disabled]="isUserAssigned(member.id)">
+				{{ member.username }}, {{ member.description }}
+			</ion-select-option>
+		</ion-select>
+	</ion-item>
+	<ion-item>
+		<ion-label class="display-none">Wybierz użytkownika</ion-label>
+		<ion-select placeholder="Wybierz użytkownika" okText="Zatwierdź" cancelText="Anuluj"
+		            interface="alert"
+		            (ionChange)="assignUser(2, $event)">
+			<ion-select-option
+				*ngFor="let member of teamList$ | async"
+				[value]="member.id" [disabled]="isUserAssigned(member.id)">
+				{{ member.username }}, {{ member.description }}
+			</ion-select-option>
+		</ion-select>
+	</ion-item>
+</ng-template>

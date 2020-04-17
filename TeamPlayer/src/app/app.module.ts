@@ -9,6 +9,9 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ComponentsModule } from './components/components.module';
+import { ApiService } from './services/api/api.service';
+import { HttpClientModule } from '@angular/common/http';
+import { httpInterceptorProviders } from './http-interceptors/interceptor-index';
 
 @NgModule({
     declarations: [ AppComponent ],
@@ -16,16 +19,20 @@ import { ComponentsModule } from './components/components.module';
     imports: [
         ComponentsModule,
         BrowserModule,
+        HttpClientModule,
         IonicModule.forRoot(),
-        AppRoutingModule
+        AppRoutingModule,
     ],
     providers: [
         StatusBar,
         SplashScreen,
+        ApiService,
+        httpInterceptorProviders,
         { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
     ],
     bootstrap: [ AppComponent ],
     schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
+    exports: []
 })
 export class AppModule {
 }

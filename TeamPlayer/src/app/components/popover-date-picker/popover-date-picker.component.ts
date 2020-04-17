@@ -1,8 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { PopoverController } from '@ionic/angular';
-import { daynames, Task } from '../../models/task';
+import { Task } from '../../models/task';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { TaskService } from '../../services/task.service';
+import { daynames } from '../../models/texts/taskDescriptions';
 
 @Component({
     selector: 'app-popover-date-picker',
@@ -13,7 +14,7 @@ export class PopoverDatePickerComponent implements OnInit {
 
     @Input() task: Task;
     now: Date = new Date();
-    _daynames: string[] = daynames;
+    _daynames: typeof daynames = daynames;
     dateForm: FormGroup;
     errorMessage: string;
     datePickerOptions: object = {

@@ -8,6 +8,8 @@ import { TaskDetailsPageRoutingModule } from './task-details-routing.module';
 
 import { TaskDetailsPage } from './task-details.page';
 import { ComponentsModule } from '../../../../components/components.module';
+import { AppModule } from '../../../../app.module';
+import { DirectivesModule } from '../../../../directives/directives.module';
 
 @NgModule({
     imports: [
@@ -15,7 +17,8 @@ import { ComponentsModule } from '../../../../components/components.module';
         FormsModule,
         IonicModule,
         TaskDetailsPageRoutingModule,
-        ComponentsModule
+        ComponentsModule,
+        DirectivesModule
     ],
   declarations: [TaskDetailsPage]
 })

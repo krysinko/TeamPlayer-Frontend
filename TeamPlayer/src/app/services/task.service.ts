@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
-import { SortOption, Task, TaskProgressInStartToEndOrder, TaskStatus } from '../models/task';
+import { SortOption, Task, TaskProgressInStartToEndOrder } from '../models/task';
 import { BehaviorSubject, Observable, of } from 'rxjs';
+import { TaskApiService } from './api/task-api.service';
+import { catchError, switchMap } from 'rxjs/operators';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable({
     providedIn: 'root'
@@ -19,10 +22,14 @@ export class TaskService {
         return (TaskProgressInStartToEndOrder.indexOf(t1.status) - TaskProgressInStartToEndOrder.indexOf(t2.status)) * (order === 'asc' ? 1 : -1);
     }
 
+    static getRandomNumber(min = 0, max = 30): number {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
     private _tasks$: BehaviorSubject<Task[]> = new BehaviorSubject<Task[]>(null);
 
-    constructor() {
-        this.getFakeTasks();
+    constructor(private taskApi: TaskApiService) {
+        this.getTasks();
     }
 
     update(task: Task): void {
@@ -45,43 +52,50 @@ export class TaskService {
         this._tasks$.next(tasksSorted);
     }
 
-    // TODO Observable<Task>
     getTask(taskId: number): Observable<Task> {
-        return of(this._tasks$.getValue().find(t => t.id === taskId));
+        return this.taskApi.getTaskFromApi(taskId);
     }
 
-    private getFakeTasks(): Task[] {
-        const tasks: Task[] = [];
-        for (let i = 1; i < this.getRandomNumber(8, 15); i++) {
-            const smallTask: Task = new Task();
-            smallTask.id = i;
-            smallTask.title = i + ' title';
-            smallTask.content = i + ' content';
-            smallTask.deadline = new Date();
-            smallTask.createdAt = new Date();
-            smallTask.deadline.setDate(smallTask.deadline.getDate() + this.getRandomNumber(100, 3000));
-            smallTask.createdAt.setDate(smallTask.createdAt.getDate() - this.getRandomNumber(100, 3000));
-            smallTask.status = _.sample(Object.values(TaskStatus)) as TaskStatus;
-            smallTask.assignedUsers = this.getAssignedUsersRandomValue();
-            tasks.push(smallTask);
-        }
-        this._tasks$.next(tasks.sort(TaskService.compareDeadlines));
-        return tasks;
+    getTasks(): void {
+        this.taskApi.getTasksFromApi().subscribe((value: Task[]) => {
+            this._tasks$.next(value as Task[]);
+        });
     }
 
-    private getRandomNumber(min = 0, max = 30): number {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
+    updateTask(task: Task) {
+        this.taskApi.update(task)
+            .pipe(
+                switchMap((t: Task, i: any) => of(this.getTasks())),
+                catchError((err: HttpErrorResponse) => {
+                    console.log(err);
+                    switch (err.status) {
+                        case 500:
+                            break;
+                        case 403:
+                            // if user logged then alert else login page
+                            case 401:
+                                // if user logged then alert else login page
+                                break;
+                        case 404:
+                            break;
+                    }
+                            return of();
+                })
+            )
+            .subscribe((tasks: Task[]) => {
+                this._tasks$.next(tasks);
+        });
     }
 
     private getAssignedUsersRandomValue(): number[] {
         const numberOfUsers: number = 7;
-        if (this.getRandomNumber(0, 1)) {
-            const numberOfUsersAssigned: number = this.getRandomNumber(1, numberOfUsers);
+        if (TaskService.getRandomNumber(0, 1)) {
+            const numberOfUsersAssigned: number = TaskService.getRandomNumber(1, numberOfUsers);
             const users: number[] = [];
             for (let i = 0; i < numberOfUsers; i++) {
-                users.push(this.getRandomNumber(0, numberOfUsers - 1));
+                users.push(TaskService.getRandomNumber(0, numberOfUsers - 1));
             }
-            return users;
+            return users.filter((usr, index, u) => u.indexOf(usr) === index);
         } else {
             return null;
         }

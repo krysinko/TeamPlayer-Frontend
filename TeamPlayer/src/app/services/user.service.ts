@@ -58,43 +58,43 @@ export class UserService {
             return [
                 {
                     id: 0,
-                    name: 'Ania',
+                    username: 'Ania',
                     email: 'ania@cc.cc',
                     description: 'UI Designer'
                 },
                 {
                     id: 1,
-                    name: 'Piotrek',
+                    username: 'Piotrek',
                     email: 'piotrek@cc.cc',
                     description: 'Key accountant'
                 },
                 {
                     id: 2,
-                    name: 'Ewa',
+                    username: 'Ewa',
                     email: 'ewa@cc.cc',
                     description: 'Level designer'
                 },
                 {
                     id: 3,
-                    name: 'Tomek',
+                    username: 'Tomek',
                     email: 'tomek@cc.cc',
                     description: 'QA'
                 },
                 {
                     id: 4,
-                    name: 'Pszemek',
+                    username: 'Pszemek',
                     email: 'pszemek@cc.cc',
                     description: 'Developer'
                 },
                 {
                     id: 5,
-                    name: 'Natalia',
+                    username: 'Natalia',
                     email: 'natalia@cc.cc',
                     description: 'Developer'
                 },
                 {
                     id: 6,
-                    name: 'Jurek',
+                    username: 'Jurek',
                     email: 'jurek@cc.cc',
                     description: 'CEO'
                 },
@@ -108,7 +108,7 @@ export class UserService {
             if (data.description) {
                 usr.description = data.description;
             }
-            usr.name = data.name;
+            usr.username = data.name;
             usr.description = '';
         }
         this.userData = usr;

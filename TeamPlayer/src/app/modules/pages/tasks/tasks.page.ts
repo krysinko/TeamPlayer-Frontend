@@ -4,13 +4,12 @@ import { Location } from '@angular/common';
 import { SortOption, Task, TaskSortOptions } from 'src/app/models/task';
 import { TaskService } from '../../../services/task.service';
 import { AlertController, PopoverController } from '@ionic/angular';
-import { PopoverDatePickerComponent } from '../../../components/popover-date-picker/popover-date-picker.component';
 import { Observable, Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
-import { TaskAssignComponent } from '../../../components/task-assign/task-assign.component';
 import { AlertInput } from '@ionic/core';
 import { isEqual } from 'lodash';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CommonTaskAttributesActions } from './common-task-attributes-actions';
 
 export class SortAlertInput extends SortOption implements AlertInput {
     type: 'radio';
@@ -23,9 +22,9 @@ export class SortAlertInput extends SortOption implements AlertInput {
     styleUrls: [ './tasks.page.scss' ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TasksPage implements OnInit, OnDestroy {
-    title: string;
+export class TasksPage extends CommonTaskAttributesActions implements OnInit, OnDestroy {
     tasks$: Observable<Task[]>;
+    title: string;
     sortOption: SortOption;
 
     // showListOptions$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
@@ -40,7 +39,8 @@ export class TasksPage implements OnInit, OnDestroy {
         private router: Router,
         private route: ActivatedRoute,
         private taskService: TaskService,
-        private popoverController: PopoverController) {
+        popoverController: PopoverController) {
+        super(popoverController);
         this.tasks$ = this.taskService.tasks$;
     }
 
@@ -53,29 +53,6 @@ export class TasksPage implements OnInit, OnDestroy {
         this.componentDestroyed$.next(true);
     }
 
-    async showDatePickerForTask(task: Task): Promise<void> {
-        const datePopover = await this.popoverController.create({
-            component: PopoverDatePickerComponent,
-            animated: true,
-            backdropDismiss: true,
-            componentProps: { task: task },
-            cssClass: 'popover-date-picker'
-        });
-
-        return datePopover.present();
-    }
-
-    async assignUserToTask(task: Task): Promise<void> {
-        const datePopover = await this.popoverController.create({
-            component: TaskAssignComponent,
-            animated: true,
-            backdropDismiss: true,
-            componentProps: { task: task },
-            cssClass: 'task-assign-popover'
-        });
-
-        return datePopover.present();
-    }
 
     async showSortOptions(): Promise<void> {
         const inputsArr: SortAlertInput[] = TaskSortOptions.map((opt: SortOption) => {
