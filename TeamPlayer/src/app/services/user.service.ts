@@ -20,6 +20,7 @@ export class UserService {
     private _user$: Observable<User>;
 
     constructor(private router: Router) {
+        this.getUserData();
     }
 
     // TODO odpowiednie typy i obsługa logowania
@@ -128,5 +129,9 @@ export class UserService {
                 resolve(true);
             }, 600);
         });
+    }
+
+    private getUserData() {
+
     }
 }

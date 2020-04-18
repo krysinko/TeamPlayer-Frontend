@@ -5,6 +5,14 @@ import { BehaviorSubject, Observable, of } from 'rxjs';
 import { TaskApiService } from './api/task-api.service';
 import { catchError, switchMap } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
+import {
+    apiErrorMessage,
+    dataNotFoundErrorMessage,
+    forbiddenErrorMessage,
+    unauthorizedErrorMessage
+} from '../models/texts/taskDescriptions';
+import { UserService } from './user.service';
+import { Router } from '@angular/router';
 
 @Injectable({
     providedIn: 'root'
@@ -15,7 +23,7 @@ export class TaskService {
     }
 
     static compareDeadlines(t1: Task, t2: Task) {
-        return t1.deadline.getTime() - t2.deadline.getTime();
+        return new Date(t1.deadline).getTime() - new Date(t2.deadline).getTime();
     }
 
     static compareTaskStatus(t1: Task, t2: Task, order: 'asc' | 'desc') {
@@ -28,7 +36,7 @@ export class TaskService {
 
     private _tasks$: BehaviorSubject<Task[]> = new BehaviorSubject<Task[]>(null);
 
-    constructor(private taskApi: TaskApiService) {
+    constructor(private taskApi: TaskApiService, private userService: UserService, private router: Router) {
         this.getTasks();
     }
 
@@ -68,15 +76,22 @@ export class TaskService {
                 switchMap((t: Task, i: any) => of(this.getTasks())),
                 catchError((err: HttpErrorResponse) => {
                     console.log(err);
+                    let message: string;
+                    let userLoginStatus: boolean;
                     switch (err.status) {
                         case 500:
+                            message = apiErrorMessage;
+                            break;
+                        case 401:
+                            message = unauthorizedErrorMessage;
+                            userLoginStatus = this.checkIfUserLoggedIn();
                             break;
                         case 403:
-                            // if user logged then alert else login page
-                            case 401:
-                                // if user logged then alert else login page
-                                break;
+                            message = forbiddenErrorMessage;
+                            userLoginStatus = this.checkIfUserLoggedIn();
+                            break;
                         case 404:
+                            message = dataNotFoundErrorMessage;
                             break;
                     }
                             return of();
@@ -98,6 +113,12 @@ export class TaskService {
             return users.filter((usr, index, u) => u.indexOf(usr) === index);
         } else {
             return null;
+        }
+    }
+
+    private checkIfUserLoggedIn(): boolean {
+        if (!this.userService.userLoggedIn$.getValue()) {
+            return true;
         }
     }
 }

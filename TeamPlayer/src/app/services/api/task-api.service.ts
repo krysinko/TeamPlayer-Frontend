@@ -25,8 +25,6 @@ export class TaskApiService {
     }
 
     update(task: Task): Observable<Task> {
-        task.deadline = (task.deadline as string).replace('T', ' ');
-        task.createdAt = (task.createdAt as string).replace('T', ' ');
-        return this.http.put<Task>(API_URL + tasksApiPath + '/' + task.id, {newTask: task});
+        return this.http.put<Task>(API_URL + tasksApiPath + '/' + task.id, task);
     }
 }

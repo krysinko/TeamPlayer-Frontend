@@ -3,7 +3,6 @@ import { PopoverController } from '@ionic/angular';
 import { Task } from '../../models/task';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { TaskService } from '../../services/task.service';
-import { daynames } from '../../models/texts/taskDescriptions';
 
 @Component({
     selector: 'app-popover-date-picker',
@@ -14,7 +13,6 @@ export class PopoverDatePickerComponent implements OnInit {
 
     @Input() task: Task;
     now: Date = new Date();
-    _daynames: typeof daynames = daynames;
     dateForm: FormGroup;
     errorMessage: string;
     datePickerOptions: object = {
@@ -34,7 +32,7 @@ export class PopoverDatePickerComponent implements OnInit {
         const timeDate: Date = new Date(this.dateForm.value.time);
         this.task.deadline = new Date(this.dateForm.value.date);
         this.task.deadline.setHours(timeDate.getHours(), timeDate.getMinutes());
-        this.taskService.update(this.task);
+        this.taskService.updateTask(this.task);
         this.popoverController.dismiss();
     }
 
@@ -45,7 +43,7 @@ export class PopoverDatePickerComponent implements OnInit {
     private buildDateForm(): void {
         let date: Date;
         if (this.task) {
-            date = this.task.deadline;
+            date = new Date(this.task.deadline);
         } else {
             date = new Date();
         }

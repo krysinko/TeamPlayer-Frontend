@@ -9,6 +9,7 @@ import { CommonTaskAttributesActions } from '../common-task-attributes-actions';
 import { IonTextarea, PopoverController } from '@ionic/angular';
 import { UserService } from '../../../../services/user.service';
 import { User } from '../../../../models/user';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 
 @Component({
@@ -28,17 +29,24 @@ export class TaskDetailsPage extends CommonTaskAttributesActions {
         return label;
     }
 
-    @ViewChild('taskDescriptionTextarea', { read: IonTextarea, static: false }) taskDescriptionInput: IonTextarea;
+    @ViewChild('taskDescriptionTextarea', { read: IonTextarea, static: false }) taskContentInput: IonTextarea;
 
     task$: BehaviorSubject<Task> = new BehaviorSubject<Task>(null);
     taskStatusKeys: string[] =  Object.keys(TaskStatus);
     taskLabels: typeof TaskLabels = TaskLabels;
     taskStatuses: typeof TaskStatus = TaskStatus;
     users: User[];
-    descriptionHasChanged$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    contentHasChanged$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    taskContentFormGroup: FormGroup;
     private taskId: number;
 
-    constructor(private route: ActivatedRoute, private taskService: TaskService, popoverController: PopoverController, private userService: UserService) {
+    constructor(
+        private route: ActivatedRoute,
+        private taskService: TaskService,
+        popoverController: PopoverController,
+        private userService: UserService,
+        private formBuilder: FormBuilder
+    ) {
         super(popoverController);
         this.users = this.userService.getTeamMembers();
         this.getTaskSubscriptionByIdParam();
@@ -52,24 +60,25 @@ export class TaskDetailsPage extends CommonTaskAttributesActions {
         return this.users.find((u: User) => u.id === id).username;
     }
 
-    clearTaskDescription() {
-        this.taskDescriptionInput.value = '';
-        this.setFocusOnDescriptionTexarea();
+    clearTaskDescription(): void {
+        this.taskContentFormGroup.setValue({content: ''});
+        this.setFocusOnDescriptionTextarea();
     }
 
-    saveTaskDescription() {
-        const task: Task = this.task$.getValue();
-        task.content = this.taskDescriptionInput.value;
-        console.log(task);
-        this.taskService.updateTask(task);
+    saveTaskDescription(): void {
+        this.taskService.updateTask({
+            ...this.task$.getValue(),
+            content: this.taskContentFormGroup.controls['content'].value
+        });
+        this.contentHasChanged$.next(false);
     }
 
-    setDescriptionChangedFlag() {
-        this.descriptionHasChanged$.next(true);
+    setDescriptionChangedFlag(): void {
+        this.contentHasChanged$.next(true);
     }
 
-    setFocusOnDescriptionTexarea() {
-        this.taskDescriptionInput.setFocus();
+    setFocusOnDescriptionTextarea(): void {
+        this.taskContentInput.setFocus();
     }
 
     private getTaskSubscriptionByIdParam(): void {
@@ -82,6 +91,16 @@ export class TaskDetailsPage extends CommonTaskAttributesActions {
             )
             .subscribe((t: Task) => {
                 this.task$.next(t);
+                this.buildTaskContentForm();
             });
+    }
+
+    private buildTaskContentForm() {
+        this.taskContentFormGroup = this.formBuilder.group({
+            content: [
+                this.task$.getValue().content || '',
+                Validators.maxLength(255)
+            ]
+        });
     }
 }

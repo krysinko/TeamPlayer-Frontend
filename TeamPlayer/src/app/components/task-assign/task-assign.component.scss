@@ -4,3 +4,20 @@ ion-select {
     min-width: 99%;
     --padding-start: 0px;
 }
+
+.remove-assignment-btn {
+    height: 25px;
+    width: 25px;
+    overflow: hidden;
+    --box-shadow: none;
+    --padding-start: 5px;
+    --padding-end: 5px;
+}
+
+.add-user-select-btn {
+    --border-width: 1px;
+    margin: 0 auto;
+    ion-icon {
+        margin-right: 8px;
+    }
+}

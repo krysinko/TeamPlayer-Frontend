@@ -9,6 +9,7 @@ import { HeaderSimpleComponent } from './header-simple/header-simple.component';
 import { PopoverDatePickerComponent } from './popover-date-picker/popover-date-picker.component';
 import { TaskAssignComponent } from './task-assign/task-assign.component';
 import { TaskCreateComponent } from './task-create/task-create.component';
+import { DirectivesModule } from '../directives/directives.module';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { TaskCreateComponent } from './task-create/task-create.component';
         ComponentsRoutingModule,
         IonicModule,
         FormsModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        DirectivesModule
     ],
     schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })

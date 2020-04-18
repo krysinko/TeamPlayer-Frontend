@@ -5,32 +5,38 @@
 		</ion-item>
 		<ion-list>
 			<ng-container *ngIf="assignedUsers && assignedUsers.size && editAssignedUsersState; else emptySelectList">
-				<ion-item *ngFor="let assignedUsr of assignedUsers.values(); let usrMapIndex = index">
+				<ion-item *ngFor="let assignedUsr of assignedUsers; let index = index" [lines]="index === assignedUsers.size - 1 ? 'none' : 'full'">
 					<ion-label class="display-none">Wybierz użytkownika</ion-label>
-					<ion-select placeholder="Wybierz użytkownika" okText="Zatwierdź" cancelText="Anuluj"
+					<ion-select placeholder="Wybierz użytkownika" okText="Save"
 					            interface="alert" [value]="assignedUsr.id"
-					            (ionChange)="assignUser(usrMapIndex, $event)" appIonSelectNoCaret>
+					            (ionChange)="assignUser(assignedUsr, $event)" appIonSelectNoCaret>
 						<ion-select-option
 							*ngFor="let member of teamList$ | async"
 							[value]="member.id" [disabled]="isUserAssigned(member.id)">
 							{{ member.username }}, {{ member.description }}
 						</ion-select-option>
 					</ion-select>
-					<ion-button slot="end" fill="clear" shape="round" (click)="removeUserFromTask(usrMapIndex, assignedUsr.id)">
+					<ion-button class="remove-assignment-btn ion-no-margin" slot="end" shape="round" fill="clear" color="danger" (click)="removeUserFromTask(assignedUsr)">
 						<ion-icon name="close-outline"></ion-icon>
 					</ion-button>
 				</ion-item>
 			</ng-container>
+			<ion-item lines="full">
+				<ion-button class="add-user-select-btn" color="deep-danger" fill="outline" shape="round" (click)="addOneMoreEntry()" type="button">
+					<ion-icon name="person-add-outline"></ion-icon>
+					Add next user
+				</ion-button>
+			</ion-item>
 		</ion-list>
 	</ion-col>
 	<ion-col size="6" class="ion-padding ion-text-center">
 		<ion-button color="deep-green" shape="round" fill="clear" (click)="dismiss()">
-			Anuluj
+			Cancel
 		</ion-button>
 	</ion-col>
 	<ion-col size="6" class="ion-padding ion-text-center">
 	<ion-button color="deep-green" shape="round" (click)="saveAssignments()">
-			Zapisz
+			Save
 		</ion-button>
 	</ion-col>
 </ion-row>
@@ -41,7 +47,7 @@
 		<ion-label class="display-none">Wybierz użytkownika</ion-label>
 		<ion-select placeholder="Wybierz użytkownika" okText="Zatwierdź" cancelText="Anuluj"
 		            interface="alert"
-		            (ionChange)="assignUser(0, $event)">
+		            (ionChange)="assignUser($event)">
 			<ion-select-option
 				*ngFor="let member of teamList$ | async"
 				[value]="member.id" [disabled]="isUserAssigned(member.id)">
@@ -53,7 +59,7 @@
 		<ion-label class="display-none">Wybierz użytkownika</ion-label>
 		<ion-select placeholder="Wybierz użytkownika" okText="Zatwierdź" cancelText="Anuluj"
 		            interface="alert"
-		            (ionChange)="assignUser(1, $event)">
+		            (ionChange)="assignUser($event)">
 			<ion-select-option
 				*ngFor="let member of teamList$ | async"
 				[value]="member.id" [disabled]="isUserAssigned(member.id)">
@@ -65,7 +71,7 @@
 		<ion-label class="display-none">Wybierz użytkownika</ion-label>
 		<ion-select placeholder="Wybierz użytkownika" okText="Zatwierdź" cancelText="Anuluj"
 		            interface="alert"
-		            (ionChange)="assignUser(2, $event)">
+		            (ionChange)="assignUser($event)">
 			<ion-select-option
 				*ngFor="let member of teamList$ | async"
 				[value]="member.id" [disabled]="isUserAssigned(member.id)">
