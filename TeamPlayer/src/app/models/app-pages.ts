@@ -15,9 +15,9 @@ export class AppPages {
         url: '/tasks',
         icon: 'list-outline'
     };
-    events: SinglePageDetails = {
-        title: 'Wydarzenia',
-        url: '/events',
+    meetings: SinglePageDetails = {
+        title: 'Spotkania',
+        url: '/meetings',
         icon: 'calendar-outline'
     };
     note: SinglePageDetails = {

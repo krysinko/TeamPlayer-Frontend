@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
 import { User } from '../models/user';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { Router } from '@angular/router';
+import { UserApiService } from './api/user-api.service';
+import { catchError, map } from 'rxjs/operators';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable({
     providedIn: 'root'
@@ -14,12 +17,14 @@ export class UserService {
     set userData(data) {
         this._user$ = data;
     }
-
     // todo default false
     userLoggedIn$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
+
+    private userId: number = 3;
     private _user$: Observable<User>;
 
-    constructor(private router: Router) {
+    constructor(private router: Router, private userApiService: UserApiService
+    ) {
         this.getUserData();
     }
 
@@ -53,55 +58,78 @@ export class UserService {
         );
     }
 
-    // todo do as observable
-    getTeamMembers(): User[] {
-        if (this.userLoggedIn$.getValue()) {
-            return [
-                {
-                    id: 0,
-                    username: 'Ania',
-                    email: 'ania@cc.cc',
-                    description: 'UI Designer'
-                },
-                {
-                    id: 1,
-                    username: 'Piotrek',
-                    email: 'piotrek@cc.cc',
-                    description: 'Key accountant'
-                },
-                {
-                    id: 2,
-                    username: 'Ewa',
-                    email: 'ewa@cc.cc',
-                    description: 'Level designer'
-                },
-                {
-                    id: 3,
-                    username: 'Tomek',
-                    email: 'tomek@cc.cc',
-                    description: 'QA'
-                },
-                {
-                    id: 4,
-                    username: 'Pszemek',
-                    email: 'pszemek@cc.cc',
-                    description: 'Developer'
-                },
-                {
-                    id: 5,
-                    username: 'Natalia',
-                    email: 'natalia@cc.cc',
-                    description: 'Developer'
-                },
-                {
-                    id: 6,
-                    username: 'Jurek',
-                    email: 'jurek@cc.cc',
-                    description: 'CEO'
-                },
-            ];
-        }
+    getUserData(id: number = this.userId): Observable<User> {
+        return this.userApiService.getUserData(id)
+            .pipe(
+                map((user: User) => {
+                    this.userData = user;
+                    return user;
+                }),
+                catchError((err: HttpErrorResponse) => {
+                    switch (err.status) {
+                        case 401:
+                            break;
+                        case 403:
+                            break;
+                        case 404:
+                            break;
+                        case 500:
+                            break;
+                    }
+                    return of(null);
+                })
+            );
     }
+
+    // todo do as observable
+    // getTeamMembers(): User[] {
+    //     if (this.userLoggedIn$.getValue()) {
+    //         return [
+    //             {
+    //                 id: 0,
+    //                 username: 'Ania',
+    //                 email: 'ania@cc.cc',
+    //                 description: 'UI Designer'
+    //             },
+    //             {
+    //                 id: 1,
+    //                 username: 'Piotrek',
+    //                 email: 'piotrek@cc.cc',
+    //                 description: 'Key accountant'
+    //             },
+    //             {
+    //                 id: 2,
+    //                 username: 'Ewa',
+    //                 email: 'ewa@cc.cc',
+    //                 description: 'Level designer'
+    //             },
+    //             {
+    //                 id: 3,
+    //                 username: 'Tomek',
+    //                 email: 'tomek@cc.cc',
+    //                 description: 'QA'
+    //             },
+    //             {
+    //                 id: 4,
+    //                 username: 'Pszemek',
+    //                 email: 'pszemek@cc.cc',
+    //                 description: 'Developer'
+    //             },
+    //             {
+    //                 id: 5,
+    //                 username: 'Natalia',
+    //                 email: 'natalia@cc.cc',
+    //                 description: 'Developer'
+    //             },
+    //             {
+    //                 id: 6,
+    //                 username: 'Jurek',
+    //                 email: 'jurek@cc.cc',
+    //                 description: 'CEO'
+    //             },
+    //         ];
+    //     }
+    // }
 
     private writeUserData(data): void {
         const usr = new User();
@@ -129,9 +157,5 @@ export class UserService {
                 resolve(true);
             }, 600);
         });
-    }
-
-    private getUserData() {
-
     }
 }

@@ -6,6 +6,7 @@
 		<ion-list>
 			<ng-container *ngIf="assignedUsers && assignedUsers.size && editAssignedUsersState; else emptySelectList">
 				<ion-item *ngFor="let assignedUsr of assignedUsers; let index = index" [lines]="index === assignedUsers.size - 1 ? 'none' : 'full'">
+					{{assignedUsr | json }}
 					<ion-label class="display-none">Wybierz użytkownika</ion-label>
 					<ion-select placeholder="Wybierz użytkownika" okText="Save"
 					            interface="alert" [value]="assignedUsr.id"

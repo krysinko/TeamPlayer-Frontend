@@ -1,0 +1,35 @@
+<app-header-simple [title]="title"></app-header-simple>
+
+<ion-content class="ion-pading-top">
+	<ion-item lines="full" *ngFor="let meeting of (meetings$ | async)" (click)="goToMeetingDetails(meeting.id)">
+		<ion-grid>
+			<ion-row class="ion-no-padding ion-padding-vertical ion-align-items-stretch">
+				<ion-col size="12" class="ion-no-padding ion-padding-end">
+					<h3 class="ion-no-margin">{{ meeting.name }}</h3>
+					<small>{{ meeting.description }}</small>
+				</ion-col>
+				<ion-col size="6" class="ion-no-padding ion-padding-top ion-padding-end">
+					<ion-text>{{ meeting.date |  date: 'dd.MM.yyyy, hh:mm' }}</ion-text>
+				</ion-col>
+				<ion-col size="6" class="ion-no-padding ion-padding-top ion-padding-end ion-text-end">
+					<ion-text>{{ meeting.participants.length }} participants</ion-text>
+				</ion-col>
+			</ion-row>
+		</ion-grid>
+		<ion-button shape="round" class="go-to-meeting-button ion-no-padding ion-no-margin" color="pastel-green"
+		            slot="end">
+			<ion-icon name="chevron-forward-outline" mode="ios"></ion-icon>
+		</ion-button>
+	</ion-item>
+
+	<ion-fab vertical="bottom" horizontal="center" slot="fixed">
+		<ion-fab-button color="danger" class="side-cta">
+			<ion-icon name="swap-vertical-outline"></ion-icon>
+		</ion-fab-button>
+	</ion-fab>
+	<ion-fab vertical="bottom" horizontal="end" slot="fixed">
+		<ion-fab-button color="deep-danger" class="main-cta">
+			<ion-icon name="add-outline"></ion-icon>
+		</ion-fab-button>
+	</ion-fab>
+</ion-content>

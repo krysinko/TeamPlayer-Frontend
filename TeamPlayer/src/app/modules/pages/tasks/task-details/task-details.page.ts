@@ -48,7 +48,7 @@ export class TaskDetailsPage extends CommonTaskAttributesActions {
         private formBuilder: FormBuilder
     ) {
         super(popoverController);
-        this.users = this.userService.getTeamMembers();
+        // this.users = this.userService.getTeamMembers();
         this.getTaskSubscriptionByIdParam();
     }
 
@@ -95,7 +95,7 @@ export class TaskDetailsPage extends CommonTaskAttributesActions {
             });
     }
 
-    private buildTaskContentForm() {
+    private buildTaskContentForm(): void {
         this.taskContentFormGroup = this.formBuilder.group({
             content: [
                 this.task$.getValue().content || '',

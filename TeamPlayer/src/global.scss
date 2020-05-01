@@ -39,6 +39,10 @@ ion-button {
   display: none !important;
 }
 
+.d-flex {
+  display: flex;
+}
+
 ion-backdrop {
   --backdrop-opacity: var(--ion-backdrop-opacity,0.5) !important;
 }

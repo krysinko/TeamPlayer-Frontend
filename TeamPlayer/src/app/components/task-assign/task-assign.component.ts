@@ -5,6 +5,7 @@ import { BehaviorSubject } from 'rxjs';
 import { PopoverController } from '@ionic/angular';
 import { TaskService } from '../../services/task.service';
 import { Task } from '../../models/task';
+import { ProjectService } from '../../services/project.service';
 
 @Component({
     selector: 'app-task-assign',
@@ -13,24 +14,24 @@ import { Task } from '../../models/task';
 })
 export class TaskAssignComponent implements OnInit {
     @Input() task: Task;
+    @Input() editAssignedUsersState: boolean = true;
     teamList$: BehaviorSubject<User[]> = new BehaviorSubject<User[]>([]);
     assignedUsers: Set<User> = new Set<User>();
-    editAssignedUsersState: boolean = false;
 
     constructor(
         private userService: UserService,
         private popoverController: PopoverController,
         private taskService: TaskService,
-        private chengeDetector: ChangeDetectorRef) {
-        this.setSubscriptionForUsers();
+        private chengeDetector: ChangeDetectorRef,
+        private projectService: ProjectService) {
     }
 
     ngOnInit() {
         if (this.task && this.task.assignees) {
+            this.setSubscriptionForUsers();
             this.editAssignedUsersState = true;
             this.task.assignees.forEach((usr: User) => {
                 this.assignedUsers.add(usr);
-                // this.assignedUsers.set(index, this.teamList$.getValue().find((u: User) => u.id === usr));
             });
             console.log(this.assignedUsers);
         } else {
@@ -38,12 +39,14 @@ export class TaskAssignComponent implements OnInit {
                 this.assignedUsers.add(new User());
             }
         }
+        this.chengeDetector.detectChanges();
     }
 
-    // todo should handle observable value
     setSubscriptionForUsers(): void {
-        this.projectService.getUsers();
-        this.teamList$.next(this.userService.getTeamMembers());
+        this.projectService.getProjectTeamMembers(this.task.project.id)
+            .subscribe((members: User[]) => {
+                this.teamList$.next(members);
+            });
     }
 
     // todo form builder, add methoids

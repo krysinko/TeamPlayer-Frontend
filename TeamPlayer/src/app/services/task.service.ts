@@ -13,6 +13,7 @@ import {
 } from '../models/texts/taskDescriptions';
 import { UserService } from './user.service';
 import { Router } from '@angular/router';
+import { User } from '../models/user';
 
 @Injectable({
     providedIn: 'root'
@@ -100,6 +101,15 @@ export class TaskService {
             .subscribe((tasks: Task[]) => {
                 this._tasks$.next(tasks);
         });
+    }
+
+    getTaskProjectTeamMembers(id: number): User[] {
+        let users: User[];
+        this.getTask(id)
+            .subscribe((task: Task) => {
+               users = task.project.users;
+            });
+        return users;
     }
 
     private getAssignedUsersRandomValue(): number[] {

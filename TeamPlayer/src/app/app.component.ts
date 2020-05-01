@@ -28,8 +28,8 @@ export class AppComponent implements OnInit {
             icon: 'list-outline'
         },
         {
-            title: 'Wydarzenia',
-            url: '/events',
+            title: 'Spotkania',
+            url: '/meetings',
             icon: 'calendar-outline'
         },
         {

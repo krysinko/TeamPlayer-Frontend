@@ -24,8 +24,8 @@ const routes: Routes = [
         loadChildren: () => import('./modules/pages/tasks/tasks.module').then(m => m.TasksPageModule)
     },
     {
-        path: 'events',
-        loadChildren: () => import('./modules/pages/events/events.module').then(m => m.EventsPageModule)
+        path: 'meetings',
+        loadChildren: () => import('./modules/pages/meetings/meetings.module').then(m => m.MeetingsPageModule)
     },
     {
         path: 'note',
