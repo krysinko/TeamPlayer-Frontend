@@ -19,7 +19,7 @@ export class TaskAssignComponent implements OnInit {
     @Input() task: Task;
     @Input() editAssignedUsersState: boolean = true;
     teamList$: BehaviorSubject<User[]> = new BehaviorSubject<User[]>([]);
-    assignedUsers: User[] = [];
+    assignedUsers: Set<User> = new Set<User>();
     assignmentForm: FormArray;
 
     constructor(
@@ -34,16 +34,16 @@ export class TaskAssignComponent implements OnInit {
 
     ngOnInit() {
 
-        let usrsset = [];
+        // let usrsset = [];
         if (this.task && this.task.assignees) {
             this.teamList$.next(this.task.project.users);
             this.setSubscriptionForUsers();
             this.editAssignedUsersState = true;
             this.task.assignees.forEach((usr: User) => {
-                usrsset.push(usr);
+                this.assignedUsers.add(usr);
                 const ctrl: FormControl = this.formBuilder.control(usr.id);
                 this.assignmentForm.push(ctrl);
-                console.log(usrsset, this.assignmentForm);
+                console.log(this.assignedUsers.values(), this.assignmentForm);
             });
             // if (this.assignedUsers.size < 3) {
             //     do {
@@ -57,10 +57,10 @@ export class TaskAssignComponent implements OnInit {
             console.log(this.assignedUsers, this.assignmentForm);
         } else {
             for (let i = 0; i < 3; i++) {
-                usrsset.push(new User());
+                this.assignedUsers.add(new User());
             }
         }
-        this.assignedUsers = usrsset;
+        // this.assignedUsers = usrsset;
 
 
 
@@ -95,52 +95,53 @@ export class TaskAssignComponent implements OnInit {
         console.log($event);
         const selectedUser: User = this.getTeamMemberById($event.detail.value);
         let usrsset = this.assignedUsers;
-        usrsset.push(selectedUser);
+        this.assignedUsers.add(selectedUser);
         // if (this.task.assignees && this.task.assignees.length) {
         //     this.task.assignees.push(user);
         // } else {
         //     this.task.assignees = [ user ];
         // }
-        this.assignedUsers = usrsset;
+        // this.assignedUsers = usrsset;
 
         console.log(this.assignedUsers);
         this.chengeDetector.detectChanges();
     }
 
     removeUserFromTask(userId: number, index: number): void {
-        let usrsset = this.assignedUsers;
-        usrsset = usrsset.filter(u => u.id !== userId);
+        // let usrsset = this.assignedUsers;
+        // usrsset = usrsset.filter(u => u.id !== userId);
+        const us = this.getTeamMemberById(userId);
+        this.assignedUsers.forEach(user => user.id === userId ? this.assignedUsers.delete(user) : user);
         this.assignmentForm.removeAt(index);
 
         // if (this.assignedUsers.get(index) && this.assignedUsers.get(index).id === id) {
         //     remove(this.task.assignees, id);
         //     this.assignedUsers.delete(index);
-        this.assignedUsers = usrsset;
+        // this.assignedUsers = usrsset;
+        console.log(this.assignedUsers);
         this.chengeDetector.detectChanges();
         // }
     }
 
-    // isUserAssigned(id: number): boolean {
-    //     let usrsset = this.assignedUsers;
-    //     let state = false;
-    //     if (!usrsset.length) {
-    //         return null;
-    //     } else {
-    //         usrsset.forEach((user: User) => {
-    //             if (user.id === id) {
-    //                 // console.log(user.id, id, user.id === id);
-    //                 state = true;
-    //             } else {
-    //                 state = false;
-    //             }
-    //         });
-    //     }
-    //     return state;
-    // }
-
-    isUserAssigned(user: User): boolean {
-        return !!find(this.assignedUsers, user);
+    isUserAssigned(id: number): boolean {
+        let usrsset = this.assignedUsers;
+        let state = false;
+        if (!usrsset.size) {
+            return null;
+        } else {
+            usrsset.forEach((user: User) => {
+                if (user.id === id) {
+                    // console.log(user.id, id, user.id === id);
+                    state = true;
+                }
+            });
+        }
+        return state;
     }
+
+    // isUserAssigned(user: User): boolean {
+    //     return !!find(this.assignedUsers, user);
+    // }
 
     addOneMoreEntry() {
         const ctrl: FormControl = this.formBuilder.control(null);
