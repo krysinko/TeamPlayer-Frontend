@@ -12,6 +12,14 @@ ion-select {
     --box-shadow: none;
     --padding-start: 5px;
     --padding-end: 5px;
+    ion-icon {
+        transition: transform 0.2s ease;
+        transform: rotate(-45deg);
+    }
+
+    &.has-value ion-icon {
+        transform: rotate(0);
+    }
 }
 
 .add-user-select-btn {

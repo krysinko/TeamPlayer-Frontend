@@ -13,3 +13,7 @@ export const usersApiPath = 'users/';
 // meetings
 export const meetingsByUserPath = 'meetings/participant/';
 export const meetingsByCreatorPath = 'meetings/Creator/';
+
+// project
+
+export const projectApiByIdPath = 'projects/';

@@ -24,6 +24,7 @@ export class ProjectService {
             .pipe(
                 map((project: Project) => {
                     this._teamMembers$.next(project.users);
+                    console.log(project.users);
                     return project.users;
                 }),
                 catchError((error: HttpErrorResponse) => {
