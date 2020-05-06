@@ -9,20 +9,20 @@
 <!--								else emptySelectList">-->
 					<ng-container *ngFor="let assignedUsr of assignmentForm.controls;
 									let index = index">
-						<ion-item [lines]="index === assignedUsers.size - 1 ? 'none' : 'full'">
+						<ion-item lines="full">
 							<ion-label class="display-none">Wybierz użytkownika</ion-label>
 
 							<ion-select placeholder="Wybierz użytkownika"
 							            okText="Save"
 							            [formControlName]="index"
 							            [value]="assignedUsr.value"
-							            (ionChange)="assignUser(null, $event)"
+							            (ionChange)="assignUser($event, index)"
 							            appIonSelectNoCaret>
 								<ion-select-option
 									*ngFor="let member of (teamList$ | async)"
 									[value]="member.id"
 									[disabled]="isUserAssigned(member.id)">
-											{{ member.username }}, {{isUserAssigned(member.id)}}
+											{{ member.username }}
 								</ion-select-option>
 							</ion-select>
 							<ion-button class="remove-assignment-btn ion-no-margin" [ngClass]="{'has-value': assignedUsr.value}"
@@ -33,9 +33,9 @@
 						</ion-item>
 					</ng-container>
 <!--				</ng-container>-->
-				<ion-item lines="full">
+				<ion-item lines="full" [hidden]="assignmentForm.controls.length >= (teamList$ | async).length">
 					<ion-button class="add-user-select-btn" color="deep-danger" fill="outline" shape="round"
-					            (click)="addOneMoreEntry()" type="button" [hidden]="assignedUsers.size >= (teamList$ | async).length">
+					            (click)="addOneMoreEntry()" type="button">
 						<ion-icon name="person-add-outline"></ion-icon>
 						Add next user
 					</ion-button>
@@ -66,11 +66,11 @@
 		<ion-label class="display-none">Wybierz użytkownika</ion-label>
 		<ion-select placeholder="Wybierz użytkownika" okText="Zatwierdź" cancelText="Anuluj"
 		            interface="alert"
-		            (ionChange)="assignUser(null, $event)">
+		            (ionChange)="assignUser($event)">
 			<ion-select-option
 				*ngFor="let member of teamList$ | async"
 				[value]="member.id" [disabled]="isUserAssigned(member.id)">
-				{{ member.username }}, {{isUserAssigned(member.id)}}
+				{{ member.username }}
 			</ion-select-option>
 		</ion-select>
 	</ion-item>

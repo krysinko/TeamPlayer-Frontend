@@ -1,4 +1,4 @@
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Injector, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 
@@ -12,6 +12,7 @@ import { ComponentsModule } from './components/components.module';
 import { ApiService } from './services/api/api.service';
 import { HttpClientModule } from '@angular/common/http';
 import { httpInterceptorProviders } from './http-interceptors/interceptor-index';
+import { AppInjectorService } from './services/app-injector.service';
 
 @NgModule({
     declarations: [ AppComponent ],
@@ -35,4 +36,7 @@ import { httpInterceptorProviders } from './http-interceptors/interceptor-index'
     exports: []
 })
 export class AppModule {
+    constructor(injector: Injector) {
+        AppInjectorService.injector = injector;
+    }
 }

@@ -33,7 +33,7 @@ export class IonSelectNoCaretDirective {
         // Also set the placeholder text to the same color as other placeholders
         // If a default value was selected, no placeholder element will be present, so check for null on this one again
         if (this.el.nativeElement.shadowRoot.querySelector('.select-placeholder') !== null) {
-            this.el.nativeElement.shadowRoot.querySelector('.select-placeholder').setAttribute('style', 'opacity: 1; color: #999 !important');
+            this.el.nativeElement.shadowRoot.querySelector('.select-placeholder').setAttribute('style', 'opacity: 1;');
         }
         // Stop listening for mutations
         this.observer.disconnect();

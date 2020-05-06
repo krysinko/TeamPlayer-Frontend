@@ -37,10 +37,8 @@ export class TasksPage extends CommonTaskAttributesActions implements OnInit, On
         private appPages: AppPages,
         private location: Location,
         private router: Router,
-        private route: ActivatedRoute,
-        private taskService: TaskService,
-        popoverController: PopoverController) {
-        super(popoverController);
+        private route: ActivatedRoute) {
+        super();
         this.tasks$ = this.taskService.tasks$;
     }
 

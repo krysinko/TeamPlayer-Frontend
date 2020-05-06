@@ -45,14 +45,13 @@ export class TaskAssignComponent implements OnInit {
                 this.assignmentForm.push(ctrl);
                 console.log(this.assignedUsers.values(), this.assignmentForm);
             });
-            // if (this.assignedUsers.size < 3) {
-            //     do {
-            //         this.assignedUsers.add(<User>{});
-            //         const ctrl: FormControl = this.formBuilder.control('');
-            //         this.assignmentForm.push(ctrl);
-            //         console.log(this.assignedUsers, this.assignmentForm);
-            //     } while (this.assignedUsers.size < 3);
-            // }
+            if (this.assignedUsers.size < 3) {
+                do {
+                    const ctrl: FormControl = this.formBuilder.control('');
+                    this.assignmentForm.push(ctrl);
+                    console.log(this.assignedUsers, this.assignmentForm);
+                } while (this.assignmentForm.controls.length < 3);
+            }
 
             console.log(this.assignedUsers, this.assignmentForm);
         } else {
@@ -60,9 +59,6 @@ export class TaskAssignComponent implements OnInit {
                 this.assignedUsers.add(new User());
             }
         }
-        // this.assignedUsers = usrsset;
-
-
 
         this.assignmentForm.valueChanges.subscribe((data) => {
             console.log(data);
@@ -91,57 +87,30 @@ export class TaskAssignComponent implements OnInit {
         this.popoverController.dismiss();
     }
 
-    assignUser(user: User = null, $event: CustomEvent): void {
-        console.log($event);
+    assignUser($event: CustomEvent, index: number): void {
         const selectedUser: User = this.getTeamMemberById($event.detail.value);
-        let usrsset = this.assignedUsers;
         this.assignedUsers.add(selectedUser);
-        // if (this.task.assignees && this.task.assignees.length) {
-        //     this.task.assignees.push(user);
-        // } else {
-        //     this.task.assignees = [ user ];
-        // }
-        // this.assignedUsers = usrsset;
-
-        console.log(this.assignedUsers);
-        this.chengeDetector.detectChanges();
     }
 
     removeUserFromTask(userId: number, index: number): void {
-        // let usrsset = this.assignedUsers;
-        // usrsset = usrsset.filter(u => u.id !== userId);
         const us = this.getTeamMemberById(userId);
         this.assignedUsers.forEach(user => user.id === userId ? this.assignedUsers.delete(user) : user);
         this.assignmentForm.removeAt(index);
-
-        // if (this.assignedUsers.get(index) && this.assignedUsers.get(index).id === id) {
-        //     remove(this.task.assignees, id);
-        //     this.assignedUsers.delete(index);
-        // this.assignedUsers = usrsset;
-        console.log(this.assignedUsers);
-        this.chengeDetector.detectChanges();
-        // }
     }
 
     isUserAssigned(id: number): boolean {
-        let usrsset = this.assignedUsers;
         let state = false;
-        if (!usrsset.size) {
+        if (!this.assignedUsers.size) {
             return null;
         } else {
-            usrsset.forEach((user: User) => {
+            this.assignedUsers.forEach((user: User) => {
                 if (user.id === id) {
-                    // console.log(user.id, id, user.id === id);
                     state = true;
                 }
             });
         }
         return state;
     }
-
-    // isUserAssigned(user: User): boolean {
-    //     return !!find(this.assignedUsers, user);
-    // }
 
     addOneMoreEntry() {
         const ctrl: FormControl = this.formBuilder.control(null);
