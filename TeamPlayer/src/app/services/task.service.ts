@@ -23,11 +23,12 @@ export class TaskService {
         return this._tasks$.asObservable();
     }
 
-    static compareDeadlines(t1: Task, t2: Task) {
-        return new Date(t1.deadline).getTime() - new Date(t2.deadline).getTime();
+    static compareDate(t1: Task, t2: Task, order: 'asc' | 'desc') {
+        return (new Date(t1.deadline).getTime() - new Date(t2.deadline).getTime()) * (order === 'asc' ? 1 : -1);
     }
 
     static compareTaskStatus(t1: Task, t2: Task, order: 'asc' | 'desc') {
+        console.log(TaskProgressInStartToEndOrder, TaskProgressInStartToEndOrder.indexOf(t1.status), TaskProgressInStartToEndOrder.indexOf(t2.status));
         return (TaskProgressInStartToEndOrder.indexOf(t1.status) - TaskProgressInStartToEndOrder.indexOf(t2.status)) * (order === 'asc' ? 1 : -1);
     }
 
@@ -50,11 +51,14 @@ export class TaskService {
     }
 
     sortTasks(options: SortOption): void {
+        console.log(options.property, options.order);
         let tasksSorted: Task[] = this._tasks$.getValue();
         if (options.property === 'status') {
             tasksSorted = tasksSorted.sort((t1: Task, t2: Task) => TaskService.compareTaskStatus(t1, t2, options.order));
+        } else if (options.property === 'deadline' || options.property === 'createdAt') {
+            tasksSorted = tasksSorted.sort((t1: Task, t2: Task) => TaskService.compareDate(t1, t2, options.order));
         } else {
-            tasksSorted = _.orderBy(tasksSorted, [ options.property, options.order ]);
+            tasksSorted = _.orderBy(tasksSorted, [ options.property ], [ options.order ]);
         }
         console.log(tasksSorted);
 

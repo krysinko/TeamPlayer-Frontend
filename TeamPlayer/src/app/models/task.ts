@@ -24,7 +24,7 @@ export enum TaskStatus {
     DONE = 'done'
 }
 
-export const TaskProgressInStartToEndOrder = [TaskStatus.PREPARATION, TaskStatus.TODO, TaskStatus.BLOCKED, TaskStatus.EXECUTION, TaskStatus.DONE ];
+export const TaskProgressInStartToEndOrder = ['PREPARATION', 'TODO', 'EXECUTION', 'BLOCKED', 'DONE'];
 
 export class SortOption {
     label: string;
@@ -46,7 +46,7 @@ export const TaskSortOptions: SortOption[] = [
     {
         label: 'Data zakończenia - od najbliższej',
         property: 'deadline',
-        order: 'desc',
+        order: 'asc',
     },
     {
         label: 'Data zakończenia - od najdalszej',
