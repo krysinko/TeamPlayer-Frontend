@@ -6,13 +6,33 @@
 		<ion-row class="ion-padding ion-justify-content-center">
 			<ion-col size="12" class="ion-padding-bottom">
 				<small>Task:</small>
-				<h2 class="ion-no-margin">
-					<ion-input [value]="task.title"
-					           placeholder="Enter task title here"
-					           maxlength="255"
-					           minlength="1">
-					</ion-input>
-				</h2>
+				<form (ngSubmit)="saveNewTitle()" [formGroup]="taskTitleFormGroup">
+					<h2 class="ion-no-margin">
+						<ion-input formControlName="title"
+						           (ionInput)="setTitleChangedFlag()"
+						           placeholder="Enter task title here"
+						           maxlength="255"
+						           minlength="1"
+						           #titleInputElement>
+						</ion-input>
+						<ion-item class="ion-no-padding" *ngIf="titleHasChanged$ | async">
+							<div slot="end">
+								<ion-button fill="clear"
+								            shape="round"
+								            type="button"
+								            (click)="clearTitleInput()">
+									Clear all
+								</ion-button>
+								<ion-button color="deep-green"
+								            shape="round"
+								            type="submit">
+									Save
+								</ion-button>
+							</div>
+						</ion-item>
+					</h2>
+				</form>
+
 
 			</ion-col>
 		</ion-row>
@@ -33,7 +53,7 @@
 					<ion-label class="ion-padding-start">Status:</ion-label>
 					<ion-select [value]="task.status"
 					            class="ion-padding-end"
-					            (ionChange)="updateStatus()"
+					            (ionChange)="updateStatus($event)"
 					            appIonSelectNoCaret>
 						<ion-select-option
 							*ngFor="let status of taskStatusKeys"

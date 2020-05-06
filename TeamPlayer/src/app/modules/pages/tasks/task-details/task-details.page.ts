@@ -6,7 +6,7 @@ import { Task, TaskStatus } from '../../../../models/task';
 import { BehaviorSubject } from 'rxjs';
 import { TaskLabels } from '../../../../models/texts/taskDescriptions';
 import { CommonTaskAttributesActions } from '../common-task-attributes-actions';
-import { IonTextarea, PopoverController } from '@ionic/angular';
+import { IonInput, IonTextarea, PopoverController } from '@ionic/angular';
 import { UserService } from '../../../../services/user.service';
 import { User } from '../../../../models/user';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -30,6 +30,7 @@ export class TaskDetailsPage extends CommonTaskAttributesActions {
     }
 
     @ViewChild('taskDescriptionTextarea', { read: IonTextarea, static: false }) taskContentInput: IonTextarea;
+    @ViewChild('titleInputElement', { read: IonInput, static: false }) taskTitleInput: IonInput;
 
     task$: BehaviorSubject<Task> = new BehaviorSubject<Task>(null);
     taskStatusKeys: string[] =  Object.keys(TaskStatus);
@@ -37,23 +38,28 @@ export class TaskDetailsPage extends CommonTaskAttributesActions {
     taskStatuses: typeof TaskStatus = TaskStatus;
     users: User[];
     contentHasChanged$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    titleHasChanged$: BehaviorSubject<boolean> =  new BehaviorSubject<boolean>(false);
     taskContentFormGroup: FormGroup;
+    taskTitleFormGroup: FormGroup;
     private taskId: number;
 
     constructor(
         private route: ActivatedRoute,
-        private taskService: TaskService,
-        popoverController: PopoverController,
         private userService: UserService,
         private formBuilder: FormBuilder
     ) {
-        super(popoverController);
-        // this.users = this.userService.getTeamMembers();
+        super();
         this.getTaskSubscriptionByIdParam();
     }
 
-    updateStatus(): void {
-
+    updateStatus($event: CustomEvent): void {
+        console.log($event.detail.value);
+        const task: Task = {
+            ...this.task$.getValue(),
+            status: $event.detail.value
+        };
+        this.taskService.updateTask(task);
+        this.task$.next(task);
     }
 
     getUsernameById(id: number): string {
@@ -81,6 +87,23 @@ export class TaskDetailsPage extends CommonTaskAttributesActions {
         this.taskContentInput.setFocus();
     }
 
+    clearTitleInput(): void {
+        this.taskTitleFormGroup.setValue({title: ''});
+        this.taskTitleInput.setFocus();
+    }
+
+    setTitleChangedFlag(): void {
+        this.titleHasChanged$.next(true);
+    }
+
+    saveNewTitle(): void {
+        this.taskService.updateTask({
+            ...this.task$.getValue(),
+            title: this.taskTitleFormGroup.controls['title'].value
+        });
+        this.titleHasChanged$.next(false);
+    }
+
     private getTaskSubscriptionByIdParam(): void {
         this.route.paramMap
             .pipe(
@@ -92,6 +115,7 @@ export class TaskDetailsPage extends CommonTaskAttributesActions {
             .subscribe((t: Task) => {
                 this.task$.next(t);
                 this.buildTaskContentForm();
+                this.buildTaskTitleForm();
             });
     }
 
@@ -99,6 +123,15 @@ export class TaskDetailsPage extends CommonTaskAttributesActions {
         this.taskContentFormGroup = this.formBuilder.group({
             content: [
                 this.task$.getValue().content || '',
+                Validators.maxLength(255)
+            ]
+        });
+    }
+
+    private buildTaskTitleForm(): void {
+        this.taskTitleFormGroup = this.formBuilder.group({
+            title: [
+                this.task$.getValue().title || '',
                 Validators.maxLength(255)
             ]
         });
