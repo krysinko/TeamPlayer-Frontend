@@ -12,8 +12,9 @@ export const usersApiPath = 'users/';
 
 // meetings
 export const meetingsByUserPath = 'meetings/participant/';
-export const meetingsByCreatorPath = 'meetings/Creator/';
+export const meetingsByCreatorPath = 'meetings/creator/';
 
 // project
 
 export const projectApiByIdPath = 'projects/';
+export const projectApiByUserIdPath = 'projects/users/';

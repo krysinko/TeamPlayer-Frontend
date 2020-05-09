@@ -12,7 +12,7 @@
 						<ion-item lines="full">
 							<ion-label class="display-none">Wybierz użytkownika</ion-label>
 
-							<ion-select placeholder="Wybierz użytkownika"
+							<ion-select placeholder="Wybierz użytkownika {{assignedUsr.value}}"
 							            okText="Save"
 							            [formControlName]="index"
 							            [value]="assignedUsr.value"
@@ -66,7 +66,7 @@
 		<ion-label class="display-none">Wybierz użytkownika</ion-label>
 		<ion-select placeholder="Wybierz użytkownika" okText="Zatwierdź" cancelText="Anuluj"
 		            interface="alert"
-		            (ionChange)="assignUser($event)">
+		            (ionChange)="assignUser($event, 1)">
 			<ion-select-option
 				*ngFor="let member of teamList$ | async"
 				[value]="member.id" [disabled]="isUserAssigned(member.id)">

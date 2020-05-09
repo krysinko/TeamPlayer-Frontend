@@ -7,7 +7,7 @@ import { TaskService } from '../../services/task.service';
 import { Task } from '../../models/task';
 import { ProjectService } from '../../services/project.service';
 import { skipWhile } from 'rxjs/operators';
-import { isEmpty, find } from 'lodash';
+import { isEmpty } from 'lodash';
 import { FormArray, FormBuilder, FormControl } from '@angular/forms';
 
 @Component({
@@ -18,7 +18,7 @@ import { FormArray, FormBuilder, FormControl } from '@angular/forms';
 export class TaskAssignComponent implements OnInit {
     @Input() task: Task;
     @Input() editAssignedUsersState: boolean = true;
-    teamList$: BehaviorSubject<User[]> = new BehaviorSubject<User[]>([]);
+    @Input() teamList$: BehaviorSubject<User[]> = new BehaviorSubject<User[]>([]);
     assignedUsers: Set<User> = new Set<User>();
     assignmentForm: FormArray;
 
@@ -55,9 +55,10 @@ export class TaskAssignComponent implements OnInit {
 
             console.log(this.assignedUsers, this.assignmentForm);
         } else {
-            for (let i = 0; i < 3; i++) {
-                this.assignedUsers.add(new User());
-            }
+            do {
+                const ctrl: FormControl = this.formBuilder.control('');
+                this.assignmentForm.push(ctrl);
+            } while (this.assignmentForm.controls.length < 3);
         }
 
         this.assignmentForm.valueChanges.subscribe((data) => {

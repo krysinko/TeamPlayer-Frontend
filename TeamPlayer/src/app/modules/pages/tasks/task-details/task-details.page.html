@@ -9,13 +9,12 @@
 				<form (ngSubmit)="saveNewTitle()" [formGroup]="taskTitleFormGroup">
 					<h2 class="ion-no-margin">
 						<ion-input formControlName="title"
-						           (ionInput)="setTitleChangedFlag()"
 						           placeholder="Enter task title here"
 						           maxlength="255"
 						           minlength="1"
 						           #titleInputElement>
 						</ion-input>
-						<ion-item class="ion-no-padding" *ngIf="titleHasChanged$ | async">
+						<ion-item class="ion-no-padding" *ngIf="taskTitleFormGroup.controls['title'].dirty">
 							<div slot="end">
 								<ion-button fill="clear"
 								            shape="round"
@@ -91,11 +90,10 @@
 						              formControlName="content"
 						              autoGrow="true"
 						              placeholder="Enter any description here..."
-						              (ionInput)="setDescriptionChangedFlag()"
 						              #taskDescriptionTextarea>
 						</ion-textarea>
 					</ion-item>
-					<ion-item class="ion-no-padding" *ngIf="contentHasChanged$ | async">
+					<ion-item class="ion-no-padding" *ngIf="taskContentFormGroup.controls['content'].dirty">
 						<div slot="end">
 							<ion-button fill="clear"
 							            shape="round"

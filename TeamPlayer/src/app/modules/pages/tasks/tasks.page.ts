@@ -97,14 +97,15 @@ export class TasksPage extends CommonTaskAttributesActions implements OnInit, On
         this.router.navigate([ 'task-details/' + id ], { relativeTo: this.route });
     }
 
+    goToNewTaskPage() {
+        this.router.navigate(['new'], { relativeTo: this.route });
+    }
+
     private getTask(index: number): Observable<Task> {
         return this.tasks$.pipe(map((arr: Task[]) => arr.find((t: Task) => t.id === index)));
     }
 
     private subscribeOnTasks(): void {
-        this.taskService.tasks$.pipe(takeUntil(this.componentDestroyed$)).subscribe((data: Task[]) => {
-            console.log(data);
-            // this.tasks = data;
-        });
+        this.tasks$ = this.taskService.tasks$.pipe(takeUntil(this.componentDestroyed$));
     }
 }

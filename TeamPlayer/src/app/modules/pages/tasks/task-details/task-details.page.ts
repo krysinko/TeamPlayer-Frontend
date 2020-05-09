@@ -76,11 +76,7 @@ export class TaskDetailsPage extends CommonTaskAttributesActions {
             ...this.task$.getValue(),
             content: this.taskContentFormGroup.controls['content'].value
         });
-        this.contentHasChanged$.next(false);
-    }
-
-    setDescriptionChangedFlag(): void {
-        this.contentHasChanged$.next(true);
+        this.taskContentFormGroup.controls['content'].markAsPristine();
     }
 
     setFocusOnDescriptionTextarea(): void {
@@ -92,16 +88,12 @@ export class TaskDetailsPage extends CommonTaskAttributesActions {
         this.taskTitleInput.setFocus();
     }
 
-    setTitleChangedFlag(): void {
-        this.titleHasChanged$.next(true);
-    }
-
     saveNewTitle(): void {
         this.taskService.updateTask({
             ...this.task$.getValue(),
             title: this.taskTitleFormGroup.controls['title'].value
         });
-        this.titleHasChanged$.next(false);
+        this.taskTitleFormGroup.controls['title'].markAsPristine();
     }
 
     private getTaskSubscriptionByIdParam(): void {

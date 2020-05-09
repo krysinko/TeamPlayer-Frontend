@@ -1,0 +1,102 @@
+<ion-header class="ion-padding-start">
+	<app-header-simple title="Create new task" [arrowBack]="true"></app-header-simple>
+</ion-header>
+<ion-content>
+	<form (ngSubmit)="saveTask()" [formGroup]="taskFormGroup">
+		<ion-row class="ion-padding ion-justify-content-center">
+			<ion-col size="12" class="ion-padding-bottom">
+				<small>Task:</small>
+				<h2 class="ion-no-margin">
+					<ion-input formControlName="title"
+					           placeholder="Enter task title here"
+					           maxlength="255"
+					           minlength="1">
+					</ion-input>
+				</h2>
+			</ion-col>
+		</ion-row>
+		<ion-row>
+			<ion-col size="12">
+				<ion-item class="ion-no-padding"
+				          lines="full"
+				          type="button">
+					<ion-label class="ion-padding-start">Project:</ion-label>
+					<ion-select class="ion-padding-end"
+					            formControlName="project"
+					            placeholder="Select project"
+					            (ionChange)="resetAssignedUsersAndTeamMembers($event)"
+					            appIonSelectNoCaret>
+						<ion-select-option
+							*ngFor="let project of userProjects"
+							[value]="project.id" appIonSelectNoCaret>
+							{{ project.name }}
+						</ion-select-option>
+					</ion-select>
+				</ion-item>
+				<ion-item class="ion-no-padding"
+				          lines="full"
+				          type="button"
+				          (click)="showDatePickerForTask(task)">
+					<ion-label class="ion-padding-start">Deadline:</ion-label>
+					<ion-text class="ion-padding-end" *ngIf="task.deadline">
+						{{ task.deadline | date:'dd.MM.yyyy, HH:mm' }}
+					</ion-text>
+					<ion-text class="ion-padding-end" *ngIf="!task.deadline">
+						None
+					</ion-text>
+				</ion-item>
+				<ion-item class="ion-no-padding"
+				          lines="full"
+				          type="button">
+					<ion-label class="ion-padding-start">Status:</ion-label>
+					<ion-select [value]="task.status"
+					            class="ion-padding-end"
+					            formControlName="status"
+					            placeholder="Select status"
+					            appIonSelectNoCaret>
+						<ion-select-option
+							*ngFor="let status of taskStatusKeys"
+							[value]="status" appIonSelectNoCaret>
+							{{taskLabels[status]}}
+						</ion-select-option>
+					</ion-select>
+				</ion-item>
+				<ion-item class="ion-no-padding"
+				          lines="full"
+				          type="button"
+				          [disabled]="taskFormGroup.controls['project'].pristine"
+				          (click)="assignUsersToTask(task, teamMembers$)">
+					<ion-label class="ion-padding-start">Assigned users:</ion-label>
+					<div class="ion-padding-vertical"
+					     *ngIf="(newTaskAsignees | async)?.length">
+						<p class="ion-padding-end"
+						   *ngFor="let user of (newTaskAsignees | async)">
+							{{ user.username }}
+						</p>
+					</div>
+					<ion-text class="ion-padding-end"  *ngIf="!(newTaskAsignees | async)?.length">None</ion-text>
+				</ion-item>
+			</ion-col>
+			<ion-col size="12">
+				<ion-item class="ion-no-padding"
+				          lines="none"
+				          type="button">
+					<ion-label class="ion-padding-horizontal">Description:</ion-label>
+				</ion-item>
+				<ion-item class="ion-no-padding" lines="full">
+					<ion-textarea class="ion-padding-horizontal ion-no-margin"
+					              maxlength="255"
+					              formControlName="content"
+					              autoGrow="true"
+					              placeholder="Enter any description here..."
+					              #taskDescriptionTextarea>
+					</ion-textarea>
+				</ion-item>
+			</ion-col>
+		</ion-row>
+	</form>
+
+</ion-content>
+<ion-footer class="ion-text-center ion-padding-bottom ion-no-border">
+	<ion-button color="danger" shape="round" [disabled]="!taskFormGroup.valid">Save</ion-button>
+</ion-footer>
