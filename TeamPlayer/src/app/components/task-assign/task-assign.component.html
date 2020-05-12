@@ -33,7 +33,7 @@
 						</ion-item>
 					</ng-container>
 <!--				</ng-container>-->
-				<ion-item lines="full" [hidden]="assignmentForm.controls.length >= (teamList$ | async).length">
+				<ion-item lines="full" [hidden]="assignmentForm?.controls?.length >= (teamList$ | async)?.length">
 					<ion-button class="add-user-select-btn" color="deep-danger" fill="outline" shape="round"
 					            (click)="addOneMoreEntry()" type="button">
 						<ion-icon name="person-add-outline"></ion-icon>

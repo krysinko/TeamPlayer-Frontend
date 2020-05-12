@@ -21,13 +21,13 @@ export class ProjectService {
     constructor(private projectApiService: ProjectApiService, private userService: UserService) {
     }
 
-    getProjectTeamMembers(projectId: number): Observable<User[]> {
-        return this.projectApiService.getProjectById(projectId)
+    getProjectTeamMembers(project: Project): Observable<User[]> {
+        return this.projectApiService.getProjectById(project.id)
             .pipe(
-                map((project: Project) => {
-                    this._teamMembers$.next(project.users);
-                    console.log(project.users);
-                    return project.users;
+                map((proj: Project) => {
+                    this._teamMembers$.next(proj.users);
+                    console.log(proj.users);
+                    return proj.users;
                 }),
                 catchError((error: HttpErrorResponse) => {
                     console.log(error);
@@ -43,9 +43,7 @@ export class ProjectService {
                 map((user: User) => {
                     id = user.id;
                 }),
-                switchMap(() => {
-                    return this.projectApiService.getProjectsByUserId(id);
-                }),
+                switchMap(() => this.projectApiService.getProjectsByUserId(id)),
                 map((projects: Project[]) => {
                     this._usersProjects$.next(projects);
                     return projects;

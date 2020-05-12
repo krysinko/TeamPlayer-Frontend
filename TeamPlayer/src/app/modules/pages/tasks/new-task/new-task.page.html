@@ -4,8 +4,17 @@
 <ion-content>
 	<form (ngSubmit)="saveTask()" [formGroup]="taskFormGroup">
 		<ion-row class="ion-padding ion-justify-content-center">
+			<ion-col size="12" class="ion-text-end ion-no-padding ion-padding-horizontal">
+				<small>
+					<ion-text color="danger">*</ion-text>
+					- field required
+				</small>
+			</ion-col>
 			<ion-col size="12" class="ion-padding-bottom">
-				<small>Task:</small>
+				<small>
+					Task:
+					<ion-text color="danger">*</ion-text>
+				</small>
 				<h2 class="ion-no-margin">
 					<ion-input formControlName="title"
 					           placeholder="Enter task title here"
@@ -20,7 +29,9 @@
 				<ion-item class="ion-no-padding"
 				          lines="full"
 				          type="button">
-					<ion-label class="ion-padding-start">Project:</ion-label>
+					<ion-label class="ion-padding-start">Project:
+						<ion-text color="danger">*</ion-text>
+					</ion-label>
 					<ion-select class="ion-padding-end"
 					            formControlName="project"
 					            placeholder="Select project"
@@ -28,7 +39,7 @@
 					            appIonSelectNoCaret>
 						<ion-select-option
 							*ngFor="let project of userProjects"
-							[value]="project.id" appIonSelectNoCaret>
+							[value]="project" appIonSelectNoCaret>
 							{{ project.name }}
 						</ion-select-option>
 					</ion-select>
@@ -36,8 +47,10 @@
 				<ion-item class="ion-no-padding"
 				          lines="full"
 				          type="button"
-				          (click)="showDatePickerForTask(task)">
-					<ion-label class="ion-padding-start">Deadline:</ion-label>
+				          (click)="showDatePickerForTask(task, true)">
+					<ion-label class="ion-padding-start">Deadline:
+						<ion-text color="danger">*</ion-text>
+					</ion-label>
 					<ion-text class="ion-padding-end" *ngIf="task.deadline">
 						{{ task.deadline | date:'dd.MM.yyyy, HH:mm' }}
 					</ion-text>
@@ -48,7 +61,9 @@
 				<ion-item class="ion-no-padding"
 				          lines="full"
 				          type="button">
-					<ion-label class="ion-padding-start">Status:</ion-label>
+					<ion-label class="ion-padding-start">Status:
+						<ion-text color="danger">*</ion-text>
+					</ion-label>
 					<ion-select [value]="task.status"
 					            class="ion-padding-end"
 					            formControlName="status"
@@ -74,7 +89,7 @@
 							{{ user.username }}
 						</p>
 					</div>
-					<ion-text class="ion-padding-end"  *ngIf="!(newTaskAsignees | async)?.length">None</ion-text>
+					<ion-text class="ion-padding-end" *ngIf="!(newTaskAsignees | async)?.length">None</ion-text>
 				</ion-item>
 			</ion-col>
 			<ion-col size="12">
@@ -95,8 +110,7 @@
 			</ion-col>
 		</ion-row>
 	</form>
-
 </ion-content>
 <ion-footer class="ion-text-center ion-padding-bottom ion-no-border">
-	<ion-button color="danger" shape="round" [disabled]="!taskFormGroup.valid">Save</ion-button>
+	<ion-button color="danger" shape="round" [disabled]="!taskFormGroup.valid" (click)="saveTask()">Save</ion-button>
 </ion-footer>

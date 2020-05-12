@@ -13,10 +13,12 @@ export class ProjectApiService {
     }
 
     getProjectById(id: number): Observable<Project> {
+        console.log(id);
         return this.http.get<Project>(API_URL + projectApiByIdPath + id);
     }
 
     getProjectsByUserId(id: number): Observable<Project[]> {
+        console.log(id);
         return this.http.get<Project[]>(API_URL + projectApiByUserIdPath + id);
     }
 }

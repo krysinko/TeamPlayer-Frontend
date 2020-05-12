@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse, HttpSentEvent } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { API_URL, tasksApiPath } from './endpoints';
 import { Observable } from 'rxjs';
@@ -22,6 +22,11 @@ export class TaskApiService {
     }
 
     update(task: Task): Observable<Task> {
+        console.log(task);
         return this.http.put<Task>(API_URL + tasksApiPath + task.id, task);
+    }
+
+    postNewTask(task: Task): Observable<Task> {
+        return this.http.post<Task>(API_URL + tasksApiPath, task);
     }
 }

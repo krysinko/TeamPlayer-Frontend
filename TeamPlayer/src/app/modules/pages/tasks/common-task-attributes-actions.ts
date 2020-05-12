@@ -13,6 +13,7 @@ export abstract class CommonTaskAttributesActions {
     taskStatusKeys: string[] = Object.keys(TaskStatus);
     taskLabels: typeof TaskLabels = TaskLabels;
     newTaskAsignees: BehaviorSubject<User[]> = new BehaviorSubject<User[]>(null);
+    newTaskDate: BehaviorSubject<Date> = new BehaviorSubject<Date>(null);
     protected popoverController: PopoverController;
     protected taskService: TaskService;
 
@@ -21,22 +22,30 @@ export abstract class CommonTaskAttributesActions {
         this.taskService = AppInjectorService.injector.get(TaskService);
     }
 
-    async showDatePickerForTask(task: Task): Promise<void> {
+    async showDatePickerForTask(task: Task, newTask: boolean = false): Promise<void> {
         const datePopover = await this.popoverController.create({
             component: PopoverDatePickerComponent,
             animated: true,
             backdropDismiss: true,
-            componentProps: { task: task },
+            componentProps: { task: task, isNewTask: newTask},
             cssClass: 'popover-date-picker'
         });
+
+        if (newTask) {
+            datePopover.onDidDismiss().then(data => {
+                if (data.data) {
+                    this.newTaskDate.next(<Date>data.data);
+                }
+            });
+        }
 
         return datePopover.present();
     }
 
 
-    async assignUsersToTask(task: Task, teamMembers: BehaviorSubject<User[]> = null): Promise<void> {
-        let properties: object;
-        if (!teamMembers) {
+    async assignUsersToTask(task: Task, teamMembers: BehaviorSubject<User[]> = new BehaviorSubject<User[]>(null)): Promise<void> {
+        let properties: any;
+        if (!teamMembers.value) {
             properties = {
                 task: task,
                 editAssignedUsersState: true,
@@ -56,13 +65,10 @@ export abstract class CommonTaskAttributesActions {
         });
 
         assigneesPopover.onDidDismiss().then(data => {
-            if (data && data.data && properties['editAssignedUsersState']) {
-                console.log(data, task.assignees);
+            if (data && data.data && properties.editAssignedUsersState) {
                 task.assignees = Array.from(<Set<User>> data.data);
-                console.log(task.assignees);
                 this.taskService.updateTask(task);
             } else if (data && data.data) {
-                console.log(data.data);
                 this.newTaskAsignees.next(Array.from(<Set<User>> data.data));
             }
         });

@@ -10,8 +10,8 @@ import { TaskService } from '../../services/task.service';
     styleUrls: [ './popover-date-picker.component.scss' ],
 })
 export class PopoverDatePickerComponent implements OnInit {
-
     @Input() task: Task;
+    @Input() isNewTask: boolean;
     now: Date = new Date();
     dateForm: FormGroup;
     errorMessage: string;
@@ -24,16 +24,17 @@ export class PopoverDatePickerComponent implements OnInit {
     constructor(private popoverController: PopoverController, private formBuilder: FormBuilder, private taskService: TaskService) {}
 
     ngOnInit() {
-        console.log(this.task);
         this.buildDateForm();
     }
 
     saveNewDateTime(): void {
         const timeDate: Date = new Date(this.dateForm.value.time);
-        this.task.deadline = new Date(this.dateForm.value.date);
-        this.task.deadline.setHours(timeDate.getHours(), timeDate.getMinutes());
-        this.taskService.updateTask(this.task);
-        this.popoverController.dismiss();
+        const dateDate: Date = new Date(this.dateForm.value.date);
+        dateDate.setHours(timeDate.getHours(), timeDate.getMinutes());
+        if (!this.isNewTask) {
+            this.taskService.updateTask({...this.task, deadline: dateDate});
+        }
+        this.popoverController.dismiss(dateDate);
     }
 
     dismiss(): void {
@@ -42,10 +43,10 @@ export class PopoverDatePickerComponent implements OnInit {
 
     private buildDateForm(): void {
         let date: Date;
-        if (this.task) {
+        if (this.task && this.task.deadline) {
             date = new Date(this.task.deadline);
         } else {
-            date = new Date();
+            date = new Date(Date.now());
         }
         this.dateForm = this.formBuilder.group({
             date: date.toISOString(),
