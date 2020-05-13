@@ -81,56 +81,6 @@ export class UserService {
             );
     }
 
-    // todo do as observable
-    // getTeamMembers(): User[] {
-    //     if (this.userLoggedIn$.getValue()) {
-    //         return [
-    //             {
-    //                 id: 0,
-    //                 username: 'Ania',
-    //                 email: 'ania@cc.cc',
-    //                 description: 'UI Designer'
-    //             },
-    //             {
-    //                 id: 1,
-    //                 username: 'Piotrek',
-    //                 email: 'piotrek@cc.cc',
-    //                 description: 'Key accountant'
-    //             },
-    //             {
-    //                 id: 2,
-    //                 username: 'Ewa',
-    //                 email: 'ewa@cc.cc',
-    //                 description: 'Level designer'
-    //             },
-    //             {
-    //                 id: 3,
-    //                 username: 'Tomek',
-    //                 email: 'tomek@cc.cc',
-    //                 description: 'QA'
-    //             },
-    //             {
-    //                 id: 4,
-    //                 username: 'Pszemek',
-    //                 email: 'pszemek@cc.cc',
-    //                 description: 'Developer'
-    //             },
-    //             {
-    //                 id: 5,
-    //                 username: 'Natalia',
-    //                 email: 'natalia@cc.cc',
-    //                 description: 'Developer'
-    //             },
-    //             {
-    //                 id: 6,
-    //                 username: 'Jurek',
-    //                 email: 'jurek@cc.cc',
-    //                 description: 'CEO'
-    //             },
-    //         ];
-    //     }
-    // }
-
     private writeUserData(data): void {
         const usr = new User();
         if (data) {

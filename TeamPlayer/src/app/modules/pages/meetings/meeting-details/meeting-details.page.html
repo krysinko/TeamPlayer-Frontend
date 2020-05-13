@@ -1,6 +1,128 @@
-<ion-header class="ion-padding-start">
-  <app-header-simple [title]="'Meeting'" [arrowBack]="true"></app-header-simple>
-</ion-header>
-<ion-content>
+<ng-container *ngIf="(meeting$ | async) as meeting">
+	<app-header-simple [title]="'Meeting'" [arrowBack]="true"></app-header-simple>
+	<ion-content>
+		<ion-row class="ion-padding ion-justify-content-center">
+			<ion-col size="12" class="ion-padding-bottom">
+				<small>Meeting:</small>
+				<!--       (ngSubmit)="saveNewTitle()" [formGroup]="taskTitleFormGroup"-->
+				<form>
+					<h2 class="ion-no-margin"> {{meeting.name}}
+						<!--          formControlName="title"-->
+						<!--          <ion-input placeholder="Enter task title here"-->
+						<!--                     maxlength="255"-->
+						<!--                     minlength="1"-->
+						<!--                     [value]="meeting.name"-->
+						<!--                     #titleInputElement>-->
+						<!--          </ion-input>-->
+						<!--          <ion-item class="ion-no-padding" *ngIf="taskTitleFormGroup.controls['title'].dirty">-->
+						<!--            <div slot="end">-->
+						<!--              <ion-button fill="clear"-->
+						<!--                          shape="round"-->
+						<!--                          type="button"-->
+						<!--                          (click)="clearTitleInput()">-->
+						<!--                Clear all-->
+						<!--              </ion-button>-->
+						<!--              <ion-button color="deep-green"-->
+						<!--                          shape="round"-->
+						<!--                          type="submit">-->
+						<!--                Save-->
+						<!--              </ion-button>-->
+						<!--            </div>-->
+						<!--          </ion-item>-->
+					</h2>
+				</form>
+			</ion-col>
+		</ion-row>
+		<ion-row>
+			<ion-col size="12">
+				<ion-item class="ion-no-padding"
+				          lines="full"
+				          type="button">
+					<!--        (click)="showDatePickerForTask(task)"-->
+					<ion-label class="ion-padding-start">Date:</ion-label>
+					<ion-text class="ion-padding-end">
+						{{ meeting.date | date:'dd.MM.yyyy, HH:mm' }}
+					</ion-text>
+				</ion-item>
+				<ion-item class="ion-no-padding" lines="full">
+					<ion-label class="ion-padding-start">Creator:</ion-label>
+					<ion-text class="ion-padding-end">{{ meeting.creator.username }}</ion-text>
+				</ion-item>
+				<!--      <ion-item class="ion-no-padding"-->
+				<!--                lines="full"-->
+				<!--                type="button">-->
+				<!--        <ion-label class="ion-padding-start">Status:</ion-label>-->
+				<!--        <ion-select [value]="task.status"-->
+				<!--                    class="ion-padding-end"-->
+				<!--                    (ionChange)="updateStatus($event)"-->
+				<!--                    appIonSelectNoCaret>-->
+				<!--          <ion-select-option-->
+				<!--                  *ngFor="let status of taskStatusKeys"-->
+				<!--                  [value]="status">-->
+				<!--            {{taskLabels[status]}}-->
+				<!--          </ion-select-option>-->
+				<!--        </ion-select>-->
+				<!--      </ion-item>-->
+				<ion-item class="ion-no-padding"
+				          lines="full"
+				          type="button"
+				>
+					<!--         (click)="assignUsersToTask(task)"-->
+					<ion-label class="ion-padding-start">Participants:</ion-label>
+					<div class="ion-padding-vertical"
+					     *ngIf="meeting.participants?.length">
+						<p class="ion-padding-end"
+						   *ngFor="let user of meeting.participants">
+							{{ user.username }}
+						</p>
+					</div>
+					<ion-text class="ion-padding-end" *ngIf="!meeting.participants?.length">None</ion-text>
+				</ion-item>
+			</ion-col>
+			<ion-col size="12" class="remove-top-bottom-padding">
+				<ion-item class="ion-no-padding"
+				          lines="none"
+				          type="button">
+					<!--                (click)="setFocusOnDescriptionTextarea()">-->
+					<ion-label class="ion-padding-horizontal">Description:</ion-label>
+				</ion-item>
+				<form>
+					<!--        (ngSubmit)="saveTaskDescription()" [formGroup]="taskContentFormGroup">-->
+					<ion-item class="ion-no-padding" lines="full">
+						<!--          formControlName="content"-->
+						<ion-textarea class="ion-padding-horizontal ion-no-margin"
+						              maxlength="255"
+						              autoGrow="true"
+						              placeholder="Enter any description here..."
+						              [value]="meeting.description"
+						              #taskDescriptionTextarea>
+						</ion-textarea>
+					</ion-item>
+					<!--        <ion-item class="ion-no-padding" *ngIf="taskContentFormGroup.controls['content'].dirty">-->
+					<!--          <div slot="end">-->
+					<!--            <ion-button fill="clear"-->
+					<!--                        shape="round"-->
+					<!--                        type="button"-->
+					<!--                        (click)="clearTaskDescription()">-->
+					<!--              Clear all-->
+					<!--            </ion-button>-->
+					<!--            <ion-button color="deep-green"-->
+					<!--                        shape="round"-->
+					<!--                        type="submit">-->
+					<!--              Save-->
+					<!--            </ion-button>-->
+					<!--          </div>-->
+					<!--        </ion-item>-->
+				</form>
+			</ion-col>
+			<!--    <ion-col size="12" class="remove-top-bottom-padding">-->
+			<!--      <ion-item class="ion-no-padding" lines="full">-->
+			<!--        <ion-label class="ion-padding-start">Created at:</ion-label>-->
+			<!--        <ion-text class="ion-padding-end">{{ task.createdAt | date:'dd.MM.yyyy, HH:mm' }}</ion-text>-->
+			<!--      </ion-item>-->
+			<!--    </ion-col>-->
 
-</ion-content>
+
+		</ion-row>
+	</ion-content>
+</ng-container>

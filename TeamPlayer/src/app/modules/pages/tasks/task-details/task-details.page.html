@@ -1,5 +1,5 @@
 <ng-container *ngIf="(task$ | async) as task">
-	<ion-header class="ion-padding-start">
+	<ion-header>
 		<app-header-simple [title]="'Task: ' + task.title" [arrowBack]="true"></app-header-simple>
 	</ion-header>
 	<ion-content>
@@ -76,7 +76,7 @@
 					<ion-text class="ion-padding-end" *ngIf="!task.assignees?.length">None</ion-text>
 				</ion-item>
 			</ion-col>
-			<ion-col size="12">
+			<ion-col size="12" class="remove-top-bottom-padding">
 				<ion-item class="ion-no-padding"
 				          lines="none"
 				          type="button"
@@ -110,7 +110,11 @@
 					</ion-item>
 				</form>
 			</ion-col>
-			<ion-col size="12">
+			<ion-col size="12" class="remove-top-bottom-padding">
+				<ion-item class="ion-no-padding" lines="full">
+					<ion-label class="ion-padding-start">Creator:</ion-label>
+					<ion-text class="ion-padding-end">{{ task.creator.username }}</ion-text>
+				</ion-item>
 				<ion-item class="ion-no-padding" lines="full">
 					<ion-label class="ion-padding-start">Created at:</ion-label>
 					<ion-text class="ion-padding-end">{{ task.createdAt | date:'dd.MM.yyyy, HH:mm' }}</ion-text>

@@ -30,7 +30,7 @@ export class MeetingsService {
     getUsersMeetings(): Observable<Meeting[]> {
         return this.userService.getUserData()
             .pipe(
-                switchMap((user: User) => this.meetingsApiService.getMeetings(user.id)),
+                switchMap((user: User) => this.meetingsApiService.getMeetingsByUser(user.id)),
                 map((meetings: Meeting[]) => {
                     this.meetings = meetings;
                     console.log(meetings);
@@ -38,6 +38,15 @@ export class MeetingsService {
                 }),
                 catchError((error: HttpErrorResponse) => {
                    return of(null);
+                })
+            );
+    }
+
+    getMeeting(meetingId: number): Observable<Meeting> {
+        return this.meetingsApiService.getMeetingById(meetingId)
+            .pipe(
+                catchError((error: HttpErrorResponse) => {
+                    return of(null);
                 })
             );
     }

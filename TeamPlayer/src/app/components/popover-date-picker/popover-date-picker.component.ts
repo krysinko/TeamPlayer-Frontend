@@ -46,11 +46,17 @@ export class PopoverDatePickerComponent implements OnInit {
         if (this.task && this.task.deadline) {
             date = new Date(this.task.deadline);
         } else {
-            date = new Date(Date.now());
+            date = this.getTomorrowDate();
         }
         this.dateForm = this.formBuilder.group({
             date: date.toISOString(),
             time: date.toISOString(),
         });
+    }
+
+    private getTomorrowDate(): Date {
+        const tomorrow: Date = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        return tomorrow;
     }
 }

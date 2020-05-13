@@ -5,17 +5,18 @@ import { Task, TaskProgressInStartToEndOrder, TaskStatus } from '../../../../mod
 import { ProjectService } from '../../../../services/project.service';
 import { Project } from '../../../../models/project';
 import { User } from '../../../../models/user';
-import { BehaviorSubject, Observable, of, pipe } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { TaskApiService } from '../../../../services/api/task-api.service';
 import {
-    apiErrorMessage, dataNotFoundErrorMessage,
+    apiErrorMessage,
+    dataNotFoundErrorMessage,
     forbiddenErrorMessage,
     unauthorizedErrorMessage
 } from '../../../../models/texts/taskDescriptions';
 import { Router } from '@angular/router';
-import { TaskService } from '../../../../services/task.service';
+import { UserService } from '../../../../services/user.service';
 
 @Component({
     selector: 'app-new-task',
@@ -26,7 +27,7 @@ export class NewTaskPage extends CommonTaskAttributesActions implements OnInit {
     taskFormGroup: FormGroup;
     task: Task = {
         ...new Task(),
-        deadline: new Date(Date.now()),
+        deadline: this.getTomorrowDate(),
         status: <TaskStatus> TaskProgressInStartToEndOrder[0],
     };
     userProjects: Project[];
@@ -36,7 +37,8 @@ export class NewTaskPage extends CommonTaskAttributesActions implements OnInit {
         private formBuilder: FormBuilder,
         private projectService: ProjectService,
         private taskApiService: TaskApiService,
-        private router: Router
+        private router: Router,
+        private userService: UserService
     ) {
         super();
         this.getUsersProjects();
@@ -48,23 +50,23 @@ export class NewTaskPage extends CommonTaskAttributesActions implements OnInit {
     ngOnInit() {
     }
 
-    saveTask() {
+    saveTask(): void {
         this.task = {...this.taskFormGroup.value, ...this.task};
         console.log(this.task, this.taskFormGroup.value);
-        // this.taskService.getTasks().pipe(
-        //     map((tasks: Task[]) => {
-        //         newTaskId = tasks.length;
-        //     }),
-        //     switchMap(() => this.postNewTask(newTaskId)),
-        //     catchError((err: HttpErrorResponse) => console.log)
-        // );
-
-        this.taskApiService.postNewTask(this.task)
+        this.userService.getUserData()
             .pipe(
-                switchMap(() => this.taskService.getTasks()),
-                catchError(this.handleApiError)).subscribe((data: Task) => {
-            this.router.navigate(['/tasks']);
-        });
+                map((user: User) => {
+                    this.task.creator = user;
+                }),
+                switchMap(() => this.postTaskToApi()),
+                catchError((err: HttpErrorResponse) => {
+                    console.log(err);
+                    return of();
+                })
+            )
+            .subscribe(() => {
+                this.router.navigate([ '/tasks' ]);
+            });
     }
 
     resetAssignedUsersAndTeamMembers($event: CustomEvent): void {
@@ -137,5 +139,19 @@ export class NewTaskPage extends CommonTaskAttributesActions implements OnInit {
                 break;
         }
         return of();
+    }
+
+    private postTaskToApi() {
+        return this.taskApiService.postNewTask(this.task)
+            .pipe(
+                switchMap(() => this.taskService.getTasks()),
+                catchError(this.handleApiError)
+            );
+    }
+
+    private getTomorrowDate(): Date {
+        const tomorrow: Date = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        return tomorrow;
     }
 }

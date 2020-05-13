@@ -1,6 +1,6 @@
 <ion-header [translucent]="true" class="ion-no-border">
 	<ion-toolbar>
-		<ion-buttons slot="start" (click)="arrowBackAction()">
+		<ion-buttons slot="start" (click)="arrowBackAction()" [ngClass]="{'ion-padding-start': arrowBack}">
 			<ion-icon slot="icon-only" name="arrow-back-outline" *ngIf="arrowBack"></ion-icon>
 			<ion-menu-button *ngIf="!arrowBack"></ion-menu-button>
 		</ion-buttons>
