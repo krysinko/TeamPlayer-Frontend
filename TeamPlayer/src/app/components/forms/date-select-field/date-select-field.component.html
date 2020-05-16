@@ -1,0 +1,9 @@
+<ion-item class="ion-no-padding"
+          lines="full"
+          type="button"
+          (click)="showDatePicker()">
+	<ion-label class="ion-padding-start">Date:</ion-label>
+	<ion-text class="ion-padding-end">
+		{{ value | date:'dd.MM.yyyy, HH:mm' }}
+	</ion-text>
+</ion-item>

@@ -10,19 +10,22 @@ import { PopoverDatePickerComponent } from './popover-date-picker/popover-date-p
 import { TaskAssignComponent } from './task-assign/task-assign.component';
 import { TaskCreateComponent } from './task-create/task-create.component';
 import { DirectivesModule } from '../directives/directives.module';
+import { AlertPopoverComponent } from './alert-popover/alert-popover.component';
+import { CustomFormsModule } from './forms/custom-forms.module';
 
 
 @NgModule({
-    declarations: [ LoginComponent, RegisterComponent, HeaderSimpleComponent, PopoverDatePickerComponent, TaskAssignComponent, TaskCreateComponent ],
-    exports: [ LoginComponent, RegisterComponent, HeaderSimpleComponent, PopoverDatePickerComponent, TaskAssignComponent, TaskCreateComponent ],
-    entryComponents: [PopoverDatePickerComponent, TaskAssignComponent, TaskCreateComponent],
+    declarations: [ LoginComponent, RegisterComponent, HeaderSimpleComponent, PopoverDatePickerComponent, TaskAssignComponent, TaskCreateComponent, AlertPopoverComponent ],
+    exports: [ LoginComponent, RegisterComponent, HeaderSimpleComponent, PopoverDatePickerComponent, TaskAssignComponent, TaskCreateComponent, AlertPopoverComponent, CustomFormsModule ],
+    entryComponents: [ PopoverDatePickerComponent, TaskAssignComponent, TaskCreateComponent, AlertPopoverComponent ],
     imports: [
         CommonModule,
         ComponentsRoutingModule,
         IonicModule,
         FormsModule,
         ReactiveFormsModule,
-        DirectivesModule
+        DirectivesModule,
+        CustomFormsModule
     ],
     schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })

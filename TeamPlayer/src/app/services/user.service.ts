@@ -17,10 +17,15 @@ export class UserService {
     set userData(data) {
         this._user$ = data;
     }
+
+    get userId(): number {
+        return this._userId;
+    }
+
     // todo default false
     userLoggedIn$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
 
-    private userId: number = 3;
+    private _userId: number = 3;
     private _user$: Observable<User>;
 
     constructor(private router: Router, private userApiService: UserApiService
@@ -58,7 +63,7 @@ export class UserService {
         );
     }
 
-    getUserData(id: number = this.userId): Observable<User> {
+    getUserData(id: number = this._userId): Observable<User> {
         return this.userApiService.getUserData(id)
             .pipe(
                 map((user: User) => {

@@ -3,10 +3,11 @@
 		<app-header-simple [title]="'Task: ' + task.title" [arrowBack]="true"></app-header-simple>
 	</ion-header>
 	<ion-content>
+		<form [formGroup]="taskFormData">
 		<ion-row class="ion-padding ion-justify-content-center">
 			<ion-col size="12" class="ion-padding-bottom">
 				<small>Task:</small>
-				<form (ngSubmit)="saveNewTitle()" [formGroup]="taskTitleFormGroup">
+<!--				<form (ngSubmit)="saveNewTitle()" [formGroup]="taskTitleFormGroup">-->
 					<h2 class="ion-no-margin">
 						<ion-input formControlName="title"
 						           placeholder="Enter task title here"
@@ -14,7 +15,7 @@
 						           minlength="1"
 						           #titleInputElement>
 						</ion-input>
-						<ion-item class="ion-no-padding" *ngIf="taskTitleFormGroup.controls['title'].dirty">
+						<ion-item class="ion-no-padding" *ngIf="taskFormData.controls['title'].dirty">
 							<div slot="end">
 								<ion-button fill="clear"
 								            shape="round"
@@ -30,22 +31,24 @@
 							</div>
 						</ion-item>
 					</h2>
-				</form>
+<!--				</form>-->
 
 
 			</ion-col>
 		</ion-row>
 		<ion-row>
 			<ion-col size="12">
-				<ion-item class="ion-no-padding"
-				          lines="full"
-				          type="button"
-				          (click)="showDatePickerForTask(task)">
-					<ion-label class="ion-padding-start">Deadline:</ion-label>
-					<ion-text class="ion-padding-end">
-						{{ task.deadline | date:'dd.MM.yyyy, HH:mm' }}
-					</ion-text>
-				</ion-item>
+<!--				<ion-item class="ion-no-padding"-->
+<!--				          lines="full"-->
+<!--				          type="button"-->
+<!--				          (click)="showDatePickerForTask(task)">-->
+<!--					<ion-label class="ion-padding-start">Deadline:</ion-label>-->
+<!--					<ion-text class="ion-padding-end">-->
+<!--						{{ task.deadline | date:'dd.MM.yyyy, HH:mm' }}-->
+<!--					</ion-text>-->
+<!--				</ion-item>-->
+
+				<app-date-select-field [text]="'Deadline'" formControlName="deadline"></app-date-select-field>
 				<ion-item class="ion-no-padding"
 				          lines="full"
 				          type="button">
@@ -83,7 +86,7 @@
 				          (click)="setFocusOnDescriptionTextarea()">
 					<ion-label class="ion-padding-horizontal">Description:</ion-label>
 				</ion-item>
-				<form (ngSubmit)="saveTaskDescription()" [formGroup]="taskContentFormGroup">
+<!--				<form (ngSubmit)="saveTaskDescription()" [formGroup]="taskContentFormGroup">-->
 					<ion-item class="ion-no-padding" lines="full">
 						<ion-textarea class="ion-padding-horizontal ion-no-margin"
 						              maxlength="255"
@@ -93,7 +96,7 @@
 						              #taskDescriptionTextarea>
 						</ion-textarea>
 					</ion-item>
-					<ion-item class="ion-no-padding" *ngIf="taskContentFormGroup.controls['content'].dirty">
+					<ion-item class="ion-no-padding" *ngIf="taskFormData.controls['content'].dirty">
 						<div slot="end">
 							<ion-button fill="clear"
 							            shape="round"
@@ -108,14 +111,14 @@
 							</ion-button>
 						</div>
 					</ion-item>
-				</form>
+<!--				</form>-->
 			</ion-col>
 			<ion-col size="12" class="remove-top-bottom-padding">
 				<ion-item class="ion-no-padding" lines="full">
 					<ion-label class="ion-padding-start">Creator:</ion-label>
-					<ion-text class="ion-padding-end">{{ task.creator.username }}</ion-text>
+					<ion-text class="ion-padding-end">{{ task.creator?.username || 'Unknown' }}</ion-text>
 				</ion-item>
-				<ion-item class="ion-no-padding" lines="full">
+				<ion-item class="ion-no-padding" lines="full" *ngIf="task.createdAt">
 					<ion-label class="ion-padding-start">Created at:</ion-label>
 					<ion-text class="ion-padding-end">{{ task.createdAt | date:'dd.MM.yyyy, HH:mm' }}</ion-text>
 				</ion-item>
@@ -123,5 +126,6 @@
 
 
 		</ion-row>
+		</form>
 	</ion-content>
 </ng-container>

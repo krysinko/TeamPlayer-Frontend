@@ -13,6 +13,7 @@ import { ApiService } from './services/api/api.service';
 import { HttpClientModule } from '@angular/common/http';
 import { httpInterceptorProviders } from './http-interceptors/interceptor-index';
 import { AppInjectorService } from './services/app-injector.service';
+import { APP_BASE_HREF, HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 @NgModule({
     declarations: [ AppComponent ],
@@ -29,7 +30,9 @@ import { AppInjectorService } from './services/app-injector.service';
         SplashScreen,
         ApiService,
         httpInterceptorProviders,
-        { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+        { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+        { provide: APP_BASE_HREF, useValue: '/' },
+        { provide: LocationStrategy, useClass: HashLocationStrategy }
     ],
     bootstrap: [ AppComponent ],
     schemas: [ CUSTOM_ELEMENTS_SCHEMA ],

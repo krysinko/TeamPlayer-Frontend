@@ -1,4 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://localhost:8080'
+  apiUrl: 'http://34.65.25.218:8080/teamplayer/',
+  apiProxy: 'api/',
 };

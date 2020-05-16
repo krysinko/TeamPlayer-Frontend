@@ -1,5 +1,20 @@
 <app-header-simple [title]="title"></app-header-simple>
 
 <ion-content>
-
+	<ng-container *ngIf="(notes$ | async)">
+		<ion-item lines="full" *ngFor="let note of (notes$ | async)">
+			<ion-grid>
+				<ion-row class="ion-no-padding ion-padding-vertical ion-align-items-stretch">
+					<ion-col size="12" class="ion-no-padding ion-padding-end">
+						<small>{{ note.project.name }}</small>
+						<h3 class="ion-no-margin">{{ note.name }}</h3>
+					</ion-col>
+				</ion-row>
+			</ion-grid>
+			<ion-button shape="round" class="go-to-note-button ion-no-padding ion-no-margin" color="pastel-green"
+			            slot="end">
+				<ion-icon name="chevron-forward-outline" mode="ios"></ion-icon>
+			</ion-button>
+		</ion-item>
+	</ng-container>
 </ion-content>

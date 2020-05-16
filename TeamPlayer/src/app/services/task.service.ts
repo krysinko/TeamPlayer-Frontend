@@ -3,7 +3,7 @@ import * as _ from 'lodash';
 import { SortOption, Task, TaskProgressInStartToEndOrder } from '../models/task';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { TaskApiService } from './api/task-api.service';
-import { catchError } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import {
     apiErrorMessage,
@@ -27,6 +27,10 @@ export class TaskService {
         this._tasks$.next(data);
     }
 
+    set singleTaskValue(value: Task) {
+        this.singleTask$.next(value);
+    }
+
     static compareDate(t1: Task, t2: Task, order: 'asc' | 'desc') {
         return (new Date(t1.deadline).getTime() - new Date(t2.deadline).getTime()) * (order === 'asc' ? 1 : -1);
     }
@@ -39,6 +43,8 @@ export class TaskService {
     static getRandomNumber(min = 0, max = 30): number {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
+
+    singleTask$: BehaviorSubject<Task> = new BehaviorSubject<Task>(null);
 
     private _tasks$: BehaviorSubject<Task[]> = new BehaviorSubject<Task[]>(null);
 
@@ -60,7 +66,13 @@ export class TaskService {
     }
 
     getTask(taskId: number): Observable<Task> {
-        return this.taskApi.getTaskFromApi(taskId);
+        return this.taskApi.getTaskFromApi(taskId)
+            .pipe(
+                map((t: Task) => {
+                    this.singleTaskValue = t;
+                }),
+                catchError((err: HttpErrorResponse) => this.handleApiError(err))
+            );
     }
 
     getTasks(): Observable<Task[]> {
@@ -83,22 +95,19 @@ export class TaskService {
 
     updateTask(task: Task): void {
         this.taskApi.update(task)
-            .pipe(catchError(this.handleApiError))
+            .pipe(
+                map((t: Task) => {
+                    this.singleTaskValue = t;
+                }),
+                catchError(this.handleApiError))
             .subscribe(() => {
                 this.getTasks();
             });
     }
 
-    getTaskProjectTeamMembers(id: number): User[] {
-        let users: User[];
-        this.getTask(id)
-            .pipe(
-                catchError(this.handleApiError)
-            )
-            .subscribe((task: Task) => {
-                users = task.project.users;
-            });
-        return users;
+    async getTaskProjectTeamMembers(id: number): Promise<User[]> {
+        const task = await this.getTask(id).toPromise();
+        return task.project.users;
     }
 
     private checkIfUserLoggedIn(): boolean {

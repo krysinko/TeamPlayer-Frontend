@@ -10,6 +10,7 @@ import { IonInput, IonTextarea, PopoverController } from '@ionic/angular';
 import { UserService } from '../../../../services/user.service';
 import { User } from '../../../../models/user';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Project } from '../../../../models/project';
 
 
 @Component({
@@ -18,6 +19,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
     styleUrls: [ './task-details.page.scss' ],
 })
 export class TaskDetailsPage extends CommonTaskAttributesActions {
+    taskFormData: FormGroup;
 
     get statusLabel(): string {
         let label: string = '';
@@ -49,17 +51,18 @@ export class TaskDetailsPage extends CommonTaskAttributesActions {
         private formBuilder: FormBuilder
     ) {
         super();
-        this.getTaskSubscriptionByIdParam();
+        this.subscribeOnSingleTaskFromService();
+        this.getTaskByIdParam();
     }
 
     updateStatus($event: CustomEvent): void {
-        console.log($event.detail.value);
-        const task: Task = {
-            ...this.task$.getValue(),
-            status: $event.detail.value
-        };
-        this.taskService.updateTask(task);
-        this.task$.next(task);
+        // console.log($event.detail.value);
+        // const task: Task = {
+        //     ...this.task$.getValue(),
+        //     status: $event.detail.value
+        // };
+        // this.taskService.updateTask(task);
+        // this.task$.next(task);
     }
 
     getUsernameById(id: number): string {
@@ -72,11 +75,11 @@ export class TaskDetailsPage extends CommonTaskAttributesActions {
     }
 
     saveTaskDescription(): void {
-        this.taskService.updateTask({
-            ...this.task$.getValue(),
-            content: this.taskContentFormGroup.controls['content'].value
-        });
-        this.taskContentFormGroup.controls['content'].markAsPristine();
+        // this.taskService.updateTask({
+        //     ...this.task$.getValue(),
+        //     content: this.taskContentFormGroup.controls['content'].value
+        // });
+        // this.taskContentFormGroup.controls['content'].markAsPristine();
     }
 
     setFocusOnDescriptionTextarea(): void {
@@ -89,14 +92,14 @@ export class TaskDetailsPage extends CommonTaskAttributesActions {
     }
 
     saveNewTitle(): void {
-        this.taskService.updateTask({
-            ...this.task$.getValue(),
-            title: this.taskTitleFormGroup.controls['title'].value
-        });
-        this.taskTitleFormGroup.controls['title'].markAsPristine();
+        // this.taskService.updateTask({
+        //     ...this.task$.getValue(),
+        //     title: this.taskTitleFormGroup.controls['title'].value
+        // });
+        // this.taskTitleFormGroup.controls['title'].markAsPristine();
     }
 
-    private getTaskSubscriptionByIdParam(): void {
+    private getTaskByIdParam(): void {
         this.route.paramMap
             .pipe(
                 switchMap((params: ParamMap) => {
@@ -105,27 +108,43 @@ export class TaskDetailsPage extends CommonTaskAttributesActions {
                 })
             )
             .subscribe((t: Task) => {
-                this.task$.next(t);
-                this.buildTaskContentForm();
-                this.buildTaskTitleForm();
+                this.buildTaskDataForm();
             });
     }
 
-    private buildTaskContentForm(): void {
-        this.taskContentFormGroup = this.formBuilder.group({
-            content: [
-                this.task$.getValue().content || '',
+    private buildTaskDataForm(): void {
+        const task: Task = this.task$.getValue();
+        this.taskFormData = this.formBuilder.group({
+            title: [
+                task.title || '',
                 Validators.maxLength(255)
-            ]
+            ],
+            content: [
+                task.content || '',
+                Validators.maxLength(255)
+            ],
+            deadline: task.deadline,
+            status: task.status,
+            project: task.project.id,
+            assignees: task.assignees,
+        });
+        this.subscribeOnFormValueChangesToUpdateTask();
+    }
+
+    private subscribeOnSingleTaskFromService(): void {
+        this.taskService.singleTask$.subscribe((task: Task) => {
+            this.task$.next(task);
+            if (task && this.taskFormData) {
+                this.taskFormData.patchValue(task);
+            }
         });
     }
 
-    private buildTaskTitleForm(): void {
-        this.taskTitleFormGroup = this.formBuilder.group({
-            title: [
-                this.task$.getValue().title || '',
-                Validators.maxLength(255)
-            ]
+    private subscribeOnFormValueChangesToUpdateTask() {
+        this.taskFormData.valueChanges.subscribe((data: any) => {
+            console.log(data);
+            // this.task$.next({...this.task$.value, ...data});
+            this.taskService.updateTask({...this.task$.value, ...data});
         });
     }
 }

@@ -9,6 +9,7 @@ export class Note {
     assignees: User[];
     poster: User;
     status: PostStatus;
+    project_id: Project;
 }
 
 export enum PostStatus {
