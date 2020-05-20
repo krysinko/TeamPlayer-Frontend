@@ -1,8 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { PopoverController } from '@ionic/angular';
-import { Task } from '../../models/task';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { TaskService } from '../../services/task.service';
 
 @Component({
     selector: 'app-popover-date-picker',
@@ -10,8 +8,8 @@ import { TaskService } from '../../services/task.service';
     styleUrls: [ './popover-date-picker.component.scss' ],
 })
 export class PopoverDatePickerComponent implements OnInit {
-    @Input() task: Task;
-    @Input() isNewTask: boolean;
+    @Input() date: Date;
+    @Input() taskName: string;
     now: Date = new Date();
     dateForm: FormGroup;
     errorMessage: string;
@@ -21,7 +19,8 @@ export class PopoverDatePickerComponent implements OnInit {
         animated: true,
     };
 
-    constructor(private popoverController: PopoverController, private formBuilder: FormBuilder, private taskService: TaskService) {}
+    constructor(private popoverController: PopoverController, private formBuilder: FormBuilder) {
+    }
 
     ngOnInit() {
         this.buildDateForm();
@@ -31,9 +30,6 @@ export class PopoverDatePickerComponent implements OnInit {
         const timeDate: Date = new Date(this.dateForm.value.time);
         const dateDate: Date = new Date(this.dateForm.value.date);
         dateDate.setHours(timeDate.getHours(), timeDate.getMinutes());
-        if (!this.isNewTask) {
-            this.taskService.updateTask({...this.task, deadline: dateDate});
-        }
         this.popoverController.dismiss(dateDate);
     }
 
@@ -42,15 +38,11 @@ export class PopoverDatePickerComponent implements OnInit {
     }
 
     private buildDateForm(): void {
-        let date: Date;
-        if (this.task && this.task.deadline) {
-            date = new Date(this.task.deadline);
-        } else {
-            date = this.getTomorrowDate();
-        }
+        this.date = new Date(this.date) || this.getTomorrowDate();
+
         this.dateForm = this.formBuilder.group({
-            date: date.toISOString(),
-            time: date.toISOString(),
+            date: this.date.toISOString(),
+            time: this.date.toISOString(),
         });
     }
 

@@ -1,9 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
-import { switchMap } from 'rxjs/operators';
+import { map, skipWhile, switchMap } from 'rxjs/operators';
 import { TaskService } from '../../../../services/task.service';
 import { Task, TaskStatus } from '../../../../models/task';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { TaskLabels } from '../../../../models/texts/taskDescriptions';
 import { CommonTaskAttributesActions } from '../common-task-attributes-actions';
 import { IonInput, IonTextarea, PopoverController } from '@ionic/angular';
@@ -11,6 +11,7 @@ import { UserService } from '../../../../services/user.service';
 import { User } from '../../../../models/user';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Project } from '../../../../models/project';
+import * as _ from 'lodash';
 
 
 @Component({
@@ -18,8 +19,7 @@ import { Project } from '../../../../models/project';
     templateUrl: './task-details.page.html',
     styleUrls: [ './task-details.page.scss' ],
 })
-export class TaskDetailsPage extends CommonTaskAttributesActions {
-    taskFormData: FormGroup;
+export class TaskDetailsPage {
 
     get statusLabel(): string {
         let label: string = '';
@@ -30,6 +30,7 @@ export class TaskDetailsPage extends CommonTaskAttributesActions {
         });
         return label;
     }
+    taskFormData: FormGroup;
 
     @ViewChild('taskDescriptionTextarea', { read: IonTextarea, static: false }) taskContentInput: IonTextarea;
     @ViewChild('titleInputElement', { read: IonInput, static: false }) taskTitleInput: IonInput;
@@ -48,11 +49,15 @@ export class TaskDetailsPage extends CommonTaskAttributesActions {
     constructor(
         private route: ActivatedRoute,
         private userService: UserService,
-        private formBuilder: FormBuilder
+        private formBuilder: FormBuilder,
+        private taskService: TaskService
     ) {
-        super();
-        this.subscribeOnSingleTaskFromService();
-        this.getTaskByIdParam();
+        this.getTaskByIdParam()
+            .subscribe((t: Task) => {
+                this.subscribeOnSingleTaskFromService();
+                this.buildTaskDataForm();
+                this.subscribeOnFormValueChangesToUpdateTask();
+            });
     }
 
     updateStatus($event: CustomEvent): void {
@@ -99,17 +104,19 @@ export class TaskDetailsPage extends CommonTaskAttributesActions {
         // this.taskTitleFormGroup.controls['title'].markAsPristine();
     }
 
-    private getTaskByIdParam(): void {
-        this.route.paramMap
+    patchTitleValue(): void {
+        this.titleHasChanged$.next(true);
+    }
+
+    private getTaskByIdParam(): Observable<Task> {
+        return this.route.paramMap
             .pipe(
+                skipWhile(_.isNil),
                 switchMap((params: ParamMap) => {
                     this.taskId = Number(params.get('id'));
                     return this.taskService.getTask(this.taskId);
                 })
-            )
-            .subscribe((t: Task) => {
-                this.buildTaskDataForm();
-            });
+            );
     }
 
     private buildTaskDataForm(): void {
@@ -125,26 +132,30 @@ export class TaskDetailsPage extends CommonTaskAttributesActions {
             ],
             deadline: task.deadline,
             status: task.status,
-            project: task.project.id,
-            assignees: task.assignees,
+            project: task.project,
+            assignees: [task.assignees],
         });
-        this.subscribeOnFormValueChangesToUpdateTask();
     }
 
     private subscribeOnSingleTaskFromService(): void {
         this.taskService.singleTask$.subscribe((task: Task) => {
             this.task$.next(task);
-            if (task && this.taskFormData) {
+            if (task && this.taskFormData && !_.isEqual(this.task$.value, task)) {
                 this.taskFormData.patchValue(task);
             }
         });
     }
 
     private subscribeOnFormValueChangesToUpdateTask() {
-        this.taskFormData.valueChanges.subscribe((data: any) => {
-            console.log(data);
-            // this.task$.next({...this.task$.value, ...data});
-            this.taskService.updateTask({...this.task$.value, ...data});
+        this.taskFormData.valueChanges.subscribe((data: Task) => {
+            console.log(this.taskFormData, data);
+            console.log(!this.taskFormData.controls['title'].dirty, !this.taskFormData.controls['title'].valid, this.titleHasChanged$.value);
+            if (this.taskFormData.controls['title'].dirty && !this.titleHasChanged$.value) {
+                return;
+            } else {
+                this.taskService.updateTask({ ...this.task$.value, ...data, });
+                this.titleHasChanged$.next(false);
+            }
         });
     }
 }

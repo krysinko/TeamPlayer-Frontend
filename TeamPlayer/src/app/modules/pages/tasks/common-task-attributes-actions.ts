@@ -22,26 +22,23 @@ export abstract class CommonTaskAttributesActions {
         this.taskService = AppInjectorService.injector.get(TaskService);
     }
 
-    async showDatePickerForTask(task: Task, newTask: boolean = false): Promise<void> {
+    async showDatePicker(task: Task): Promise<void> {
         const datePopover = await this.popoverController.create({
             component: PopoverDatePickerComponent,
             animated: true,
             backdropDismiss: true,
-            componentProps: { task: task, isNewTask: newTask},
+            componentProps: { date: task.deadline, taskName: task.title },
             cssClass: 'popover-date-picker'
         });
 
-        if (newTask) {
-            datePopover.onDidDismiss().then(data => {
-                if (data.data) {
-                    this.newTaskDate.next(<Date>data.data);
-                }
-            });
-        }
+        datePopover.onDidDismiss().then(data => {
+            if (data.data) {
+                this.taskService.updateTask({...task, deadline: data.data});
+            }
+        });
 
         return datePopover.present();
     }
-
 
     async assignUsersToTask(task: Task, teamMembers: BehaviorSubject<User[]> = new BehaviorSubject<User[]>(null)): Promise<void> {
         let properties: any;

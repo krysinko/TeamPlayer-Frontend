@@ -12,12 +12,38 @@ import { TaskCreateComponent } from './task-create/task-create.component';
 import { DirectivesModule } from '../directives/directives.module';
 import { AlertPopoverComponent } from './alert-popover/alert-popover.component';
 import { CustomFormsModule } from './forms/custom-forms.module';
+import { TextareaInputComponent } from './forms/textarea-input/textarea-input.component';
+import { SimpleSelectComponent } from './forms/simple-select/simple-select.component';
 
 
 @NgModule({
-    declarations: [ LoginComponent, RegisterComponent, HeaderSimpleComponent, PopoverDatePickerComponent, TaskAssignComponent, TaskCreateComponent, AlertPopoverComponent ],
-    exports: [ LoginComponent, RegisterComponent, HeaderSimpleComponent, PopoverDatePickerComponent, TaskAssignComponent, TaskCreateComponent, AlertPopoverComponent, CustomFormsModule ],
-    entryComponents: [ PopoverDatePickerComponent, TaskAssignComponent, TaskCreateComponent, AlertPopoverComponent ],
+    declarations: [
+        LoginComponent,
+        RegisterComponent,
+        HeaderSimpleComponent,
+        PopoverDatePickerComponent,
+        TaskAssignComponent,
+        TaskCreateComponent,
+        AlertPopoverComponent
+    ],
+    exports: [
+        LoginComponent,
+        RegisterComponent,
+        HeaderSimpleComponent,
+        PopoverDatePickerComponent,
+        TaskAssignComponent,
+        TaskCreateComponent,
+        AlertPopoverComponent,
+        CustomFormsModule
+    ],
+    entryComponents: [
+        PopoverDatePickerComponent,
+        TaskAssignComponent,
+        TaskCreateComponent,
+        AlertPopoverComponent,
+        TextareaInputComponent,
+        SimpleSelectComponent
+    ],
     imports: [
         CommonModule,
         ComponentsRoutingModule,

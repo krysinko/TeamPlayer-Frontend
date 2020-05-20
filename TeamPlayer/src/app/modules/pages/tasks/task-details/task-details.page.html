@@ -6,34 +6,7 @@
 		<form [formGroup]="taskFormData">
 		<ion-row class="ion-padding ion-justify-content-center">
 			<ion-col size="12" class="ion-padding-bottom">
-				<small>Task:</small>
-<!--				<form (ngSubmit)="saveNewTitle()" [formGroup]="taskTitleFormGroup">-->
-					<h2 class="ion-no-margin">
-						<ion-input formControlName="title"
-						           placeholder="Enter task title here"
-						           maxlength="255"
-						           minlength="1"
-						           #titleInputElement>
-						</ion-input>
-						<ion-item class="ion-no-padding" *ngIf="taskFormData.controls['title'].dirty">
-							<div slot="end">
-								<ion-button fill="clear"
-								            shape="round"
-								            type="button"
-								            (click)="clearTitleInput()">
-									Clear all
-								</ion-button>
-								<ion-button color="deep-green"
-								            shape="round"
-								            type="submit">
-									Save
-								</ion-button>
-							</div>
-						</ion-item>
-					</h2>
-<!--				</form>-->
-
-
+				<app-title-input formControlName="title" (valueSubmitted)="patchTitleValue()"></app-title-input>
 			</ion-col>
 		</ion-row>
 		<ion-row>
@@ -48,22 +21,27 @@
 <!--					</ion-text>-->
 <!--				</ion-item>-->
 
-				<app-date-select-field [text]="'Deadline'" formControlName="deadline"></app-date-select-field>
-				<ion-item class="ion-no-padding"
-				          lines="full"
-				          type="button">
-					<ion-label class="ion-padding-start">Status:</ion-label>
-					<ion-select [value]="task.status"
-					            class="ion-padding-end"
-					            (ionChange)="updateStatus($event)"
-					            appIonSelectNoCaret>
-						<ion-select-option
-							*ngFor="let status of taskStatusKeys"
-		                    [value]="status">
-								{{taskLabels[status]}}
-						</ion-select-option>
-					</ion-select>
-				</ion-item>
+				<app-date-select-field [label]="'Deadline'" formControlName="deadline"></app-date-select-field>
+				<app-simple-select formControlName="status" [options]="taskStatusKeys" [optionLabels]="taskLabels" [label]="'Status'"></app-simple-select>
+<!--				<ion-item class="ion-no-padding"-->
+<!--				          lines="full"-->
+<!--				          type="button">-->
+<!--					<ion-label class="ion-padding-start">Status:</ion-label>-->
+<!--					<ion-select [value]="task.status"-->
+<!--					            class="ion-padding-end"-->
+<!--					            (ionChange)="updateStatus($event)"-->
+<!--					            appIonSelectNoCaret>-->
+<!--						<ion-select-option-->
+<!--							*ngFor="let status of taskStatusKeys"-->
+<!--		                    [value]="status">-->
+<!--								{{taskLabels[status]}}-->
+<!--						</ion-select-option>-->
+<!--					</ion-select>-->
+<!--				</ion-item>-->
+
+
+
+
 				<ion-item class="ion-no-padding"
 				          lines="full"
 				          type="button"
@@ -78,41 +56,13 @@
 					</div>
 					<ion-text class="ion-padding-end" *ngIf="!task.assignees?.length">None</ion-text>
 				</ion-item>
+
 			</ion-col>
+
 			<ion-col size="12" class="remove-top-bottom-padding">
-				<ion-item class="ion-no-padding"
-				          lines="none"
-				          type="button"
-				          (click)="setFocusOnDescriptionTextarea()">
-					<ion-label class="ion-padding-horizontal">Description:</ion-label>
-				</ion-item>
-<!--				<form (ngSubmit)="saveTaskDescription()" [formGroup]="taskContentFormGroup">-->
-					<ion-item class="ion-no-padding" lines="full">
-						<ion-textarea class="ion-padding-horizontal ion-no-margin"
-						              maxlength="255"
-						              formControlName="content"
-						              autoGrow="true"
-						              placeholder="Enter any description here..."
-						              #taskDescriptionTextarea>
-						</ion-textarea>
-					</ion-item>
-					<ion-item class="ion-no-padding" *ngIf="taskFormData.controls['content'].dirty">
-						<div slot="end">
-							<ion-button fill="clear"
-							            shape="round"
-							            type="button"
-							            (click)="clearTaskDescription()">
-								Clear all
-							</ion-button>
-							<ion-button color="deep-green"
-							            shape="round"
-							            type="submit">
-								Save
-							</ion-button>
-						</div>
-					</ion-item>
-<!--				</form>-->
+				<app-textarea-input [label]="'Description'" formControlName="content"></app-textarea-input>
 			</ion-col>
+
 			<ion-col size="12" class="remove-top-bottom-padding">
 				<ion-item class="ion-no-padding" lines="full">
 					<ion-label class="ion-padding-start">Creator:</ion-label>

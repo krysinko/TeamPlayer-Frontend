@@ -1,3 +1,23 @@
-<p>
-  title-input works!
-</p>
+<small *ngIf="label">{{ label }}:</small>
+<h2 class="ion-no-margin">
+  <ion-input [(ngModel)]="value" (keyup)="activateButtons()" placeholder="Enter task title here"
+             maxlength="255"
+             minlength="1">
+  </ion-input>
+  <ion-item class="ion-no-padding" *ngIf="(buttonsVisible$ | async)">
+    <div slot="end">
+      <ion-button fill="clear"
+                  shape="round"
+                  type="button"
+                  (click)="clearTitleInput()">
+        Clear all
+      </ion-button>
+      <ion-button color="deep-green"
+                  shape="round"
+                  type="button"
+                  (click)="submitValueToParent()">
+        Save
+      </ion-button>
+    </div>
+  </ion-item>
+</h2>

@@ -1,3 +1,31 @@
-<p>
-  textarea-input works!
-</p>
+<ion-item class="ion-no-padding"
+          lines="none"
+          type="button"
+          (click)="setFocusOnTextarea()">
+	<ion-label class="ion-padding-horizontal">{{ label }}:</ion-label>
+</ion-item>
+<ion-item class="ion-no-padding" lines="full">
+	<ion-textarea [(ngModel)]="value"
+	              (keyup)="activateButtons()"
+	              class="ion-padding-horizontal ion-no-margin"
+	              maxlength="255"
+	              autoGrow="true"
+	              placeholder="Enter some description here..." #textareaElement>
+	</ion-textarea>
+</ion-item>
+<ion-item class="ion-no-padding" *ngIf="buttonsVisible$ | async">
+	<div slot="end">
+		<ion-button fill="clear"
+		            shape="round"
+		            type="button"
+		            (click)="clearTextareaValue()">
+			Clear all
+		</ion-button>
+		<ion-button color="deep-green"
+		            shape="round"
+		            type="button"
+		            (click)="submitValueToParent()">
+			Save
+		</ion-button>
+	</div>
+</ion-item>

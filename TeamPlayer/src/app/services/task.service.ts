@@ -3,7 +3,7 @@ import * as _ from 'lodash';
 import { SortOption, Task, TaskProgressInStartToEndOrder } from '../models/task';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { TaskApiService } from './api/task-api.service';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, skipWhile } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import {
     apiErrorMessage,
@@ -68,6 +68,7 @@ export class TaskService {
     getTask(taskId: number): Observable<Task> {
         return this.taskApi.getTaskFromApi(taskId)
             .pipe(
+                skipWhile(_.isNil),
                 map((t: Task) => {
                     this.singleTaskValue = t;
                 }),
