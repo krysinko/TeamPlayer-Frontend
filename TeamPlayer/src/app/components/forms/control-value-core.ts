@@ -11,6 +11,9 @@ export class ControlValueCore {
     }
 
     @Input() label: string;
+    @Input() required: boolean = false;
+    @Input() placeholder: string;
+    @Input() disabled: boolean = false;
 
     _value: any;
 
@@ -28,6 +31,10 @@ export class ControlValueCore {
 
     writeValue(v: any): void {
         this.value = v;
+    }
+
+    setDisabledState(isDisabled: boolean): void {
+        this.disabled = isDisabled;
     }
 
     onChange: any = () => {};

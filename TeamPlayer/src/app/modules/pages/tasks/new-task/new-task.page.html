@@ -11,102 +11,37 @@
 				</small>
 			</ion-col>
 			<ion-col size="12" class="ion-padding-bottom">
-				<small>
-					Task:
-					<ion-text color="danger">*</ion-text>
-				</small>
-				<h2 class="ion-no-margin">
-					<ion-input formControlName="title"
-					           placeholder="Enter task title here"
-					           maxlength="255"
-					           minlength="1">
-					</ion-input>
-				</h2>
+				<app-title-input [label]="'Task'" formControlName="title" [required]="true"></app-title-input>
 			</ion-col>
 		</ion-row>
 		<ion-row>
 			<ion-col size="12">
-				<ion-item class="ion-no-padding"
-				          lines="full"
-				          type="button">
-					<ion-label class="ion-padding-start">Project:
-						<ion-text color="danger">*</ion-text>
-					</ion-label>
-					<ion-select class="ion-padding-end"
-					            formControlName="project"
-					            placeholder="Select project"
-					            (ionChange)="resetAssignedUsersAndTeamMembers($event)"
-					            appIonSelectNoCaret>
-						<ion-select-option
-							*ngFor="let project of userProjects"
-							[value]="project" appIonSelectNoCaret>
-							{{ project.name }}
-						</ion-select-option>
-					</ion-select>
-				</ion-item>
-				<ion-item class="ion-no-padding"
-				          lines="full"
-				          type="button"
-				          (click)="showDatePickerForTask(task, true)">
-					<ion-label class="ion-padding-start">Deadline:
-						<ion-text color="danger">*</ion-text>
-					</ion-label>
-					<ion-text class="ion-padding-end" *ngIf="task.deadline">
-						{{ task.deadline | date:'dd.MM.yyyy, HH:mm' }}
-					</ion-text>
-					<ion-text class="ion-padding-end" *ngIf="!task.deadline">
-						None
-					</ion-text>
-				</ion-item>
-				<ion-item class="ion-no-padding"
-				          lines="full"
-				          type="button">
-					<ion-label class="ion-padding-start">Status:
-						<ion-text color="danger">*</ion-text>
-					</ion-label>
-					<ion-select [value]="task.status"
-					            class="ion-padding-end"
-					            formControlName="status"
-					            placeholder="Select status"
-					            appIonSelectNoCaret>
-						<ion-select-option
-							*ngFor="let status of taskStatusKeys"
-							[value]="status" appIonSelectNoCaret>
-							{{taskLabels[status]}}
-						</ion-select-option>
-					</ion-select>
-				</ion-item>
-				<ion-item class="ion-no-padding"
-				          lines="full"
-				          type="button"
-				          [disabled]="taskFormGroup.controls['project'].pristine"
-				          (click)="assignUsersToTask(task, teamMembers$)">
-					<ion-label class="ion-padding-start">Assigned users:</ion-label>
-					<div class="ion-padding-vertical"
-					     *ngIf="(newTaskAsignees | async)?.length">
-						<p class="ion-padding-end"
-						   *ngFor="let user of (newTaskAsignees | async)">
-							{{ user.username }}
-						</p>
-					</div>
-					<ion-text class="ion-padding-end" *ngIf="!(newTaskAsignees | async)?.length">None</ion-text>
-				</ion-item>
+				<app-simple-select formControlName="project"
+				                   [label]="'Project'"
+				                   [options]="userProjects"
+				                   [optionLabels]="projectNames"
+				                   [placeholder]="'Select project'"
+				                   [required]="true"
+				></app-simple-select>
+				<app-date-select-field [label]="'Deadline'"
+				                       formControlName="deadline"
+				                       [required]="true"
+				></app-date-select-field>
+				<app-simple-select formControlName="status"
+				                   [label]="'Status'"
+				                   [options]="taskStatusKeys"
+				                   [optionLabels]="taskLabels"
+				                   [placeholder]="'Select status'"
+				                   [required]="true"></app-simple-select>
+				<app-users-select-field formControlName="assignees"
+				                        [label]="'Assign team members'"
+				                        [projectId]="taskFormGroup.controls['project'].value.id"
+				                        [disabled]="!taskFormGroup.controls['project'].value?.id"
+				></app-users-select-field>
 			</ion-col>
 			<ion-col size="12">
-				<ion-item class="ion-no-padding"
-				          lines="none"
-				          type="button">
-					<ion-label class="ion-padding-horizontal">Description:</ion-label>
-				</ion-item>
-				<ion-item class="ion-no-padding" lines="full">
-					<ion-textarea class="ion-padding-horizontal ion-no-margin"
-					              maxlength="255"
-					              formControlName="content"
-					              autoGrow="true"
-					              placeholder="Enter any description here..."
-					              #taskDescriptionTextarea>
-					</ion-textarea>
-				</ion-item>
+				<app-textarea-input formControlName="content" [label]="'Description'"
+				                    [placeholder]="'Enter any description here...'"></app-textarea-input>
 			</ion-col>
 		</ion-row>
 	</form>

@@ -10,8 +10,9 @@ import { ControlValueCore } from '../control-value-core';
 })
 export class SimpleSelectComponent extends ControlValueCore {
     @Input() optionLabels: string[];
-    @Input() options: string[];
+    @Input() options: any[];
     @Input() label: string;
+    @Input() placeholder: string;
 
     set value(v: string) {
         console.log(v);

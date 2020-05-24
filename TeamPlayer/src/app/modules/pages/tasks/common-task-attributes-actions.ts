@@ -11,7 +11,6 @@ import { BehaviorSubject } from 'rxjs';
 export abstract class CommonTaskAttributesActions {
 
     taskStatusKeys: string[] = Object.keys(TaskStatus);
-    taskLabels: typeof TaskLabels = TaskLabels;
     newTaskAsignees: BehaviorSubject<User[]> = new BehaviorSubject<User[]>(null);
     newTaskDate: BehaviorSubject<Date> = new BehaviorSubject<Date>(null);
     protected popoverController: PopoverController;
@@ -40,12 +39,13 @@ export abstract class CommonTaskAttributesActions {
         return datePopover.present();
     }
 
-    async assignUsersToTask(task: Task, teamMembers: BehaviorSubject<User[]> = new BehaviorSubject<User[]>(null)): Promise<void> {
+    async assignUsersToTask(task: Task = null, projectId: number): Promise<void> {
         let properties: any;
             properties = {
-                projectId: task.project.id,
-                assignees: task.assignees,
+                projectId: task ? task.project.id : projectId,
+                assignees: task ? task.assignees : [],
             };
+            console.log(properties);
         const assigneesPopover = await this.popoverController.create({
             component: TaskAssignComponent,
             animated: true,

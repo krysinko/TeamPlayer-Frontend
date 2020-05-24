@@ -77,7 +77,9 @@ export class TaskAssignComponent implements OnInit {
 
     removeUserFromTask(userId: number, index: number): void {
         const us = this.getTeamMemberById(userId);
-        this.assignedUsers.forEach(user => user.id === userId ? this.assignedUsers.delete(user) : user);
+        if (this.assignedUsers.size) {
+            this.assignedUsers.forEach(user => user.id === userId ? this.assignedUsers.delete(user) : user);
+        }
         this.assignmentsFormArray.removeAt(index);
     }
 
@@ -105,9 +107,11 @@ export class TaskAssignComponent implements OnInit {
     }
 
     private setAssignmentsAndFormData() {
+        if (this.assignees && this.assignees.length) {
             this.assignees.forEach((usr: User) => {
                 this.buildFormControl(usr);
             });
+        }
         this.fillFormWithEmptyEntries();
     }
 
@@ -120,7 +124,7 @@ export class TaskAssignComponent implements OnInit {
     }
 
     private fillFormWithEmptyEntries() {
-        if ((this.assignedUsers.size < 3 && this.teamList$.value.length > 3 ) || (this.assignmentsFormArray.controls.length < 3 && this.teamList$.value.length > 3)) {
+        if ((this.assignedUsers.size < 3 || this.assignmentsFormArray.controls.length < 3) && this.teamList$.value.length > 3) {
             do {
                 const ctrl: FormControl = this.formBuilder.control(null);
                 this.assignmentsFormArray.controls.push(ctrl);

@@ -28,10 +28,14 @@ export class UsersSelectFieldComponent extends ControlValueCore {
     @Input() projectId: number;
     @Input() label: string = 'Assigned users';
 
-    _value: User[];
+    _value: User[] = [];
 
     constructor(private popoverController: PopoverController, public ngControl: NgControl) {
         super(ngControl);
+    }
+
+    setDisabledState(isDisabled: boolean): void {
+
     }
 
     async openAssignmentPopover(): Promise<void> {

@@ -29,11 +29,12 @@ export class DateSelectFieldComponent extends ControlValueCore implements Contro
     }
 
     async showDatePicker(): Promise<void> {
+        console.log(this.value);
         const datePopover = await this.popoverController.create({
             component: PopoverDatePickerComponent,
             animated: true,
             backdropDismiss: true,
-            componentProps: { date: this.value },
+            componentProps: { date: this.value ||  this.getTomorrowDate() },
             cssClass: 'popover-date-picker'
         });
 
@@ -44,5 +45,11 @@ export class DateSelectFieldComponent extends ControlValueCore implements Contro
         });
 
         return datePopover.present();
+    }
+
+    private getTomorrowDate(): Date {
+        const tomorrow: Date = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        return tomorrow;
     }
 }

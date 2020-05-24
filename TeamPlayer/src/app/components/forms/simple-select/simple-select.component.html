@@ -2,11 +2,11 @@
           lines="full"
           type="button">
 	<ion-label class="ion-padding-start">{{ label }}:</ion-label>
-	<ion-select class="ion-padding-end" [(ngModel)]="value" appIonSelectNoCaret>
+	<ion-select class="ion-padding-end" [(ngModel)]="value" [placeholder]="placeholder" appIonSelectNoCaret>
 		<ion-select-option
-			*ngFor="let status of options"
-			[value]="status">
-			{{ optionLabels[status] }}
+			*ngFor="let opt of options; let index = index;"
+			[value]="opt">
+			{{ optionLabels[index] }}
 		</ion-select-option>
 	</ion-select>
 </ion-item>

@@ -12,7 +12,7 @@ import { TaskApiService } from '../../../../services/api/task-api.service';
 import {
     apiErrorMessage,
     dataNotFoundErrorMessage,
-    forbiddenErrorMessage,
+    forbiddenErrorMessage, TaskLabels,
     unauthorizedErrorMessage
 } from '../../../../models/texts/taskDescriptions';
 import { Router } from '@angular/router';
@@ -27,11 +27,12 @@ export class NewTaskPage extends CommonTaskAttributesActions implements OnInit {
     taskFormGroup: FormGroup;
     task: Task = {
         ...new Task(),
-        deadline: this.getTomorrowDate(),
         status: <TaskStatus> TaskProgressInStartToEndOrder[0],
     };
     userProjects: Project[];
+    projectNames: string[];
     teamMembers$: BehaviorSubject<User[]> = new BehaviorSubject<User[]>(null);
+    taskLabels: string[] = Object.values(TaskLabels);
 
     constructor(
         private formBuilder: FormBuilder,
@@ -51,7 +52,7 @@ export class NewTaskPage extends CommonTaskAttributesActions implements OnInit {
     }
 
     saveTask(): void {
-        this.task = {...this.taskFormGroup.value, ...this.task};
+        this.task = {...this.taskFormGroup.value};
         console.log(this.task, this.taskFormGroup.value);
         this.userService.getUserData()
             .pipe(
@@ -84,14 +85,16 @@ export class NewTaskPage extends CommonTaskAttributesActions implements OnInit {
     private getUsersProjects(): void {
         this.projectService.getUsersProjects().pipe().subscribe((projects: Project[]) => {
             this.userProjects = projects;
+            this.projectNames = [];
+            Object.values(projects).forEach((p: Project) => this.projectNames.push(p.name));
         });
     }
 
     private buildTaskForm(): void {
         this.taskFormGroup = this.formBuilder.group({
-            title: [ this.task.title, [ Validators.required, Validators.maxLength(255) ] ],
-            deadline: [ this.task.deadline, Validators.required ],
-            status: [ this.task.status, Validators.required ],
+            title: [ '', [ Validators.required, Validators.maxLength(255) ] ],
+            deadline: [ '', Validators.required ],
+            status: [ '', Validators.required ],
             assignees: [],
             content: [ '', [ Validators.maxLength(255) ] ],
             project: [ '', Validators.required ],
@@ -147,11 +150,5 @@ export class NewTaskPage extends CommonTaskAttributesActions implements OnInit {
                 switchMap(() => this.taskService.getTasks()),
                 catchError(this.handleApiError)
             );
-    }
-
-    private getTomorrowDate(): Date {
-        const tomorrow: Date = new Date();
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        return tomorrow;
     }
 }

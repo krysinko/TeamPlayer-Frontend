@@ -36,7 +36,7 @@ export class TaskDetailsPage {
 
     task$: BehaviorSubject<Task> = new BehaviorSubject<Task>(null);
     taskStatusKeys: string[] =  Object.keys(TaskStatus);
-    taskLabels: typeof TaskLabels = TaskLabels;
+    taskLabels: string[] = Object.values(TaskLabels);
     taskStatuses: typeof TaskStatus = TaskStatus;
     users: User[];
     contentHasChanged$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);

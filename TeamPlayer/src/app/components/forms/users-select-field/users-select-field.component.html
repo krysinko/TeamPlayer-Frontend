@@ -1,14 +1,15 @@
 <ion-item class="ion-no-padding"
           lines="full"
           type="button"
+          [disabled]="disabled"
           (click)="openAssignmentPopover()">
 	<ion-label class="ion-padding-start">{{ label }}:</ion-label>
 	<div class="ion-padding-vertical"
-	     *ngIf="value.length">
+	     *ngIf="value?.length">
 		<p class="ion-padding-end"
 		   *ngFor="let user of value">
 			{{ user.username }}
 		</p>
 	</div>
-	<ion-text class="ion-padding-end" *ngIf="!value.length">None</ion-text>
+	<ion-text class="ion-padding-end" *ngIf="!value">None</ion-text>
 </ion-item>

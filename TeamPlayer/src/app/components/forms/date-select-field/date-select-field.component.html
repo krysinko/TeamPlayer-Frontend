@@ -4,6 +4,6 @@
           (click)="showDatePicker()">
 	<ion-label class="ion-padding-start">{{ label }}:</ion-label>
 	<ion-text class="ion-padding-end">
-		{{ value | date:'dd.MM.yyyy, HH:mm' }}
+		{{ value ? (value | date:'dd.MM.yyyy, HH:mm') : 'Select date' }}
 	</ion-text>
 </ion-item>
