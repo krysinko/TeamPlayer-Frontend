@@ -4,18 +4,18 @@
 			<ion-item lines="none">
 				<ion-label><h3>Przypisz zadanie do:</h3></ion-label>
 			</ion-item>
-			<ion-list>
+			<ion-list formArrayName="assignments">
 <!--				<ng-container *ngIf="assignedUsers?.length && editAssignedUsersState;-->
 <!--								else emptySelectList">-->
-					<ng-container *ngFor="let assignedUsr of assignmentForm.controls;
+					<ng-container *ngFor="let assignedUsr of assignmentForm.controls['assignments']['controls'];
 									let index = index">
 						<ion-item lines="full">
-							<ion-label class="display-none">Wybierz użytkownika</ion-label>
+							<ion-label class="display-none">Wybierz użytkownika {{ assignmentsFormArray.controls[index].value | json }}</ion-label>
 
-							<ion-select placeholder="Wybierz użytkownika {{assignedUsr.value}}"
+							<ion-select placeholder="Wybierz użytkownika"
 							            okText="Save"
 							            [formControlName]="index"
-							            [value]="assignedUsr.value"
+							            [value]="assignmentsFormArray.controls[index].value"
 							            (ionChange)="assignUser($event, index)"
 							            appIonSelectNoCaret>
 								<ion-select-option
@@ -33,7 +33,7 @@
 						</ion-item>
 					</ng-container>
 <!--				</ng-container>-->
-				<ion-item lines="full" [hidden]="assignmentForm?.controls?.length >= (teamList$ | async)?.length">
+				<ion-item lines="full" [hidden]="assignmentsFormArray?.controls?.length >= (teamList$ | async)?.length">
 					<ion-button class="add-user-select-btn" color="deep-danger" fill="outline" shape="round"
 					            (click)="addOneMoreEntry()" type="button">
 						<ion-icon name="person-add-outline"></ion-icon>

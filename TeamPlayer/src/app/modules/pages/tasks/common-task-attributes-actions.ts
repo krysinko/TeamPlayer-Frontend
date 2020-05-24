@@ -42,17 +42,10 @@ export abstract class CommonTaskAttributesActions {
 
     async assignUsersToTask(task: Task, teamMembers: BehaviorSubject<User[]> = new BehaviorSubject<User[]>(null)): Promise<void> {
         let properties: any;
-        if (!teamMembers.value) {
             properties = {
-                task: task,
-                editAssignedUsersState: true,
+                projectId: task.project.id,
+                assignees: task.assignees,
             };
-        } else {
-            properties = {
-                editAssignedUsersState: false,
-                teamList$: teamMembers,
-            };
-        }
         const assigneesPopover = await this.popoverController.create({
             component: TaskAssignComponent,
             animated: true,
@@ -62,11 +55,9 @@ export abstract class CommonTaskAttributesActions {
         });
 
         assigneesPopover.onDidDismiss().then(data => {
-            if (data && data.data && properties.editAssignedUsersState) {
+            if (data && data.data) {
                 task.assignees = Array.from(<Set<User>> data.data);
                 this.taskService.updateTask(task);
-            } else if (data && data.data) {
-                this.newTaskAsignees.next(Array.from(<Set<User>> data.data));
             }
         });
 

@@ -11,51 +11,27 @@
 		</ion-row>
 		<ion-row>
 			<ion-col size="12">
+				<ion-item class="ion-no-padding" lines="full">
+					<ion-label class="ion-padding-start">Project:</ion-label>
+					<ion-text class="ion-padding-end">{{ task.project?.name || 'Unknown' }} {{task.project?.id}}</ion-text>
+				</ion-item>
+				<app-date-select-field [label]="'Deadline'" formControlName="deadline"></app-date-select-field>
+				<app-simple-select formControlName="status" [options]="taskStatusKeys" [optionLabels]="taskLabels" [label]="'Status'"></app-simple-select>
+				<app-users-select-field formControlName="assignees" [projectId]="task.project?.id"></app-users-select-field>
 <!--				<ion-item class="ion-no-padding"-->
 <!--				          lines="full"-->
 <!--				          type="button"-->
-<!--				          (click)="showDatePickerForTask(task)">-->
-<!--					<ion-label class="ion-padding-start">Deadline:</ion-label>-->
-<!--					<ion-text class="ion-padding-end">-->
-<!--						{{ task.deadline | date:'dd.MM.yyyy, HH:mm' }}-->
-<!--					</ion-text>-->
+<!--				          (click)="assignUsersToTask(task)">-->
+<!--					<ion-label class="ion-padding-start">Assigned users:</ion-label>-->
+<!--					<div class="ion-padding-vertical"-->
+<!--					     *ngIf="task.assignees?.length">-->
+<!--						<p class="ion-padding-end"-->
+<!--						   *ngFor="let user of task.assignees">-->
+<!--							{{ user.username }}-->
+<!--						</p>-->
+<!--					</div>-->
+<!--					<ion-text class="ion-padding-end" *ngIf="!task.assignees?.length">None</ion-text>-->
 <!--				</ion-item>-->
-
-				<app-date-select-field [label]="'Deadline'" formControlName="deadline"></app-date-select-field>
-				<app-simple-select formControlName="status" [options]="taskStatusKeys" [optionLabels]="taskLabels" [label]="'Status'"></app-simple-select>
-<!--				<ion-item class="ion-no-padding"-->
-<!--				          lines="full"-->
-<!--				          type="button">-->
-<!--					<ion-label class="ion-padding-start">Status:</ion-label>-->
-<!--					<ion-select [value]="task.status"-->
-<!--					            class="ion-padding-end"-->
-<!--					            (ionChange)="updateStatus($event)"-->
-<!--					            appIonSelectNoCaret>-->
-<!--						<ion-select-option-->
-<!--							*ngFor="let status of taskStatusKeys"-->
-<!--		                    [value]="status">-->
-<!--								{{taskLabels[status]}}-->
-<!--						</ion-select-option>-->
-<!--					</ion-select>-->
-<!--				</ion-item>-->
-
-
-
-
-				<ion-item class="ion-no-padding"
-				          lines="full"
-				          type="button"
-				          (click)="assignUsersToTask(task)">
-					<ion-label class="ion-padding-start">Assigned users:</ion-label>
-					<div class="ion-padding-vertical"
-					     *ngIf="task.assignees?.length">
-						<p class="ion-padding-end"
-						   *ngFor="let user of task.assignees">
-							{{ user.username }}
-						</p>
-					</div>
-					<ion-text class="ion-padding-end" *ngIf="!task.assignees?.length">None</ion-text>
-				</ion-item>
 
 			</ion-col>
 

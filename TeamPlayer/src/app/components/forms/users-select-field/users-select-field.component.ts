@@ -1,7 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { PopoverController } from '@ionic/angular';
 import { NgControl } from '@angular/forms';
 import { ControlValueCore } from '../control-value-core';
+import { User } from '../../../models/user';
+import { Task } from '../../../models/task';
+import { BehaviorSubject } from 'rxjs';
+import { TaskAssignComponent } from '../../task-assign/task-assign.component';
 
 @Component({
     selector: 'app-users-select-field',
@@ -9,8 +13,8 @@ import { ControlValueCore } from '../control-value-core';
     styleUrls: [ './users-select-field.component.scss' ],
 })
 export class UsersSelectFieldComponent extends ControlValueCore {
-    set value(v: Date) {
-        if (v && v !== this._value) {
+    set value(v: User[]) {
+        if (v !== this._value) {
             this._value = v;
             this.onChange(v);
             this.onTouch(v);
@@ -21,9 +25,34 @@ export class UsersSelectFieldComponent extends ControlValueCore {
         return this._value;
     }
 
-    _value: Date;
+    @Input() projectId: number;
+    @Input() label: string = 'Assigned users';
+
+    _value: User[];
 
     constructor(private popoverController: PopoverController, public ngControl: NgControl) {
         super(ngControl);
+    }
+
+    async openAssignmentPopover(): Promise<void> {
+        const assigneesPopover = await this.popoverController.create({
+            component: TaskAssignComponent,
+            animated: true,
+            backdropDismiss: true,
+            componentProps: {
+                projectId: this.projectId,
+                assignees: this.value
+            },
+            cssClass: 'task-assign-popover'
+        });
+
+        assigneesPopover.onDidDismiss().then(data => {
+            console.log(data);
+            if (data && data.data) {
+                this.value = Array.from(<Set<User>> data.data);
+            }
+        });
+
+        return assigneesPopover.present();
     }
 }

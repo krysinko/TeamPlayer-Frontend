@@ -21,12 +21,12 @@ export class ProjectService {
     constructor(private projectApiService: ProjectApiService, private userService: UserService) {
     }
 
-    getProjectTeamMembers(project: Project): Observable<User[]> {
-        return this.projectApiService.getProjectById(project.id)
+    getProjectTeamMembers(project: Project, projectId: number = null): Observable<User[]> {
+        return this.projectApiService.getProjectById(project ? project.id : projectId)
             .pipe(
                 map((proj: Project) => {
                     this._teamMembers$.next(proj.users);
-                    console.log(proj.users);
+                    // console.log(proj.users);
                     return proj.users;
                 }),
                 catchError((error: HttpErrorResponse) => {

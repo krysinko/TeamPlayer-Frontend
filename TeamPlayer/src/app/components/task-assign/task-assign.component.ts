@@ -4,11 +4,8 @@ import { User } from '../../models/user';
 import { BehaviorSubject } from 'rxjs';
 import { PopoverController } from '@ionic/angular';
 import { TaskService } from '../../services/task.service';
-import { Task } from '../../models/task';
 import { ProjectService } from '../../services/project.service';
-import { skipWhile } from 'rxjs/operators';
-import { isEmpty } from 'lodash';
-import { FormArray, FormBuilder, FormControl } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
 @Component({
     selector: 'app-task-assign',
@@ -16,11 +13,15 @@ import { FormArray, FormBuilder, FormControl } from '@angular/forms';
     styleUrls: [ './task-assign.component.scss' ],
 })
 export class TaskAssignComponent implements OnInit {
-    @Input() task: Task;
-    @Input() editAssignedUsersState: boolean = true;
-    @Input() teamList$: BehaviorSubject<User[]> = new BehaviorSubject<User[]>([]);
+    // @Input() task: Task;
+    // @Input() editAssignedUsersState: boolean = true;
+    teamList$: BehaviorSubject<User[]> = new BehaviorSubject<User[]>([]);
+
+    @Input() projectId: number = null;
+    @Input() assignees: User[] = [];
     assignedUsers: Set<User> = new Set<User>();
-    assignmentForm: FormArray;
+    assignmentForm: FormGroup;
+    assignmentsFormArray: FormArray;
 
     constructor(
         private userService: UserService,
@@ -29,13 +30,15 @@ export class TaskAssignComponent implements OnInit {
         private chengeDetector: ChangeDetectorRef,
         private projectService: ProjectService,
         private formBuilder: FormBuilder) {
-        this.assignmentForm = this.formBuilder.array([]);
+        this.assignmentForm = this.formBuilder.group({
+            assignments: this.formBuilder.array([])
+        });
+        this.assignmentsFormArray = this.assignmentForm.get('assignments') as FormArray;
     }
 
     ngOnInit() {
-
-        // let usrsset = [];
-        if (this.task && this.task.assignees) {
+        console.log(this.projectId, this.assignees);
+        if (this.projectId) {
             this.setSubscriptionForUsers();
             this.setAssignmentsAndFormData();
             console.log(this.assignedUsers, this.assignmentForm);
@@ -49,18 +52,13 @@ export class TaskAssignComponent implements OnInit {
     }
 
     setSubscriptionForUsers(): void {
-        this.projectService.getProjectTeamMembers(this.task.project)
-            .pipe(
-                skipWhile((members: User[]) => isEmpty(members))
-            )
+        this.projectService.getProjectTeamMembers(null, this.projectId)
             .subscribe((members: User[]) => {
                 this.teamList$.next(members);
                 this.setAssignmentsAndFormData();
-                console.log(members);
+                console.log(members, this.projectId);
             });
     }
-
-    // todo form builder, add methoids
 
     saveAssignments() {
         this.popoverController.dismiss(this.assignedUsers);
@@ -72,13 +70,15 @@ export class TaskAssignComponent implements OnInit {
 
     assignUser($event: CustomEvent, index: number): void {
         const selectedUser: User = this.getTeamMemberById($event.detail.value);
-        this.assignedUsers.add(selectedUser);
+        if (selectedUser) {
+            this.assignedUsers.add(selectedUser);
+        }
     }
 
     removeUserFromTask(userId: number, index: number): void {
         const us = this.getTeamMemberById(userId);
         this.assignedUsers.forEach(user => user.id === userId ? this.assignedUsers.delete(user) : user);
-        this.assignmentForm.removeAt(index);
+        this.assignmentsFormArray.removeAt(index);
     }
 
     isUserAssigned(id: number): boolean {
@@ -97,7 +97,7 @@ export class TaskAssignComponent implements OnInit {
 
     addOneMoreEntry() {
         const ctrl: FormControl = this.formBuilder.control(null);
-        this.assignmentForm.push(ctrl);
+        this.assignmentsFormArray.controls.push(ctrl);
     }
 
     private getTeamMemberById(id: number): User {
@@ -105,24 +105,28 @@ export class TaskAssignComponent implements OnInit {
     }
 
     private setAssignmentsAndFormData() {
-        this.task.assignees.forEach((usr: User, index: number) => {
-            if (this.teamList$.value.find((val: User) => val.id === usr.id)) {
-                this.assignedUsers.add(usr);
-                const ctrl: FormControl = this.formBuilder.control(usr.id);
-                this.assignmentForm.push(ctrl);
-                console.log(this.teamList$.value, this.task, this.assignedUsers.values(), this.assignmentForm);
-            }
-        });
+            this.assignees.forEach((usr: User) => {
+                this.buildFormControl(usr);
+            });
         this.fillFormWithEmptyEntries();
     }
 
+    private buildFormControl(usr: User) {
+        if (!!this.getTeamMemberById(usr.id)) {
+            this.assignedUsers.add(usr);
+            const ctrl: FormControl = this.formBuilder.control(usr.id);
+            this.assignmentsFormArray.controls.push(ctrl);
+        }
+    }
+
     private fillFormWithEmptyEntries() {
-        if ((this.assignedUsers.size < 3 && this.teamList$.value.length > 3 ) || (this.assignmentForm.controls.length < 3 && this.teamList$.value.length > 3)) {
+        if ((this.assignedUsers.size < 3 && this.teamList$.value.length > 3 ) || (this.assignmentsFormArray.controls.length < 3 && this.teamList$.value.length > 3)) {
             do {
-                const ctrl: FormControl = this.formBuilder.control('');
-                this.assignmentForm.push(ctrl);
+                const ctrl: FormControl = this.formBuilder.control(null);
+                this.assignmentsFormArray.controls.push(ctrl);
                 console.log(this.assignedUsers, this.assignmentForm);
-            } while (this.assignmentForm.controls.length < 3);
+            } while (this.assignmentsFormArray.controls.length < 3);
+            console.log(this.assignmentsFormArray.controls);
         }
     }
 }

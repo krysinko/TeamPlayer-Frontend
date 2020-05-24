@@ -5,13 +5,12 @@ import { TaskService } from '../../../../services/task.service';
 import { Task, TaskStatus } from '../../../../models/task';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { TaskLabels } from '../../../../models/texts/taskDescriptions';
-import { CommonTaskAttributesActions } from '../common-task-attributes-actions';
-import { IonInput, IonTextarea, PopoverController } from '@ionic/angular';
+import { IonInput, IonTextarea } from '@ionic/angular';
 import { UserService } from '../../../../services/user.service';
 import { User } from '../../../../models/user';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Project } from '../../../../models/project';
 import * as _ from 'lodash';
+import { ProjectService } from '../../../../services/project.service';
 
 
 @Component({
@@ -50,7 +49,8 @@ export class TaskDetailsPage {
         private route: ActivatedRoute,
         private userService: UserService,
         private formBuilder: FormBuilder,
-        private taskService: TaskService
+        private taskService: TaskService,
+        private projectService: ProjectService
     ) {
         this.getTaskByIdParam()
             .subscribe((t: Task) => {
@@ -102,6 +102,14 @@ export class TaskDetailsPage {
         //     title: this.taskTitleFormGroup.controls['title'].value
         // });
         // this.taskTitleFormGroup.controls['title'].markAsPristine();
+    }
+
+    getProjectMembers(): Observable<User[]> {
+        // this.projectService.
+        return this.projectService.getProjectTeamMembers(this.task$.value.project)
+            .pipe(map((users: User[]) => {
+                return users;
+            }));
     }
 
     patchTitleValue(): void {
