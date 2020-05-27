@@ -61,6 +61,7 @@ export class TaskAssignComponent implements OnInit {
     }
 
     saveAssignments() {
+        this.removeNotSelectedAssignments();
         this.popoverController.dismiss(this.assignedUsers);
     }
 
@@ -132,5 +133,18 @@ export class TaskAssignComponent implements OnInit {
             } while (this.assignmentsFormArray.controls.length < 3);
             console.log(this.assignmentsFormArray.controls);
         }
+    }
+
+    private removeNotSelectedAssignments() {
+        const selectedUsersId: number[] = [];
+        this.assignmentsFormArray.controls.forEach((control: FormControl) => {
+            // this.assignedUsers.
+            selectedUsersId.push(control.value);
+        });
+        this.assignedUsers.forEach((u: User) => {
+            if (!selectedUsersId.includes(u.id)) {
+                this.assignedUsers.delete(u);
+            }
+        });
     }
 }

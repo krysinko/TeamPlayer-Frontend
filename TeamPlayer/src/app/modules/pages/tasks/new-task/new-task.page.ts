@@ -5,14 +5,15 @@ import { Task, TaskProgressInStartToEndOrder, TaskStatus } from '../../../../mod
 import { ProjectService } from '../../../../services/project.service';
 import { Project } from '../../../../models/project';
 import { User } from '../../../../models/user';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { TaskApiService } from '../../../../services/api/task-api.service';
 import {
     apiErrorMessage,
     dataNotFoundErrorMessage,
-    forbiddenErrorMessage, TaskLabels,
+    forbiddenErrorMessage,
+    TaskLabels,
     unauthorizedErrorMessage
 } from '../../../../models/texts/taskDescriptions';
 import { Router } from '@angular/router';
@@ -31,7 +32,6 @@ export class NewTaskPage extends CommonTaskAttributesActions implements OnInit {
     };
     userProjects: Project[];
     projectNames: string[];
-    teamMembers$: BehaviorSubject<User[]> = new BehaviorSubject<User[]>(null);
     taskLabels: string[] = Object.values(TaskLabels);
 
     constructor(
@@ -44,42 +44,19 @@ export class NewTaskPage extends CommonTaskAttributesActions implements OnInit {
         super();
         this.getUsersProjects();
         this.buildTaskForm();
-        this.subscribeOnDatePickerValue();
-        this.subscribeOnNewAssigneesValue();
     }
 
     ngOnInit() {
     }
 
     saveTask(): void {
-        this.task = {...this.taskFormGroup.value};
+        this.task = { ...this.taskFormGroup.value };
         console.log(this.task, this.taskFormGroup.value);
         this.userService.getUserData()
-            .pipe(
-                map((user: User) => {
-                    this.task.creator = user;
-                }),
-                switchMap(() => this.postTaskToApi()),
-                catchError((err: HttpErrorResponse) => {
-                    console.log(err);
-                    return of();
-                })
-            )
-            .subscribe(() => {
-                this.router.navigate([ '/tasks' ]);
+            .subscribe((user: User) => {
+                this.task.creator = user;
+                this.taskService.postTaskToApi(this.task);
             });
-    }
-
-    resetAssignedUsersAndTeamMembers($event: CustomEvent): void {
-        this.taskFormGroup.controls['assignees'].reset();
-        this.newTaskAsignees.next([]);
-        this.getTeamMembers($event);
-    }
-
-    private getTeamMembers($event: CustomEvent): void {
-        this.projectService.getProjectTeamMembers($event.detail.value).subscribe((users: User[]) => {
-            this.teamMembers$.next(users);
-        });
     }
 
     private getUsersProjects(): void {
@@ -99,26 +76,6 @@ export class NewTaskPage extends CommonTaskAttributesActions implements OnInit {
             content: [ '', [ Validators.maxLength(255) ] ],
             project: [ '', Validators.required ],
         });
-    }
-
-    private subscribeOnDatePickerValue(): void {
-        this.newTaskDate.subscribe((value: Date) => {
-            this.taskFormGroup.patchValue({ deadline: value });
-            this.task.deadline = value;
-        });
-    }
-
-    private subscribeOnNewAssigneesValue(): void {
-        this.newTaskAsignees.subscribe((assignees: User[]) => {
-            this.taskFormGroup.patchValue({ assignees: assignees });
-            this.task.assignees = assignees;
-        });
-    }
-
-    private postNewTask(newTaskId: number) {
-        this.task.id = newTaskId;
-        console.log(this.task);
-        return of();
     }
 
     private handleApiError(err: HttpErrorResponse): Observable<any> {
@@ -142,13 +99,5 @@ export class NewTaskPage extends CommonTaskAttributesActions implements OnInit {
                 break;
         }
         return of();
-    }
-
-    private postTaskToApi() {
-        return this.taskApiService.postNewTask(this.task)
-            .pipe(
-                switchMap(() => this.taskService.getTasks()),
-                catchError(this.handleApiError)
-            );
     }
 }

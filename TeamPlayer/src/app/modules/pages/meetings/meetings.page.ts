@@ -30,7 +30,11 @@ export class MeetingsPage implements OnInit {
     }
 
     goToMeetingDetails(id: number) {
-            this.router.navigate([ 'meeting-details/' + id ], { relativeTo: this.route });
+        this.router.navigate([ 'meeting-details/' + id ], { relativeTo: this.route });
+    }
+
+    goToCreatingMeeting() {
+        this.router.navigate([ 'new' ], { relativeTo: this.route });
     }
 
     private getMeetings() {

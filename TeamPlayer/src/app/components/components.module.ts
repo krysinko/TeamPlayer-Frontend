@@ -8,7 +8,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HeaderSimpleComponent } from './header-simple/header-simple.component';
 import { PopoverDatePickerComponent } from './popover-date-picker/popover-date-picker.component';
 import { TaskAssignComponent } from './task-assign/task-assign.component';
-import { TaskCreateComponent } from './task-create/task-create.component';
 import { DirectivesModule } from '../directives/directives.module';
 import { AlertPopoverComponent } from './alert-popover/alert-popover.component';
 import { CustomFormsModule } from './forms/custom-forms.module';
@@ -23,7 +22,6 @@ import { SimpleSelectComponent } from './forms/simple-select/simple-select.compo
         HeaderSimpleComponent,
         PopoverDatePickerComponent,
         TaskAssignComponent,
-        TaskCreateComponent,
         AlertPopoverComponent
     ],
     exports: [
@@ -32,14 +30,12 @@ import { SimpleSelectComponent } from './forms/simple-select/simple-select.compo
         HeaderSimpleComponent,
         PopoverDatePickerComponent,
         TaskAssignComponent,
-        TaskCreateComponent,
         AlertPopoverComponent,
         CustomFormsModule
     ],
     entryComponents: [
         PopoverDatePickerComponent,
         TaskAssignComponent,
-        TaskCreateComponent,
         AlertPopoverComponent,
         TextareaInputComponent,
         SimpleSelectComponent

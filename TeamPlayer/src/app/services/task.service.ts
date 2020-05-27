@@ -83,15 +83,6 @@ export class TaskService {
                 this.tasks = value;
             });
         return this.tasks$;
-
-        // return this.taskApi.getTasksFromApi().pipe(
-        //     map((value: Task[]) => {
-        //         this._tasks$.next(value);
-        //         console.log(value);
-        //         return value;
-        //     }),
-        //     catchError(this.handleApiError)
-        // );
     }
 
     updateTask(task: Task): void {
@@ -109,6 +100,16 @@ export class TaskService {
     async getTaskProjectTeamMembers(id: number): Promise<User[]> {
         const task = await this.getTask(id).toPromise();
         return task.project.users;
+    }
+
+    postTaskToApi(task: Task): void {
+        this.taskApi.postNewTask(task)
+            .pipe(catchError(this.handleApiError))
+            .subscribe((t: Task) => {
+                    this.getTasks();
+                    this.router.navigate([ '/tasks/task-details/' + t.id ]);
+                },
+            );
     }
 
     private checkIfUserLoggedIn(): boolean {

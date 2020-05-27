@@ -60,16 +60,6 @@ export class TaskDetailsPage {
             });
     }
 
-    updateStatus($event: CustomEvent): void {
-        // console.log($event.detail.value);
-        // const task: Task = {
-        //     ...this.task$.getValue(),
-        //     status: $event.detail.value
-        // };
-        // this.taskService.updateTask(task);
-        // this.task$.next(task);
-    }
-
     getUsernameById(id: number): string {
         return this.users.find((u: User) => u.id === id).username;
     }
@@ -77,14 +67,6 @@ export class TaskDetailsPage {
     clearTaskDescription(): void {
         this.taskContentFormGroup.setValue({content: ''});
         this.setFocusOnDescriptionTextarea();
-    }
-
-    saveTaskDescription(): void {
-        // this.taskService.updateTask({
-        //     ...this.task$.getValue(),
-        //     content: this.taskContentFormGroup.controls['content'].value
-        // });
-        // this.taskContentFormGroup.controls['content'].markAsPristine();
     }
 
     setFocusOnDescriptionTextarea(): void {
@@ -96,16 +78,7 @@ export class TaskDetailsPage {
         this.taskTitleInput.setFocus();
     }
 
-    saveNewTitle(): void {
-        // this.taskService.updateTask({
-        //     ...this.task$.getValue(),
-        //     title: this.taskTitleFormGroup.controls['title'].value
-        // });
-        // this.taskTitleFormGroup.controls['title'].markAsPristine();
-    }
-
     getProjectMembers(): Observable<User[]> {
-        // this.projectService.
         return this.projectService.getProjectTeamMembers(this.task$.value.project)
             .pipe(map((users: User[]) => {
                 return users;

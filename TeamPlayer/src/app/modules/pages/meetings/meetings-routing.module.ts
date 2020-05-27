@@ -10,6 +10,10 @@ const routes: Routes = [
     {
         path: 'meeting-details/:id',
         loadChildren: () => import('./meeting-details/meeting-details.module').then(m => m.MeetingDetailsPageModule)
+    },
+    {
+        path: 'new',
+        loadChildren: () => import('./meeting-details/meeting-details.module').then(m => m.MeetingDetailsPageModule)
     }
 
 ];
