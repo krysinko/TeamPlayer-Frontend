@@ -8,11 +8,12 @@
 					<ion-col size="12" class="ion-no-padding ion-padding-end">
 						<small>{{ note.project.name }}</small>
 						<h3 class="ion-no-margin">{{ note.name }}</h3>
+						<h6 class="ion-no-margin" *ngIf="note.poster?.username">{{ note.poster.username }}</h6>
 					</ion-col>
 				</ion-row>
 			</ion-grid>
 			<ion-button shape="round" class="go-to-note-button ion-no-padding ion-no-margin" color="pastel-green"
-			            slot="end">
+			            slot="end" (click)="goToNotePage(note.id)">
 				<ion-icon name="chevron-forward-outline" mode="ios"></ion-icon>
 			</ion-button>
 		</ion-item>

@@ -21,15 +21,16 @@
 			<ion-icon name="chevron-forward-outline" mode="ios"></ion-icon>
 		</ion-button>
 	</ion-item>
-
-	<ion-fab vertical="bottom" horizontal="center" slot="fixed">
-		<ion-fab-button color="danger" class="side-cta">
-			<ion-icon name="swap-vertical-outline"></ion-icon>
-		</ion-fab-button>
-	</ion-fab>
-	<ion-fab vertical="bottom" horizontal="end" slot="fixed" (click)="goToCreatingMeeting()">
-		<ion-fab-button color="deep-danger" class="main-cta">
-			<ion-icon name="add-outline"></ion-icon>
-		</ion-fab-button>
-	</ion-fab>
 </ion-content>
+
+<ion-fab vertical="top" horizontal="end" slot="fixed" class="list-cta">
+<!--	<ion-fab-button color="danger" class="side-cta">-->
+<!--		<ion-icon name="swap-vertical-outline"></ion-icon>-->
+
+<!--	</ion-fab-button>-->
+</ion-fab>
+<ion-fab vertical="top" horizontal="end" slot="fixed" class="list-cta"  (click)="goToCreatingMeeting()">
+	<ion-fab-button color="deep-danger" class="main-cta">
+		<ion-icon name="add-outline"></ion-icon>
+	</ion-fab-button>
+</ion-fab>

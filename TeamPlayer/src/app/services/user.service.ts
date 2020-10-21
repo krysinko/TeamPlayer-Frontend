@@ -5,11 +5,21 @@ import { Router } from '@angular/router';
 import { UserApiService } from './api/user-api.service';
 import { catchError, map } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
+import { RegisterData } from '../models/register-data';
 
 @Injectable({
     providedIn: 'root'
 })
 export class UserService {
+    // todo default false
+    userLoggedIn$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
+    private _user$: Observable<User>;
+
+    constructor(private router: Router, private userApiService: UserApiService
+    ) {
+        this.getUserData();
+    }
+
     get user(): Observable<User> {
         return this._user$;
     }
@@ -18,19 +28,10 @@ export class UserService {
         this._user$ = data;
     }
 
+    private _userId: number = 3;
+
     get userId(): number {
         return this._userId;
-    }
-
-    // todo default false
-    userLoggedIn$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
-
-    private _userId: number = 3;
-    private _user$: Observable<User>;
-
-    constructor(private router: Router, private userApiService: UserApiService
-    ) {
-        this.getUserData();
     }
 
     // TODO odpowiednie typy i obsługa logowania
@@ -50,12 +51,12 @@ export class UserService {
         return true;
     }
 
-    register(userData): void {
+    register(userData: RegisterData): void {
         this.apiRegister(userData).then(
             () => {
                 alert('User registered!');
                 this.writeUserData(userData);
-                this.logIn();
+                // this.logIn();
                 this.router.navigate([ '/' ]);
             },
             err => {
@@ -98,7 +99,7 @@ export class UserService {
         this.userData = usr;
     }
 
-    private apiRegister(userdata): Promise<boolean> {
+    private apiRegister(userdata: RegisterData): Promise<boolean> {
         return new Promise((resolve, reject) => {
             setTimeout(function () {
                 resolve(true);

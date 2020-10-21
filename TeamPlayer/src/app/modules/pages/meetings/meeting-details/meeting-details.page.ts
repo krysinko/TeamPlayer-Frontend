@@ -17,20 +17,20 @@ export class MeetingDetailsPage implements OnInit {
     meeting$: BehaviorSubject<Meeting> = new BehaviorSubject<Meeting>(null);
     meetingEditForm: FormGroup;
 
-    get meeting(): Meeting {
-        return this.meeting$.value;
-    }
-
-    set meetingValue(data: Meeting) {
-        this.meeting$.next(data);
-    }
-
     constructor(
         private route: ActivatedRoute,
         private userService: UserService,
         private meetingService: MeetingsService,
         private formBuilder: FormBuilder) {
         this.getMeetingSubscriptionById();
+    }
+
+    get meeting(): Meeting {
+        return this.meeting$.value;
+    }
+
+    set meetingValue(data: Meeting) {
+        this.meeting$.next(data);
     }
 
     ngOnInit() {
@@ -67,7 +67,7 @@ export class MeetingDetailsPage implements OnInit {
         if (meeting) {
             this.meetingEditForm = this.formBuilder.group({
                 name: [ meeting.name, Validators.required ],
-                description: [ meeting.name, Validators.required ],
+                description: [ meeting.description, Validators.required ],
                 date: [ meeting.date, Validators.required ],
                 participants: [ meeting.participants ]
             });
@@ -86,7 +86,7 @@ export class MeetingDetailsPage implements OnInit {
     private subscribeOnMeetingFormChangesToUpdate() {
         this.meetingEditForm.valueChanges.subscribe((data: Meeting) => {
             if (this.meeting$.value) {
-                this.meetingService.updateMeeting({...this.meeting$.value, ...data});
+                this.meetingService.updateMeeting({ ...this.meeting$.value, ...data });
             }
         });
     }

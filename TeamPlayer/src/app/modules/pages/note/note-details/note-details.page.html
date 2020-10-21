@@ -1,0 +1,47 @@
+<app-header-simple [title]="title"></app-header-simple>
+
+<ion-content *ngIf="(note$ | async) as note">
+	<form [formGroup]="noteFormGroup">
+		<ion-row class="ion-padding ion-justify-content-center">
+			<ion-col size="12" class="ion-padding-bottom">
+<!--				TODO get users projects-->
+<!--				<app-simple-select [options]="">{{note.project_id.name}}</app-simple-select>-->
+				<app-title-input [label]="'Note'" [placeholder]="'Enter note subject'" formControlName="name" [required]="true"></app-title-input>
+			</ion-col>
+		</ion-row>
+		<ion-row *ngIf="note">
+			<ion-col size="12">
+				<app-users-select-field formControlName="assignees" [projectId]="note.project_id.id"></app-users-select-field>
+			</ion-col>
+			<ion-col size="12" *ngIf="note$ | async" class="remove-top-bottom-padding">
+				<ion-item class="ion-no-padding" lines="full">
+					<ion-label class="ion-padding-start">Project:</ion-label>
+					<ion-text class="ion-padding-end">{{ (note$ | async).project_id?.name || 'Unknown' }}</ion-text>
+				</ion-item>
+				<ion-item class="ion-no-padding" lines="full">
+					<ion-label class="ion-padding-start">Poster:</ion-label>
+					<ion-text class="ion-padding-end">{{ (note$ | async).poster?.username }}</ion-text>
+				</ion-item>
+			</ion-col>
+			<ion-col size="12" *ngIf="isChecklist">
+				<h4 class="ion-margin">Checklist:</h4>
+				<ng-container *ngFor="let note of note$.value.content">
+					<ion-item lines="full">
+						<ion-checkbox [checked]="note.checked"></ion-checkbox>
+						<ion-label class="ion-margin-start">{{ note.label }}</ion-label>
+					</ion-item>
+<!--					 todo content przerobic na sensowny obiekt-->
+				</ng-container>
+				<ion-button> Add + </ion-button>
+			</ion-col>
+		</ion-row>
+	</form>
+
+
+	<br>
+	<br>
+	<br>
+	<br>
+		<pre>
+	{{ note | json }}</pre>
+</ion-content>

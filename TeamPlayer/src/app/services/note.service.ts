@@ -9,9 +9,10 @@ import {
     unauthorizedErrorMessage
 } from '../models/texts/taskDescriptions';
 import { UserService } from './user.service';
-import { Note } from '../models/note';
-import { catchError, map, switchMap } from 'rxjs/operators';
+import { Note, PostStatus } from '../models/note';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { User } from '../models/user';
+import { NoteChecklist } from '../models/note-types';
 
 @Injectable({
     providedIn: 'root'
@@ -19,6 +20,7 @@ import { User } from '../models/user';
 export class NoteService {
 
     constructor(private noteApiService: NoteApiService, private userService: UserService) {
+        // this.fixAllNotes();
     }
 
     getUserNotes(): Observable<Note[]> {
@@ -40,6 +42,31 @@ export class NoteService {
             );
     }
 
+    getNoteById(id: number): Observable<Note> {
+        return this.noteApiService.getNoteById(id).pipe(
+            tap((note: Note) => {
+                if (typeof note.content === 'string' && note.status === PostStatus.CHECKLIST) {
+                    note.content = JSON.parse(note.content) as NoteChecklist[];
+                }
+            }),
+            catchError((err: HttpErrorResponse) => this.handleApiError(err)));
+    }
+
+    // private fixAllNotes() {
+    //     this.noteApiService.getNotesFromApi().pipe(tap((notes: Note[]) => {
+    //             notes.forEach((note: Note) => {
+    //                 if (typeof note.content === 'string') {
+    //                     const obj = [ new NoteChecklist(note.content, false) ];
+    //                     note.content = JSON.stringify(obj);
+    //                     console.log(note);
+    //
+    //                     this.noteApiService.updateNote(note).subscribe();
+    //                 }
+    //             });
+    //         }),
+    //         catchError((err: HttpErrorResponse) => this.handleApiError(err))
+    // ).subscribe();
+    // }
 
     private handleApiError(err: HttpErrorResponse): Observable<any> {
         console.log(err);

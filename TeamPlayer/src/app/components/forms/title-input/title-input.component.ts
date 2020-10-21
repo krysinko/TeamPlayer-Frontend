@@ -34,6 +34,7 @@ export class TitleInputComponent extends ControlValueCore implements OnInit {
     }
 
     ngOnInit() {
+        console.log(this.value);
         this.originalValue = this.value;
     }
 
