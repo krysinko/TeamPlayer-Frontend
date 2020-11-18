@@ -6,6 +6,7 @@ import { BehaviorSubject, of } from 'rxjs';
 import { Note, PostStatus } from '../../../../models/note';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../../../../services/user.service';
+import { NoteChecklist } from '../../../../models/note-types';
 
 @Component({
     selector: 'app-note-details',
@@ -18,6 +19,7 @@ export class NoteDetailsPage implements OnInit {
     note$: BehaviorSubject<Note> = new BehaviorSubject<Note>(null);
     noteFormGroup: FormGroup;
     isChecklist: boolean = false;
+    private readonly emptyNoteCheck = new NoteChecklist('', false, false);
 
     get note(): Note {
         return this.note$.value;
@@ -34,6 +36,14 @@ export class NoteDetailsPage implements OnInit {
 
     ngOnInit() {}
 
+    addNewCheckItem(): void {
+        if (this.isChecklist) {
+            // @ts-ignore
+            const notes: NoteChecklist[] = this.note$.value.content;
+            notes.push(this.emptyNoteCheck);
+            this.note$.next({...this.note$.value, content: notes});
+        }
+    }
 
     private getNote(): void {
         this.route.paramMap
@@ -67,5 +77,18 @@ export class NoteDetailsPage implements OnInit {
             poster: this.userService, // TODO this.authService.user
             status: this.note$.value ? this.note$.value.status : PostStatus.CHECKLIST,
         });
+    }
+
+    saveNewCheck(): void {
+        // if (this.isChecklist) {
+        //     // @ts-ignore
+        //     this.note$.value.content.filter((n: NoteChecklist) => {
+        //         return !n.label
+        //     })
+        // }
+    }
+
+    removeCheck(): void {
+
     }
 }

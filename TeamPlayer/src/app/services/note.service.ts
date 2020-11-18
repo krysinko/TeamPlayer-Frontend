@@ -47,6 +47,10 @@ export class NoteService {
             tap((note: Note) => {
                 if (typeof note.content === 'string' && note.status === PostStatus.CHECKLIST) {
                     note.content = JSON.parse(note.content) as NoteChecklist[];
+                    note.content.map((n: NoteChecklist) => {
+                        n.saved = true;
+                        n.checked = true;
+                    });
                 }
             }),
             catchError((err: HttpErrorResponse) => this.handleApiError(err)));
