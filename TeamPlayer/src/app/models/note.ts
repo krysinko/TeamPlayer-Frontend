@@ -5,7 +5,7 @@ import { NoteChecklist } from './note-types';
 export class Note {
     id: number;
     name: string;
-    content: NoteChecklist[] | string;
+    content: NoteChecklist[];
     project: Project; // rethink, loop risk
     assignees: User[];
     poster: User;

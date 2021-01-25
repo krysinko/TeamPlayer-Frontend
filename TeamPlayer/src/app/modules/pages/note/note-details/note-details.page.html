@@ -2,6 +2,7 @@
 
 <ion-content *ngIf="(note$ | async) as note">
 	<form [formGroup]="noteFormGroup">
+<!--		TODO wzrór: task assign -->
 		<ion-row class="ion-padding ion-justify-content-center">
 			<ion-col size="12" class="ion-padding-bottom">
 <!--				TODO get users projects-->
@@ -25,28 +26,31 @@
 			</ion-col>
 			<ion-col size="12" *ngIf="isChecklist">
 				<h4 class="ion-margin">Checklist:</h4>
-				<ng-container *ngFor="let note of note$.value.content">
-					<ion-item lines="full" [ngClass]="{'checked': note.checked, 'saved': note.saved }">
-						<ng-container *ngIf="note.saved then displayTemplate; else newCheckTemplate"></ng-container>
+				<div *ngFor="let noteData of noteFormGroup.controls['content']['controls'], let i = index">
+					<div *ngIf="contentFormArray.controls[i] as note">
+						<ion-item lines="full" [ngClass]="{'checked': note['controls']['checked'].value, 'saved': note['controls']['saved'].value }" (blur)="saveNewCheck(i)" [formGroup]="note">
+							<ng-container *ngIf="note['controls']['saved'].value then displayTemplate; else newCheckTemplate"></ng-container>
 
-						<ng-template #displayTemplate>
-							<ion-label>
-								<ion-checkbox [checked]="note.checked" [(ngModel)]="note.checked" class="ion-no-margin"></ion-checkbox>
-								<ion-text class="ion-padding-start">{{ note.label }}</ion-text>
-							</ion-label>
-						</ng-template>
+							<ng-template #displayTemplate>
+								<ion-label>
+									<ion-checkbox [checked]="note['controls'].checked.value" formControlName="checked" name="checked" (click)="yyy(note)" class="ion-no-margin" (ionBlur)="saveNewCheck(i)"></ion-checkbox>
+									<ion-text class="ion-padding-start">{{ note['controls']['label'].value }}</ion-text>
+								</ion-label>
+							</ng-template>
 
-						<ng-template #newCheckTemplate>
-								<ion-checkbox [checked]="note.checked" [(ngModel)]="note.checked" class="ion-no-margin"></ion-checkbox>
-								<ion-input [(ngModel)]="note.label" class="ion-margin-start" type="text" placeholder="Nowy punkt">
-								</ion-input>
-						</ng-template>
+							<ng-template #newCheckTemplate>
+								{{note['controls'].checked.value}}
+									<ion-checkbox [checked]="note['controls']['checked'].value" formControlName="checked" name="checked" class="ion-no-margin"  (ionBlur)="saveNewCheck(i)"></ion-checkbox>
+								{{note['controls'].label.value}}
+								<ion-input formControlName="label" [value]="note['controls']['label'].value"  class="ion-margin-start" type="text" placeholder="Nowy punkt"  (ionBlur)="saveNewCheck(i)">
+									</ion-input>
+							</ng-template>
+							<ion-button (click)="saveNewCheck1()" shape="round" fill="clear" color="danger" slot="end" *ngIf="!note['controls'].saved.value && note['controls'].label.value"><ion-icon name="send" mode="md"></ion-icon></ion-button>
+							<ion-button (click)="removeCheck(note.value)" shape="round" fill="clear" color="danger" slot="end"><ion-icon name="close"></ion-icon></ion-button>
 
-						<ion-button (click)="saveNewCheck()" shape="round" fill="clear" color="danger" slot="end" *ngIf="!note.saved && note.label"><ion-icon name="paper-plane" mode="md"></ion-icon></ion-button>
-						<ion-button (click)="removeCheck()" shape="round" fill="clear" color="danger" slot="end"><ion-icon name="close"></ion-icon></ion-button>
-
-					</ion-item>
-				</ng-container>
+						</ion-item>
+					</div>
+				</div>
 				<div class="ion-align-items-end ion-text-end ion-padding-top">
 				<ion-button shape="round" (click)="addNewCheckItem()"><ion-icon name="add"></ion-icon> Add  </ion-button>
 				</div>

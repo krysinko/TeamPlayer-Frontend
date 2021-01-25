@@ -4,7 +4,7 @@ import { NoteService } from '../../../../services/note.service';
 import { switchMap } from 'rxjs/operators';
 import { BehaviorSubject, of } from 'rxjs';
 import { Note, PostStatus } from '../../../../models/note';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../../../../services/user.service';
 import { NoteChecklist } from '../../../../models/note-types';
 
@@ -19,6 +19,7 @@ export class NoteDetailsPage implements OnInit {
     note$: BehaviorSubject<Note> = new BehaviorSubject<Note>(null);
     noteFormGroup: FormGroup;
     isChecklist: boolean = false;
+    contentFormArray: FormArray;
     private readonly emptyNoteCheck = new NoteChecklist('', false, false);
 
     get note(): Note {
@@ -31,7 +32,6 @@ export class NoteDetailsPage implements OnInit {
 
     constructor(private route: ActivatedRoute, private noteService: NoteService, private formBuilder: FormBuilder, private userService: UserService) {
         this.getNote();
-
     }
 
     ngOnInit() {}
@@ -39,9 +39,18 @@ export class NoteDetailsPage implements OnInit {
     addNewCheckItem(): void {
         if (this.isChecklist) {
             // @ts-ignore
-            const notes: NoteChecklist[] = this.note$.value.content;
+            const notes: NoteChecklist[] = this.note.content;
             notes.push(this.emptyNoteCheck);
-            this.note$.next({...this.note$.value, content: notes});
+            this.noteValue = {...this.note, content: notes};
+            (this.noteFormGroup.controls['content'] as FormArray).push(
+                this.formBuilder.group(
+                    {
+                        label: this.emptyNoteCheck.label,
+                        checked: this.emptyNoteCheck.checked,
+                        saved: this.emptyNoteCheck.saved,
+                    }
+                )
+            );
         }
     }
 
@@ -68,27 +77,52 @@ export class NoteDetailsPage implements OnInit {
     }
 
     private buildNoteForm() {
-        console.log(this.note$.value ? this.note$.value.assignees : [], this.note$.value);
-        this.noteFormGroup = this.formBuilder.group({
-            name: [ this.note$.value ? this.note$.value.name : '', [Validators.required] ],
-            content: [ this.note$.value ? this.note$.value.content : '' ],
-            project: [ null, [Validators.required] ],
-            assignees: [this.note$.value ? this.note$.value.assignees : [], [Validators.required] ],
-            poster: this.userService, // TODO this.authService.user
-            status: this.note$.value ? this.note$.value.status : PostStatus.CHECKLIST,
+        console.log(this.note ? this.note.assignees : [], this.note);
+
+        const contentArr: FormArray = this.formBuilder.array([]);
+        this.note.content.forEach((val: NoteChecklist) => {
+            contentArr.push(this.formBuilder.group({
+                    label: val.label,
+                    checked: val.checked,
+                    saved: val.saved,
+                })
+            );
         });
+
+        this.contentFormArray = contentArr;
+        console.log(contentArr);
+        this.noteFormGroup = this.formBuilder.group({
+            name: [ this.note ? this.note.name : '', [Validators.required] ],
+            content: contentArr as FormArray,
+            project: [ null, [Validators.required] ],
+            assignees: [this.note ? this.note.assignees : [], [Validators.required] ],
+            poster: this.userService, // TODO this.authService.user
+            status: this.note ? this.note.status : PostStatus.CHECKLIST,
+        });
+        console.log(this.noteFormGroup);
     }
 
-    saveNewCheck(): void {
+    saveNewCheck1(): void {}
+
+    saveNewCheck(i: number): void {
         // if (this.isChecklist) {
         //     // @ts-ignore
-        //     this.note$.value.content.filter((n: NoteChecklist) => {
+        //     this.note.content.filter((n: NoteChecklist) => {
         //         return !n.label
         //     })
         // }
+        console.log("new check", i);
     }
 
-    removeCheck(): void {
-
+    yyy(N) {
+        console.log(N);
+    }
+    removeCheck(note: NoteChecklist): void {
+        const content: NoteChecklist[] = this.note.content;
+        delete content.filter((n: NoteChecklist,  i: number) => {
+            return n.checked === note.checked && n.label === note.label && n.saved === note.saved && content.indexOf(note) === i;
+        })[0];
+        console.log(content);
+        this.noteValue = {...this.note, content: content};
     }
 }
