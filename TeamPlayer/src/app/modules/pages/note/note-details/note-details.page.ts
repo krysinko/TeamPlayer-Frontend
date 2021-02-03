@@ -38,7 +38,6 @@ export class NoteDetailsPage implements OnInit {
 
     addNewCheckItem(): void {
         if (this.isChecklist) {
-            // @ts-ignore
             const notes: NoteChecklist[] = this.note.content;
             notes.push(this.emptyNoteCheck);
             this.noteValue = {...this.note, content: notes};
@@ -52,6 +51,10 @@ export class NoteDetailsPage implements OnInit {
                 )
             );
         }
+    }
+
+    getNoteFormGroup(i): FormGroup {
+        return (this.contentFormArray.controls[i] as unknown) as FormGroup;
     }
 
     private getNote(): void {
@@ -104,14 +107,17 @@ export class NoteDetailsPage implements OnInit {
 
     saveNewCheck1(): void {}
 
-    saveNewCheck(i: number): void {
-        // if (this.isChecklist) {
-        //     // @ts-ignore
-        //     this.note.content.filter((n: NoteChecklist) => {
-        //         return !n.label
-        //     })
-        // }
-        console.log("new check", i);
+    saveNewContent(i: number): void {
+        const currentNote: Note = this.note;
+        currentNote.content = currentNote.content.map((checklist: NoteChecklist, index: number) => {
+           if (index === i)  {
+               checklist = this.getNoteFormGroup(i).value;
+           }
+           return checklist;
+        });
+
+        this.noteValue = {...this.note, content: currentNote.content};
+        console.log(this.note);
     }
 
     yyy(N) {

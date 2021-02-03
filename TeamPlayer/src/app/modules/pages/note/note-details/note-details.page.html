@@ -28,24 +28,22 @@
 				<h4 class="ion-margin">Checklist:</h4>
 				<div *ngFor="let noteData of noteFormGroup.controls['content']['controls'], let i = index">
 					<div *ngIf="contentFormArray.controls[i] as note">
-						<ion-item lines="full" [ngClass]="{'checked': note['controls']['checked'].value, 'saved': note['controls']['saved'].value }" (blur)="saveNewCheck(i)" [formGroup]="note">
+						<ion-item lines="full" [ngClass]="{'checked': note['controls']['checked'].value, 'saved': note['controls']['saved'].value }" (blur)="saveNewContent(i)" [formGroup]="getNoteFormGroup(i)">
 							<ng-container *ngIf="note['controls']['saved'].value then displayTemplate; else newCheckTemplate"></ng-container>
 
 							<ng-template #displayTemplate>
 								<ion-label>
-									<ion-checkbox [checked]="note['controls'].checked.value" formControlName="checked" name="checked" (click)="yyy(note)" class="ion-no-margin" (ionBlur)="saveNewCheck(i)"></ion-checkbox>
+									<ion-checkbox [checked]="note['controls'].checked.value" formControlName="checked" name="checked" (click)="yyy(note)" class="ion-no-margin" (ionBlur)="saveNewContent(i)"></ion-checkbox>
 									<ion-text class="ion-padding-start">{{ note['controls']['label'].value }}</ion-text>
 								</ion-label>
 							</ng-template>
 
 							<ng-template #newCheckTemplate>
-								{{note['controls'].checked.value}}
-									<ion-checkbox [checked]="note['controls']['checked'].value" formControlName="checked" name="checked" class="ion-no-margin"  (ionBlur)="saveNewCheck(i)"></ion-checkbox>
-								{{note['controls'].label.value}}
-								<ion-input formControlName="label" [value]="note['controls']['label'].value"  class="ion-margin-start" type="text" placeholder="Nowy punkt"  (ionBlur)="saveNewCheck(i)">
-									</ion-input>
+								<ion-checkbox [checked]="note['controls']['checked'].value" formControlName="checked" name="checked" class="ion-no-margin"  (ionBlur)="saveNewContent(i)"></ion-checkbox>
+								<ion-input formControlName="label" [value]="note['controls']['label'].value"  class="ion-margin-start" type="text" placeholder="Nowy punkt"  (ionBlur)="saveNewContent(i)">
+								</ion-input>
 							</ng-template>
-							<ion-button (click)="saveNewCheck1()" shape="round" fill="clear" color="danger" slot="end" *ngIf="!note['controls'].saved.value && note['controls'].label.value"><ion-icon name="send" mode="md"></ion-icon></ion-button>
+							<ion-button (click)="saveNewContent(i)" shape="round" fill="clear" color="danger" slot="end" *ngIf="!note['controls']['saved'].value && note['controls'].label.value"><ion-icon name="save" mode="md"></ion-icon></ion-button>
 							<ion-button (click)="removeCheck(note.value)" shape="round" fill="clear" color="danger" slot="end"><ion-icon name="close"></ion-icon></ion-button>
 
 						</ion-item>
