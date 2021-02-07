@@ -56,6 +56,12 @@ export class NoteService {
             catchError((err: HttpErrorResponse) => this.handleApiError(err)));
     }
 
+    saveNote(note: Note): Observable<any> {
+        return this.noteApiService.updateNote(note).pipe(
+            catchError((err: HttpErrorResponse) => this.handleApiError(err))
+        );
+    }
+
     // private fixAllNotes() {
     //     this.noteApiService.getNotesFromApi().pipe(tap((notes: Note[]) => {
     //             notes.forEach((note: Note) => {

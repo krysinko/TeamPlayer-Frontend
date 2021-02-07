@@ -1,66 +1,85 @@
 <app-header-simple [title]="title"></app-header-simple>
 
 <ion-content *ngIf="(note$ | async) as note">
-	<form [formGroup]="noteFormGroup">
-<!--		TODO wzrór: task assign -->
-		<ion-row class="ion-padding ion-justify-content-center">
-			<ion-col size="12" class="ion-padding-bottom">
-<!--				TODO get users projects-->
-<!--				<app-simple-select [options]="">{{note.project_id.name}}</app-simple-select>-->
-				<app-title-input [label]="'Note'" [placeholder]="'Enter note subject'" formControlName="name" [required]="true"></app-title-input>
-			</ion-col>
-		</ion-row>
-		<ion-row *ngIf="note">
-			<ion-col size="12">
-				<app-users-select-field formControlName="assignees" [projectId]="note.project_id.id"></app-users-select-field>
-			</ion-col>
-			<ion-col size="12" *ngIf="note$ | async" class="remove-top-bottom-padding">
-				<ion-item class="ion-no-padding" lines="full">
-					<ion-label class="ion-padding-start">Project:</ion-label>
-					<ion-text class="ion-padding-end">{{ (note$ | async).project_id?.name || 'Unknown' }}</ion-text>
-				</ion-item>
-				<ion-item class="ion-no-padding" lines="full">
-					<ion-label class="ion-padding-start">Poster:</ion-label>
-					<ion-text class="ion-padding-end">{{ (note$ | async).poster?.username }}</ion-text>
-				</ion-item>
-			</ion-col>
-			<ion-col size="12" *ngIf="isChecklist">
-				<h4 class="ion-margin">Checklist:</h4>
-				<div *ngFor="let noteData of noteFormGroup.controls['content']['controls'], let i = index">
-					<div *ngIf="contentFormArray.controls[i] as note">
-						<ion-item lines="full" [ngClass]="{'checked': note['controls']['checked'].value, 'saved': note['controls']['saved'].value }" (blur)="saveNewContent(i)" [formGroup]="getNoteFormGroup(i)">
-							<ng-container *ngIf="note['controls']['saved'].value then displayTemplate; else newCheckTemplate"></ng-container>
+    <form [formGroup]="noteFormGroup">
+        <!--		TODO wzrór: task assign -->
+        <ion-row class="ion-padding ion-justify-content-center">
+            <ion-col size="12" class="ion-padding-bottom">
+                <!--				TODO get users projects-->
+                <!--				<app-simple-select [options]="">{{note.project_id.name}}</app-simple-select>-->
+                <app-title-input [label]="'Note'" [placeholder]="'Enter note subject'" formControlName="name"
+                                 [required]="true"></app-title-input>
+            </ion-col>
+        </ion-row>
+        <ion-row *ngIf="note">
+            <ion-col size="12">
+                <app-users-select-field formControlName="assignees"
+                                        [projectId]="note.project_id.id"></app-users-select-field>
+            </ion-col>
+            <ion-col size="12" *ngIf="note$ | async" class="remove-top-bottom-padding">
+                <ion-item class="ion-no-padding" lines="full">
+                    <ion-label class="ion-padding-start">Project:</ion-label>
+                    <ion-text class="ion-padding-end">{{ (note$ | async).project_id?.name || 'Unknown' }}</ion-text>
+                </ion-item>
+                <ion-item class="ion-no-padding" lines="full">
+                    <ion-label class="ion-padding-start">Poster:</ion-label>
+                    <ion-text class="ion-padding-end">{{ (note$ | async).poster?.username }}</ion-text>
+                </ion-item>
+            </ion-col>
+            <ion-col size="12" *ngIf="isChecklist">
+                <h4 class="ion-margin">Checklist:</h4>
+                <div *ngFor="let noteData of noteFormGroup.controls['content']['controls'], let i = index">
+                    <div *ngIf="contentFormArray.controls[i] as note">
+                        <ion-item lines="full"
+                                  [ngClass]="{'checked': note['controls']['checked'].value, 'saved': note['controls']['saved'].value }"
+                                  (blur)="saveNewContent(i)" [formGroup]="getNoteFormGroup(i)">
+                            <ng-container
+                                    *ngIf="note['controls']['saved'].value then displayTemplate; else newCheckTemplate"></ng-container>
 
-							<ng-template #displayTemplate>
-								<ion-label>
-									<ion-checkbox [checked]="note['controls'].checked.value" formControlName="checked" name="checked" (click)="yyy(note)" class="ion-no-margin" (ionBlur)="saveNewContent(i)"></ion-checkbox>
-									<ion-text class="ion-padding-start">{{ note['controls']['label'].value }}</ion-text>
-								</ion-label>
-							</ng-template>
+                            <ng-template #displayTemplate>
+                                <ion-label>
+                                    <ion-checkbox [checked]="note['controls'].checked.value" formControlName="checked"
+                                                  name="checked" (click)="yyy(note)" class="ion-no-margin"
+                                                  (ionBlur)="saveNewContent(i)"></ion-checkbox>
+                                    <ion-text class="ion-padding-start">{{ note['controls']['label'].value }}</ion-text>
+                                </ion-label>
+                            </ng-template>
 
-							<ng-template #newCheckTemplate>
-								<ion-checkbox [checked]="note['controls']['checked'].value" formControlName="checked" name="checked" class="ion-no-margin"  (ionBlur)="saveNewContent(i)"></ion-checkbox>
-								<ion-input formControlName="label" [value]="note['controls']['label'].value"  class="ion-margin-start" type="text" placeholder="Nowy punkt"  (ionBlur)="saveNewContent(i)">
-								</ion-input>
-							</ng-template>
-							<ion-button (click)="saveNewContent(i)" shape="round" fill="clear" color="danger" slot="end" *ngIf="!note['controls']['saved'].value && note['controls'].label.value"><ion-icon name="save" mode="md"></ion-icon></ion-button>
-							<ion-button (click)="removeCheck(note.value)" shape="round" fill="clear" color="danger" slot="end"><ion-icon name="close"></ion-icon></ion-button>
+                            <ng-template #newCheckTemplate>
+                                <ion-checkbox [checked]="note['controls']['checked'].value" formControlName="checked"
+                                              name="checked" class="ion-no-margin"
+                                              (ionBlur)="saveNewContent(i)"></ion-checkbox>
+                                <ion-input formControlName="label" [value]="note['controls']['label'].value"
+                                           class="ion-margin-start" type="text" placeholder="Nowy punkt"
+                                           (ionBlur)="saveNewContent(i)">
+                                </ion-input>
+                            </ng-template>
+                            <ion-button (click)="saveNewContent(i)" shape="round" fill="clear" color="danger" slot="end"
+                                        *ngIf="!note['controls']['saved'].value && note['controls']['label'].value">
+                                <ion-icon name="checkmark-done-outline"></ion-icon>
+                            </ion-button>
+                            <ion-button (click)="removeCheck(note.value)" shape="round" fill="clear" color="danger"
+                                        slot="end">
+                                <ion-icon name="close"></ion-icon>
+                            </ion-button>
+                        </ion-item>
+                    </div>
+                </div>
+                <div class="ion-align-items-end ion-text-end ion-padding-top">
+                    <ion-button shape="round" (click)="addNewCheckItem()">
+                        <ion-icon name="add"></ion-icon>
+                        Add
+                    </ion-button>
+                </div>
+            </ion-col>
+        </ion-row>
+    </form>
 
-						</ion-item>
-					</div>
-				</div>
-				<div class="ion-align-items-end ion-text-end ion-padding-top">
-				<ion-button shape="round" (click)="addNewCheckItem()"><ion-icon name="add"></ion-icon> Add  </ion-button>
-				</div>
-			</ion-col>
-		</ion-row>
-	</form>
 
-
-	<br>
-	<br>
-	<br>
-	<br>
-		<pre>
+    <br>
+    <br>
+    <br>
+    <br>
+    <pre>
 	{{ note | json }}</pre>
 </ion-content>

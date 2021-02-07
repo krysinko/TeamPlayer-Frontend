@@ -1,17 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, ParamMap } from '@angular/router';
-import { NoteService } from '../../../../services/note.service';
-import { switchMap } from 'rxjs/operators';
-import { BehaviorSubject, of } from 'rxjs';
-import { Note, PostStatus } from '../../../../models/note';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { UserService } from '../../../../services/user.service';
-import { NoteChecklist } from '../../../../models/note-types';
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute, ParamMap} from '@angular/router';
+import {NoteService} from '../../../../services/note.service';
+import {switchMap} from 'rxjs/operators';
+import {BehaviorSubject, of} from 'rxjs';
+import {Note, PostStatus} from '../../../../models/note';
+import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UserService} from '../../../../services/user.service';
+import {NoteChecklist} from '../../../../models/note-types';
 
 @Component({
     selector: 'app-note-details',
     templateUrl: './note-details.page.html',
-    styleUrls: [ './note-details.page.scss' ],
+    styleUrls: ['./note-details.page.scss'],
 })
 export class NoteDetailsPage implements OnInit {
     title: string = 'Notatka';
@@ -34,7 +34,8 @@ export class NoteDetailsPage implements OnInit {
         this.getNote();
     }
 
-    ngOnInit() {}
+    ngOnInit() {
+    }
 
     addNewCheckItem(): void {
         if (this.isChecklist) {
@@ -56,6 +57,44 @@ export class NoteDetailsPage implements OnInit {
     getNoteFormGroup(i): FormGroup {
         return (this.contentFormArray.controls[i] as unknown) as FormGroup;
     }
+
+    saveNewCheck1(): void {
+    }
+
+    saveNewContent(i: number): void {
+        const currentNote: Note = this.note;
+        currentNote.content = currentNote.content.map((checklist: NoteChecklist, index: number) => {
+            if (index === i) {
+                checklist = this.getNoteFormGroup(i).value;
+            }
+            return checklist;
+        });
+
+        this.noteValue = {...this.note, content: currentNote.content};
+        console.log(this.note);
+        this.postNote();
+    }
+
+    yyy(N) {
+        console.log(N);
+    }
+
+    removeCheck(note: NoteChecklist): void {
+        const content: NoteChecklist[] = this.note.content;
+        delete content.filter((n: NoteChecklist, i: number) => {
+            return n.checked === note.checked && n.label === note.label && n.saved === note.saved && content.indexOf(note) === i;
+        })[0];
+        console.log(content);
+        this.noteValue = {...this.note, content: content};
+        this.postNote();
+    }
+
+    private postNote(): void {
+        this.noteService.saveNote(this.note).subscribe((note: Note) => {
+            this.noteValue = note;
+        });
+    }
+
 
     private getNote(): void {
         this.route.paramMap
@@ -95,40 +134,13 @@ export class NoteDetailsPage implements OnInit {
         this.contentFormArray = contentArr;
         console.log(contentArr);
         this.noteFormGroup = this.formBuilder.group({
-            name: [ this.note ? this.note.name : '', [Validators.required] ],
+            name: [this.note ? this.note.name : '', [Validators.required]],
             content: contentArr as FormArray,
-            project: [ null, [Validators.required] ],
-            assignees: [this.note ? this.note.assignees : [], [Validators.required] ],
+            project: [null, [Validators.required]],
+            assignees: [this.note ? this.note.assignees : [], [Validators.required]],
             poster: this.userService, // TODO this.authService.user
             status: this.note ? this.note.status : PostStatus.CHECKLIST,
         });
         console.log(this.noteFormGroup);
-    }
-
-    saveNewCheck1(): void {}
-
-    saveNewContent(i: number): void {
-        const currentNote: Note = this.note;
-        currentNote.content = currentNote.content.map((checklist: NoteChecklist, index: number) => {
-           if (index === i)  {
-               checklist = this.getNoteFormGroup(i).value;
-           }
-           return checklist;
-        });
-
-        this.noteValue = {...this.note, content: currentNote.content};
-        console.log(this.note);
-    }
-
-    yyy(N) {
-        console.log(N);
-    }
-    removeCheck(note: NoteChecklist): void {
-        const content: NoteChecklist[] = this.note.content;
-        delete content.filter((n: NoteChecklist,  i: number) => {
-            return n.checked === note.checked && n.label === note.label && n.saved === note.saved && content.indexOf(note) === i;
-        })[0];
-        console.log(content);
-        this.noteValue = {...this.note, content: content};
     }
 }
