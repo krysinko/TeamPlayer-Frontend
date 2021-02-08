@@ -32,11 +32,12 @@ export class NoteService {
                             || note.poster.id === this.userService.userId;
                     }));
                 }),
-                map((note: Note[]) => {
-                    note.map(n => {
-                        n.project = n.project_id;
+                map((notes: Note[]) => {
+                    notes.map(note => {
+                        note.project = note.project_id;
+                        return this.convertNoteContentFromJson(note);
                     });
-                    return note;
+                    return notes;
                 }),
                 catchError((err: HttpErrorResponse) => this.handleApiError(err)),
             );
@@ -44,22 +45,30 @@ export class NoteService {
 
     getNoteById(id: number): Observable<Note> {
         return this.noteApiService.getNoteById(id).pipe(
-            tap((note: Note) => {
-                if (typeof note.content === 'string' && note.status === PostStatus.CHECKLIST) {
-                    note.content = JSON.parse(note.content) as NoteChecklist[];
-                    note.content.map((n: NoteChecklist) => {
-                        n.saved = true;
-                        n.checked = true;
-                    });
-                }
+            map ((note: Note) => {
+                return this.convertNoteContentFromJson(note);
             }),
             catchError((err: HttpErrorResponse) => this.handleApiError(err)));
     }
 
     saveNote(note: Note): Observable<any> {
         return this.noteApiService.updateNote(note).pipe(
+            map ((_note: Note) => {
+                return this.convertNoteContentFromJson(_note);
+            }),
             catchError((err: HttpErrorResponse) => this.handleApiError(err))
         );
+    }
+
+    private convertNoteContentFromJson(note: Note): Note {
+        if (typeof note.content === 'string' && note.status === PostStatus.CHECKLIST) {
+            note.content = JSON.parse(note.content) as NoteChecklist[];
+            note.content.map((n: NoteChecklist) => {
+                n.saved = true;
+                // n.checked = true;
+            });
+        }
+        return note;
     }
 
     // private fixAllNotes() {

@@ -51,6 +51,7 @@ export class NoteDetailsPage implements OnInit {
                     }
                 )
             );
+            this.contentFormArray = this.noteFormGroup.controls['content'] as FormArray;
         }
     }
 
@@ -62,15 +63,11 @@ export class NoteDetailsPage implements OnInit {
     }
 
     saveNewContent(i: number): void {
-        const currentNote: Note = this.note;
-        currentNote.content = currentNote.content.map((checklist: NoteChecklist, index: number) => {
-            if (index === i) {
-                checklist = this.getNoteFormGroup(i).value;
-            }
-            return checklist;
-        });
+        const currentNoteContent: NoteChecklist[] = this.note.content;
+        currentNoteContent[i] = this.getNoteFormGroup(i).value;
+        console.log('new val', currentNoteContent);
 
-        this.noteValue = {...this.note, content: currentNote.content};
+        this.noteValue = {...this.note, content: currentNoteContent};
         console.log(this.note);
         this.postNote();
     }
@@ -79,19 +76,18 @@ export class NoteDetailsPage implements OnInit {
         console.log(N);
     }
 
-    removeCheck(note: NoteChecklist): void {
-        const content: NoteChecklist[] = this.note.content;
-        delete content.filter((n: NoteChecklist, i: number) => {
-            return n.checked === note.checked && n.label === note.label && n.saved === note.saved && content.indexOf(note) === i;
-        })[0];
-        console.log(content);
-        this.noteValue = {...this.note, content: content};
+    removeCheck(indexToRemove: number): void {
+        const newContent: NoteChecklist[] = this.note.content.filter((n: NoteChecklist, i: number) => i !== indexToRemove);
+        this.noteValue = {...this.note, content: newContent};
+        console.log(newContent);
         this.postNote();
     }
 
     private postNote(): void {
         this.noteService.saveNote(this.note).subscribe((note: Note) => {
             this.noteValue = note;
+            this.contentFormArray = this.buildContentFormArray(note.content);
+            // this.buildNoteForm();
         });
     }
 
@@ -121,15 +117,7 @@ export class NoteDetailsPage implements OnInit {
     private buildNoteForm() {
         console.log(this.note ? this.note.assignees : [], this.note);
 
-        const contentArr: FormArray = this.formBuilder.array([]);
-        this.note.content.forEach((val: NoteChecklist) => {
-            contentArr.push(this.formBuilder.group({
-                    label: val.label,
-                    checked: val.checked,
-                    saved: val.saved,
-                })
-            );
-        });
+        const contentArr: FormArray = this.buildContentFormArray();
 
         this.contentFormArray = contentArr;
         console.log(contentArr);
@@ -137,10 +125,23 @@ export class NoteDetailsPage implements OnInit {
             name: [this.note ? this.note.name : '', [Validators.required]],
             content: contentArr as FormArray,
             project: [null, [Validators.required]],
-            assignees: [this.note ? this.note.assignees : [], [Validators.required]],
+            assignees: [this.note.assignees],
             poster: this.userService, // TODO this.authService.user
             status: this.note ? this.note.status : PostStatus.CHECKLIST,
         });
         console.log(this.noteFormGroup);
+    }
+
+    private buildContentFormArray(content: NoteChecklist[] = this.note.content): FormArray {
+        const contentArr: FormArray = this.formBuilder.array([]);
+        content.forEach((val: NoteChecklist) => {
+            contentArr.push(this.formBuilder.group({
+                    label: val.label,
+                    checked: val.checked,
+                    saved: val.saved,
+                })
+            );
+        });
+        return contentArr;
     }
 }

@@ -13,7 +13,7 @@
         </ion-row>
         <ion-row *ngIf="note">
             <ion-col size="12">
-                <app-users-select-field formControlName="assignees"
+                <app-users-select-field [formControl]="noteFormGroup.controls['assignees']"
                                         [projectId]="note.project_id.id"></app-users-select-field>
             </ion-col>
             <ion-col size="12" *ngIf="note$ | async" class="remove-top-bottom-padding">
@@ -50,15 +50,14 @@
                                               name="checked" class="ion-no-margin"
                                               (ionBlur)="saveNewContent(i)"></ion-checkbox>
                                 <ion-input formControlName="label" [value]="note['controls']['label'].value"
-                                           class="ion-margin-start" type="text" placeholder="Nowy punkt"
-                                           (ionBlur)="saveNewContent(i)">
+                                           class="ion-margin-start" type="text" placeholder="Nowy punkt">
                                 </ion-input>
                             </ng-template>
                             <ion-button (click)="saveNewContent(i)" shape="round" fill="clear" color="danger" slot="end"
                                         *ngIf="!note['controls']['saved'].value && note['controls']['label'].value">
                                 <ion-icon name="checkmark-done-outline"></ion-icon>
                             </ion-button>
-                            <ion-button (click)="removeCheck(note.value)" shape="round" fill="clear" color="danger"
+                            <ion-button (click)="removeCheck(i)" shape="round" fill="clear" color="danger"
                                         slot="end">
                                 <ion-icon name="close"></ion-icon>
                             </ion-button>
