@@ -7,7 +7,7 @@
             <ion-col size="12" class="ion-padding-bottom">
                 <!--				TODO get users projects-->
                 <!--				<app-simple-select [options]="">{{note.project_id.name}}</app-simple-select>-->
-                <app-title-input [label]="'Note'" [placeholder]="'Enter note subject'" formControlName="name"
+                <app-title-input [label]="'Notatka'" [placeholder]="'Dodaj tytuł...'" formControlName="name"
                                  [required]="true"></app-title-input>
             </ion-col>
         </ion-row>
@@ -18,16 +18,16 @@
             </ion-col>
             <ion-col size="12" *ngIf="note$ | async" class="remove-top-bottom-padding">
                 <ion-item class="ion-no-padding" lines="full">
-                    <ion-label class="ion-padding-start">Project:</ion-label>
+                    <ion-label class="ion-padding-start">Projekt:</ion-label>
                     <ion-text class="ion-padding-end">{{ (note$ | async).project_id?.name || 'Unknown' }}</ion-text>
                 </ion-item>
                 <ion-item class="ion-no-padding" lines="full">
-                    <ion-label class="ion-padding-start">Poster:</ion-label>
+                    <ion-label class="ion-padding-start">Autor:</ion-label>
                     <ion-text class="ion-padding-end">{{ (note$ | async).poster?.username }}</ion-text>
                 </ion-item>
             </ion-col>
             <ion-col size="12" *ngIf="isChecklist">
-                <h4 class="ion-margin">Checklist:</h4>
+                <h4 class="ion-margin">Lista:</h4>
                 <div *ngFor="let noteData of noteFormGroup.controls['content']['controls'], let i = index">
                     <div *ngIf="contentFormArray.controls[i] as note">
                         <ion-item lines="full"
@@ -67,7 +67,7 @@
                 <div class="ion-align-items-end ion-text-end ion-padding-top">
                     <ion-button shape="round" (click)="addNewCheckItem()">
                         <ion-icon name="add"></ion-icon>
-                        Add
+                        Dodaj
                     </ion-button>
                 </div>
             </ion-col>

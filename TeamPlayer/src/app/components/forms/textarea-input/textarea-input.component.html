@@ -10,7 +10,7 @@
 	              class="ion-padding-horizontal ion-no-margin"
 	              maxlength="255"
 	              autoGrow="true"
-	              placeholder="Enter some description here..." #textareaElement>
+	              [placeholder]="placeholder || 'Dodaj opis...'" #textareaElement>
 	</ion-textarea>
 </ion-item>
 <ion-item class="ion-no-padding" *ngIf="buttonsVisible$ | async">
@@ -19,13 +19,13 @@
 		            shape="round"
 		            type="button"
 		            (click)="clearTextareaValue()">
-			Clear all
+			Wyczyść
 		</ion-button>
 		<ion-button color="deep-green"
 		            shape="round"
 		            type="button"
 		            (click)="submitValueToParent()">
-			Save
+			Zapisz
 		</ion-button>
 	</div>
 </ion-item>

@@ -1,6 +1,6 @@
 <small *ngIf="label">{{ label }}:</small>
 <h2 class="ion-no-margin">
-  <ion-input [(ngModel)]="value" (keyup)="activateButtons()" placeholder="Enter task title here"
+  <ion-input [(ngModel)]="value" (keyup)="activateButtons()" placeholder="Dodaj tytuł zadania..."
              maxlength="255"
              minlength="1">
   </ion-input>
@@ -10,13 +10,13 @@
                   shape="round"
                   type="button"
                   (click)="clearTitleInput()">
-        Clear all
+        Wyczyść
       </ion-button>
       <ion-button color="deep-green"
                   shape="round"
                   type="button"
                   (click)="submitValueToParent()">
-        Save
+        Zapisz
       </ion-button>
     </div>
   </ion-item>

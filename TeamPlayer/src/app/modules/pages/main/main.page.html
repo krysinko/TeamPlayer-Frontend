@@ -12,7 +12,8 @@
 			<!-- TODO weryfikacja stanu autentykacji -->
 			<h5>Aplikacja do zarządzania Twoją organizacją</h5>
 		</ion-col>
-		<ng-container *ngIf="!userLoggedIn">
+		<ng-container>
+<!--		<ng-container *ngIf="!userLoggedIn">-->
 			<ion-col size="4" class="ion-justify-content-end ion-text-end">
 				<ion-button (click)="goToLoginPage()" shape="round" color="green">Logowanie</ion-button>
 			</ion-col>

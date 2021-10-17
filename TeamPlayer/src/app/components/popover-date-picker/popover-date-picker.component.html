@@ -1,17 +1,17 @@
 <form (ngSubmit)="saveNewDateTime()" [formGroup]="dateForm">
 	<ion-row class="ion-align-items-center">
 		<ion-col size="12" class="ion-padding-start">
-			<h3>Set datetime for "{{ taskName }}":</h3>
+			<h3>Wyznacz datę dla "{{ taskName }}":</h3>
 		</ion-col>
 		<ion-col size="12" class="ion-justify-content-center">
 			<ion-item lines="none" type="button">
-				<ion-label>Time:</ion-label>
+				<ion-label>Godzina:</ion-label>
 				<ion-datetime displayFormat="HH:mm" formControlName="time" [pickerOptions]="datePickerOptions"
 				              doneText="Zatwierdź" cancelText="Anuluj"></ion-datetime>
 			</ion-item>
 			<ion-item lines="none" type="button">
 				<ion-label>
-					Date:
+					Data:
 				</ion-label>
 				<ion-datetime formControlName="date" [min]="now.toISOString()" max="2099-12-31"
 				              pickerFormat="DDDD, DD.MM.YYYY" [pickerOptions]="datePickerOptions"
@@ -25,11 +25,11 @@
 		</ion-col>
 		<ion-col size="6" class="ion-padding ion-text-center">
 			<ion-button color="deep-green" shape="round" fill="clear" (click)="dismiss()">
-				Cancel
+				Anuluj
 			</ion-button>
 		</ion-col>
 		<ion-col size="6" class="ion-justify-content-center ion-text-center">
-			<ion-button type="submit" shape="round" class="ion-margin-end">Save</ion-button>
+			<ion-button type="submit" shape="round" class="ion-margin-end">Zapisz</ion-button>
 		</ion-col>
 	</ion-row>
 </form>

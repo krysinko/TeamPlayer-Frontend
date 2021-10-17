@@ -129,9 +129,9 @@ export class TaskDetailsPage {
 
     private subscribeOnFormValueChangesToUpdateTask() {
         this.taskFormData.valueChanges.subscribe((data: Task) => {
-            console.log(this.taskFormData, data);
-            console.log(!this.taskFormData.controls['title'].dirty, !this.taskFormData.controls['title'].valid, this.titleHasChanged$.value);
-            if (this.taskFormData.controls['title'].dirty && !this.titleHasChanged$.value) {
+            console.log(this.taskFormData, data, this.task$.value);
+            console.log(this.taskFormData.controls['title'].dirty, !this.taskFormData.controls['title'].valid, this.titleHasChanged$.value);
+            if (!this.taskFormData.controls['title'].dirty && !this.titleHasChanged$.value) {
                 return;
             } else {
                 this.taskService.updateTask({ ...this.task$.value, ...data, });

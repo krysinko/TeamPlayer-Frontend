@@ -4,29 +4,29 @@
 		<form [formGroup]="meetingEditForm">
 			<ion-row class="ion-padding ion-justify-content-center">
 				<ion-col size="12" class="ion-padding-bottom">
-					<app-title-input [label]="'Meeting'" [placeholder]="'Enter meeting subject'"
+					<app-title-input [label]="'Spotkanie'" [placeholder]="'Dodaj temat spotkania...'"
 					                 formControlName="name"></app-title-input>
 				</ion-col>
 			</ion-row>
 			<ion-row>
 				<ion-col size="12">
 					<app-date-select-field formControlName="date" [placeholder]="'Select date'"
-					                       [label]="'Date'"></app-date-select-field>
+					                       [label]="'Data'"></app-date-select-field>
 					<ion-item class="ion-no-padding" lines="full" *ngIf="meeting$ | async">
-						<ion-label class="ion-padding-start">Creator:</ion-label>
+						<ion-label class="ion-padding-start">Gospodarz:</ion-label>
 						<ion-text class="ion-padding-end">{{ (meeting$ | async).creator?.username }}</ion-text>
 					</ion-item>
-					<app-users-select-field formControlName="participants" [label]="'Participants'"
+					<app-users-select-field formControlName="participants" [label]="'Uczestnicy'"
 					                        [projectId]="31"></app-users-select-field>
 				</ion-col>
 				<ion-col size="12" class="remove-top-bottom-padding">
-					<app-textarea-input formControlName="description" label="Description"></app-textarea-input>
+					<app-textarea-input formControlName="description" label="Opis"></app-textarea-input>
 				</ion-col>
 			</ion-row>
 		</form>
 	</ion-content>
 	<ion-footer class="ion-text-center ion-padding-bottom ion-no-border" *ngIf="!(meeting$ | async)">
-		<ion-button color="danger" shape="round" [disabled]="!meetingEditForm.valid" (click)="saveMeeting()">Save
+		<ion-button color="danger" shape="round" [disabled]="!meetingEditForm.valid" (click)="saveMeeting()">Zapisz
 		</ion-button>
 	</ion-footer>
 </ng-container>

@@ -1,5 +1,5 @@
 <ion-header class="ion-padding-start">
-	<app-header-simple title="Create new task" [arrowBack]="true"></app-header-simple>
+	<app-header-simple title="Utwórz zadanie" [arrowBack]="true"></app-header-simple>
 </ion-header>
 <ion-content>
 	<form (ngSubmit)="saveTask()" [formGroup]="taskFormGroup">
@@ -7,23 +7,23 @@
 			<ion-col size="12" class="ion-text-end ion-no-padding ion-padding-horizontal">
 				<small>
 					<ion-text color="danger">*</ion-text>
-					- field required
+					- pole obowiązkowe
 				</small>
 			</ion-col>
 			<ion-col size="12" class="ion-padding-bottom">
-				<app-title-input [label]="'Task'" formControlName="title" [required]="true"></app-title-input>
+				<app-title-input [label]="'Zadanie'" formControlName="title" [required]="true"></app-title-input>
 			</ion-col>
 		</ion-row>
 		<ion-row>
 			<ion-col size="12">
 				<app-simple-select formControlName="project"
-				                   [label]="'Project'"
+				                   [label]="'Projekt'"
 				                   [options]="userProjects"
 				                   [optionLabels]="projectNames"
-				                   [placeholder]="'Select project'"
+				                   [placeholder]="'Wybierz projekt'"
 				                   [required]="true"
 				></app-simple-select>
-				<app-date-select-field [label]="'Deadline'"
+				<app-date-select-field [label]="'Termin'"
 				                       formControlName="deadline"
 				                       [required]="true"
 				></app-date-select-field>
@@ -31,21 +31,21 @@
 				                   [label]="'Status'"
 				                   [options]="taskStatusKeys"
 				                   [optionLabels]="taskLabels"
-				                   [placeholder]="'Select status'"
+				                   [placeholder]="'Wybierz status'"
 				                   [required]="true"></app-simple-select>
 				<app-users-select-field formControlName="assignees"
-				                        [label]="'Assign team members'"
+				                        [label]="'Przydziel członków zespołu'"
 				                        [projectId]="taskFormGroup.controls['project'].value.id"
 				                        [disabled]="!taskFormGroup.controls['project'].value?.id"
 				></app-users-select-field>
 			</ion-col>
 			<ion-col size="12">
-				<app-textarea-input formControlName="content" [label]="'Description'"
-				                    [placeholder]="'Enter any description here...'"></app-textarea-input>
+				<app-textarea-input formControlName="content" [label]="'Opis'"
+				                    [placeholder]="'Dodaj opis...'"></app-textarea-input>
 			</ion-col>
 		</ion-row>
 	</form>
 </ion-content>
 <ion-footer class="ion-text-center ion-padding-bottom ion-no-border">
-	<ion-button color="danger" shape="round" [disabled]="!taskFormGroup.valid" (click)="saveTask()">Save</ion-button>
+	<ion-button color="danger" shape="round" [disabled]="!taskFormGroup.valid" (click)="saveTask()">Zapisz</ion-button>
 </ion-footer>

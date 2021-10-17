@@ -20,7 +20,7 @@ export class AppComponent implements OnInit {
         {
             title: 'Strona główna',
             url: '/main',
-            icon: 'cube-outline'
+            icon: 'home-outline'
         },
         {
             title: 'Zadania',
@@ -41,6 +41,11 @@ export class AppComponent implements OnInit {
             title: 'Zespoły',
             url: '/teams',
             icon: 'people-outline'
+        },
+        {
+            title: 'Projekty',
+            url: '/teams',
+            icon: 'rocket-outline'
         },
         {
             title: 'Mój profil',

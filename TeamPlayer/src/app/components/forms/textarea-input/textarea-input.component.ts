@@ -23,6 +23,7 @@ export class TextareaInputComponent extends ControlValueCore implements OnInit {
     }
 
     @Input() label: string;
+    @Input() placeholder: string;
     @Output() valueSubmitted: EventEmitter<boolean> = new EventEmitter<boolean>();
     @ViewChild('textareaElement', { read: IonTextarea, static: false }) textareaElement: IonTextarea;
 

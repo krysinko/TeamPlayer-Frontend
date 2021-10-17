@@ -1,6 +1,6 @@
 <ng-container *ngIf="(task$ | async) as task">
 	<ion-header>
-		<app-header-simple [title]="'Task: ' + task.title" [arrowBack]="true"></app-header-simple>
+		<app-header-simple [title]="'Zadanie: ' + task.title" [arrowBack]="true"></app-header-simple>
 	</ion-header>
 	<ion-content>
 		<form [formGroup]="taskFormData">
@@ -12,10 +12,10 @@
 		<ion-row>
 			<ion-col size="12">
 				<ion-item class="ion-no-padding" lines="full">
-					<ion-label class="ion-padding-start">Project:</ion-label>
+					<ion-label class="ion-padding-start">Projekt:</ion-label>
 					<ion-text class="ion-padding-end">{{ task.project?.name || 'Unknown' }} {{task.project?.id}}</ion-text>
 				</ion-item>
-				<app-date-select-field [label]="'Deadline'" formControlName="deadline"></app-date-select-field>
+				<app-date-select-field [label]="'Termin'" formControlName="deadline"></app-date-select-field>
 				<app-simple-select formControlName="status" [options]="taskStatusKeys" [optionLabels]="taskLabels" [label]="'Status'"></app-simple-select>
 				<app-users-select-field formControlName="assignees" [projectId]="task.project?.id"></app-users-select-field>
 <!--				<ion-item class="ion-no-padding"-->
@@ -36,16 +36,16 @@
 			</ion-col>
 
 			<ion-col size="12" class="remove-top-bottom-padding">
-				<app-textarea-input [label]="'Description'" formControlName="content"></app-textarea-input>
+				<app-textarea-input [label]="'Opis'" formControlName="content"></app-textarea-input>
 			</ion-col>
 
 			<ion-col size="12" class="remove-top-bottom-padding">
 				<ion-item class="ion-no-padding" lines="full">
-					<ion-label class="ion-padding-start">Creator:</ion-label>
-					<ion-text class="ion-padding-end">{{ task.creator?.username || 'Unknown' }}</ion-text>
+					<ion-label class="ion-padding-start">Autor:</ion-label>
+					<ion-text class="ion-padding-end">{{ task.creator?.username || 'Nieznany' }}</ion-text>
 				</ion-item>
 				<ion-item class="ion-no-padding" lines="full" *ngIf="task.createdAt">
-					<ion-label class="ion-padding-start">Created at:</ion-label>
+					<ion-label class="ion-padding-start">Utworzono:</ion-label>
 					<ion-text class="ion-padding-end">{{ task.createdAt | date:'dd.MM.yyyy, HH:mm' }}</ion-text>
 				</ion-item>
 			</ion-col>

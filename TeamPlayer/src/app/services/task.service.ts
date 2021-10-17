@@ -3,7 +3,7 @@ import * as _ from 'lodash';
 import { SortOption, Task, TaskProgressInStartToEndOrder } from '../models/task';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { TaskApiService } from './api/task-api.service';
-import { catchError, map, skipWhile } from 'rxjs/operators';
+import {catchError, map, skipWhile, filter, tap} from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import {
     apiErrorMessage,
@@ -78,7 +78,15 @@ export class TaskService {
 
     getTasks(): Observable<Task[]> {
         this.taskApi.getTasksFromApi()
-            .pipe(catchError(this.handleApiError))
+            .pipe(
+                tap((tasks: Task[]) => {
+                    return tasks.filter((t: Task) =>
+                        <boolean>this.userService.findUserInSet(
+                            [...t.assignees, t.creator, ...t.project.users, t.project.admin]
+                        )
+                    );
+                }),
+                catchError(this.handleApiError))
             .subscribe((value: Task[]) => {
                 this.tasks = value;
             });
@@ -86,6 +94,7 @@ export class TaskService {
     }
 
     updateTask(task: Task): void {
+        console.log('updating task', task);
         this.taskApi.update(task)
             .pipe(
                 map((t: Task) => {

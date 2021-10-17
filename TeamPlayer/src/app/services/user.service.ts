@@ -87,6 +87,10 @@ export class UserService {
             );
     }
 
+    findUserInSet(arrayOfUsers: User[]): boolean {
+        return arrayOfUsers.some((u: User) => u && u.id === this._userId);
+    }
+
     private writeUserData(data): void {
         const usr = new User();
         if (data) {
